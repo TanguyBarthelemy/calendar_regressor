@@ -1,0 +1,66 @@
+---
+title: "Calendar steps"
+author: "Tanguy"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Presentation
+
+### Notation
+
+Dans la suite :
+- $i$ désigne le jour de la semaine
+- $j$ ou $mois_j$ désigne le numéro du mois de l'année
+
+### Préparation du calendrier
+
+- On compte les jours ($NbDays$ est le nombre total de jour du mois) :
+$Day_i$ est le nombre de jour n°i dans le mois ($Day_1$ est le dimanche, $Day_2$ le lundi, ... $Day_7$ est le samedi)
+
+- On compte les jours fériés 
+$Off_i$ est le nombre de jour férié tombant un jour n°i dans le mois ($Off_1$ pour tous les dimanches, $Off_2$ les lundis, ... et $Off_7$ les samedis)
+
+- On distingue alors jours IN et jours OFF (selon fériés et vacances). En France la liste des jours off est :
+    * 1er de l'an (1er janvier)
+    * Lundi de Paques
+    * Jeudi de l'ascension
+    * Lundi de pentecôte
+    * Fête du travail (1er mai)
+    * Armistice de 1945 (8 mai) mais uniquement depuis 1982
+    * Fête nationale (14 juillet)
+    * L'assomption (15 Août)
+    * Toussaint (1 novembre)
+    * Armistice de 1918 (11 novembre)
+    * Noël (25 décembre)
+    * les différents ponts (les lundi et vendredi à chaque fois qu'il y a un mardi ou un jeudi de férié) 
+
+Ainsi :
+$In_i = Day_i - Off_i$ pour $i$ entre 1 et 7.
+
+- On créé les jours TD (tradings days) comme contrast par rapport à un référence (généralement le dimanche) :
+$TD_i = Day_i - Day_1$ pour $i$ entre 2 et 7. 
+Par abus de notation, des fois i parcourt [1, 6] et non [2, 7] et alors 1 désigne le lundi et 6 le samedi.
+
+- On créé la variable WD (working days) qui calcule un nombre moyen de jours travaillé (en contraste)
+$$ WD = \left(\sum_{i = 2}^{6} Day_i\right) - \frac{5}{2} \times \left(Day_1 + Day_7\right) $$
+On applique la formule plus générale :
+
+$$ reg_i = group_i - group_0 \times \frac{\# group_i}{\# group_0} $$ avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$ et $group_0 = {1, 7}$
+
+- On créé les "Working week-days" (TD), en opposition les "Publics Holydays" (PH) et les "Weekday contrast" (Weekdays) :
+$$ TD = \sum_{i = 2}^{6} In_i $$
+$$ PH = \sum_{i = 2}^{6} Off_i $$
+$$ Weekdays = TD - \frac{5}{2} \times \left(PH + Day_1 + Day_7\right) $$
+
+### Retrait des moyennes de long-terme
+
+- On va calculer les moyennes de long-terme pour les variables $Day_i$ et les $Off_i$. Ces moyennes se calculent mois par mois :
+$mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j}$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_$ le numéro du mois entre 1 et 12.
+$mean\_Off_{i, mois\_j} = \sum_{annees} Off_{i, mois\_j}$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12
+
+
+
