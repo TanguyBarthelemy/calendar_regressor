@@ -33,6 +33,7 @@ library("rjd3modelling")
 # library("timeSeries")
 # library("gridExtra")
 # library("kableExtra")
+library("magrittr")
 
 
 # Création du calendrier --------------------------------------------------

@@ -15,7 +15,7 @@ source("./R/0_set_up.R")
 # objet TS
 wkd1_mens_ts <- htd(frenchCalendar, frequency = frequency_mens, 
                     start = start_reg, length = frequency_mens * 40, 
-                    groups = groups_reg1, meanCorrection = TRUE, contrasts = FALSE)
+                    groups = groups_reg1, meanCorrection = TRUE, contrasts = TRUE)
 colnames(wkd1_mens_ts) <- "reg1_rjd"
 # objet data.frame
 reg1_rjd_mens_df <- cbind(date = zoo::as.Date(time(wkd1_mens_ts)),

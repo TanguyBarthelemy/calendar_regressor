@@ -5,10 +5,10 @@ source("./R/0_set_up.R")
 
 ## Préparation des données ------------------------------------
 
-# used_calendar <- newCalendar
+used_calendar <- newCalendar
 used_calendar <- frenchCalendar
 
-wkd1_mens_ts <- htd(used_calendar, frequency = frequency_mens, 
+wkd1_mens_ts <- htd(frenchCalendar, frequency = frequency_mens, 
                     start = start_reg, length = frequency_mens * 40, 
                     groups = groups_reg1, meanCorrection = FALSE, 
                     contrasts = FALSE)
@@ -16,9 +16,9 @@ wkd1_mens_ts <- htd(used_calendar, frequency = frequency_mens,
 # objet data.frame
 reg1_rjd_mens_df <- cbind(date = zoo::as.Date(time(wkd1_mens_ts)),
                           as.data.frame(wkd1_mens_ts))
-colnames(reg1_rjd_mens_df) <- c("date", "reg1_r0_rjd", "reg1_r1_rjd")
+colnames(reg1_rjd_mens_df) <- c("date", "reg1_gr0_rjd", "reg1_gr1_rjd")
 reg1_rjd_mens_df <- reg1_rjd_mens_df |> 
-    dplyr::mutate(reg1_rjd = reg1_r1_rjd - 5/2 * reg1_r0_rjd)
+    dplyr::mutate(reg1_rjd = reg1_gr1_rjd - 5/2 * reg1_gr0_rjd)
 
 ### Etude de la création des WD ------------------------------------------------
 
@@ -78,9 +78,9 @@ wkd1_mens_ts_corr <- htd(used_calendar, frequency = frequency_mens,
 # objet data.frame
 reg1_rjd_mens_df <- cbind(date = zoo::as.Date(time(wkd1_mens_ts_corr)),
                           as.data.frame(wkd1_mens_ts_corr))
-colnames(reg1_rjd_mens_df) <- c("date", "reg1_r0_rjd_corr", "reg1_r1_rjd_corr")
+colnames(reg1_rjd_mens_df) <- c("date", "reg1_gr0_rjd_corr", "reg1_gr1_rjd_corr")
 reg1_rjd_mens_df <- reg1_rjd_mens_df |> 
-    dplyr::mutate(reg1_rjd_corr = reg1_r1_rjd_corr - 5/2 * reg1_r0_rjd_corr)
+    dplyr::mutate(reg1_rjd_corr = reg1_gr1_rjd_corr - 5/2 * reg1_gr0_rjd_corr)
 
 
 ### Etude de la création des WD ------------------------------------------------
