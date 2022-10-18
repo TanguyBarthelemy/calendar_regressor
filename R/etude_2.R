@@ -82,19 +82,8 @@ colnames(reg1_rjd_mens_df) <- c("date", "reg1_r0_rjd_corr", "reg1_r1_rjd_corr")
 reg1_rjd_mens_df <- reg1_rjd_mens_df |> 
     dplyr::mutate(reg1_rjd_corr = reg1_r1_rjd_corr - 5/2 * reg1_r0_rjd_corr)
 
+
 ### Etude de la création des WD ------------------------------------------------
-
-
-wkd1_sas <- haven::read_sas("./output_calendar_sas/frenchcalendar_c.sas7bdat") |> 
-    dplyr::mutate(
-        NbOffWE = Off1 + Off7, 
-        NbOffW = Off2 + Off3 + Off4 + Off5 + Off6, 
-        NbOff = NbOffW + NbOffWE, 
-        NbInWE = In1 + In7, 
-        NbInW = In2 + In3 + In4 + In5 + In6, 
-        NbIn = NbInW + NbInWE, 
-        NbW = NbInW + NbOffW, 
-        NbWE = NbInWE + NbOffWE)
 
 wkd1_rjd <- reg1_rjd_mens_df
 
@@ -132,6 +121,6 @@ tot2 <- tot2 |>
     dplyr::relocate(c(NbInWE, NbInW, NbIn, 
                       NbOffWE, NbOffW, NbOff), .after = WD)
 
-tot2 |> subset(diff_rjd) |> View()
+tot2 |> subset(diff_rjd)
 
 

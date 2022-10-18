@@ -82,3 +82,35 @@ reg_cjo <- frenchCalendar_corr |>
     dplyr::mutate(Date = as.Date(Date)) |> 
     dplyr::mutate(REG1_contr = 
         REG1 - sum(c(groups_in, groups_off) == 'REG1') / sum(c(groups_in, groups_off) == 'REG0') * REG0)
+
+
+
+
+# On peut utiliser des pivots pour le faire
+
+df_init <- data.frame(
+    id = 1:5, 
+    d1 = rep(1, 5), 
+    d2 = rep(2, 5), 
+    d3 = rep(3, 5), 
+    f1 = rep(4, 5), 
+    f2 = rep(5, 5), 
+    f3 = rep(6, 5), 
+    h1 = rep("6", 5), 
+    h4 = as.Date(22555:22559)
+)
+
+df_init |> dplyr::mutate(
+    g1 = d1 + f1, 
+    g2 = d2 + f2, 
+    g3 = d3 + f3
+)
+
+
+df_init %>% 
+    tidyr::pivot_longer(cols = c(dplyr::starts_with(c("d", "f"))), 
+                        names_to = c(".value", "var"), 
+                        names_pattern = "(\\w)(\\d)") %>% 
+    dplyr::mutate(g = d+f) %>% 
+    tidyr::pivot_wider(names_from = var, values_from = c(g, d, f), names_sep = "")
+
