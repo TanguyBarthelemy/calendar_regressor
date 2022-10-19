@@ -28,3 +28,24 @@ calendar.holiday(frenchCalendar, "ASSUMPTION") # Assomption
 calendar.holiday(frenchCalendar, "ALLSAINTSDAY") # Toussaint
 calendar.holiday(frenchCalendar, "ARMISTICE")
 calendar.holiday(frenchCalendar, "CHRISTMAS") # Noël
+
+
+# Import des données ------------------------------------------------------
+
+reg_sas_trim_df <- xlsx::read.xlsx("./data/reg_cjo_t.xls", sheetIndex = 1)
+reg_sas_mens_df <- xlsx::read.xlsx("./data/reg_cjo_m.xls", sheetIndex = 1)
+reg_sas_trim_df$date <- base::as.Date(reg_sas_trim_df$date)
+reg_sas_mens_df$date <- base::as.Date(reg_sas_mens_df$Date)
+
+
+# Paramètres des jeux de regresseurs --------------------------------------
+
+groups_reg1 <- c(rep(1, 5), 0, 0)
+# groups_reg1 <- c(rep(1, 6), 0)
+groups_reg2 <- c(rep(1, 5), 2, 0)
+groups_reg5 <- c(1:5, 0, 0)
+groups_reg6 <- c(1:6, 0)
+frequency_mens <- 12
+frequency_trim <- 4
+# start doit être de taille 2
+start_reg <- c(1990, 1)
