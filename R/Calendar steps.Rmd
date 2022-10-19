@@ -59,8 +59,30 @@ $$ Weekdays = TD - \frac{5}{2} \times \left(PH + Day_1 + Day_7\right) $$
 ### Retrait des moyennes de long-terme
 
 - On va calculer les moyennes de long-terme pour les variables $Day_i$ et les $Off_i$. Ces moyennes se calculent mois par mois :
-$mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j}$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_$ le numéro du mois entre 1 et 12.
+$mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j}$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12.
 $mean\_Off_{i, mois\_j} = \sum_{annees} Off_{i, mois\_j}$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12
 
+- On peut ensuite recalculer de nouvelles variables :
+$$ Day_i\_corr = Day_i - mean\_Day_i $$, 
+$$ Off_i\_corr = Off_i - mean\_Off_i $$, 
+$$ In_i\_corr = Day_i\_corr - Off_i\_corr $$, 
+Ainsi que toutes les autres variables présentées précédemment avec les nouveaux $Day_i\_corr$, $Off_i\_corr$ et $In_i\_corr$.
 
+### Calcul des variables de regresseurs à partir des groupes
+
+Pour créer un jeu de régresseurs, nous regroupons les jours de certains types entre eux. Par exemple :
+- le jeu REG1 créé 2 groupes de jours 
+    * G1 = jours ouvrables
+    * G0 = les autres
+- le jeu REG6 créé 7 groupes de jours 
+    * G1 = lundi ouvrables
+    * G2 = mardi ouvrables
+    * G3 = mercredi ouvrables
+    * G4 = jeudi ouvrables
+    * G5 = vendredi ouvrables
+    * G6 = samedi ouvrables
+    * G0 = les autres)
+- et d'autres (REG5, REG3, ...)
+
+Nous allons ensuite 
 
