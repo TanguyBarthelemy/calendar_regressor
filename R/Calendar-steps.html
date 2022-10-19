@@ -299,8 +299,8 @@ pre code {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -308,16 +308,9 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -402,10 +395,11 @@ vacances). En France la liste des jours off est :</p>
 <li>Armistice de 1918 (11 novembre)</li>
 <li>Noël (25 décembre)</li>
 <li>les différents ponts (les lundi et vendredi à chaque fois qu’il y a
-un mardi ou un jeudi de férié) Ainsi : <span class="math inline">\(In_i
-= Day_i - Off_i\)</span> pour <span class="math inline">\(i\)</span>
-entre 1 et 7.</li>
+un mardi ou un jeudi de férié)</li>
 </ul></li>
+</ul>
+<p>Ainsi on peut définir les jours ouvrables : <span class="math inline">\(In_i = Day_i - Off_i\)</span> pour <span class="math inline">\(i\)</span> entre 1 et 7.</p>
+<ul>
 <li><p>On créé les jours TD (tradings days) comme contrast par rapport à
 un référence (généralement le dimanche) : <span class="math inline">\(TD_i = Day_i - Day_1\)</span> pour <span class="math inline">\(i\)</span> entre 2 et 7. Par abus de notation, des
 fois i parcourt [1, 6] et non [2, 7] et alors 1 désigne le lundi et 6 le
@@ -418,23 +412,93 @@ Day_7\right) \]</span> On applique la formule plus générale :</p></li>
 <p><span class="math display">\[ reg_i = group_i - group_0 \times
 \frac{\# group_i}{\# group_0} \]</span> avec ici <span class="math inline">\(i = 1\)</span> et <span class="math inline">\(group_1 = {2, 3, 4, 5, 6}\)</span> et <span class="math inline">\(group_0 = {1, 7}\)</span></p>
 <ul>
-<li>On créé les “Working week-days” (TD), en opposition les “Publics
-Holydays” (PH) et les “Weekday contrast” (Weekdays) : <span class="math display">\[ TD = \sum_{i = 2}^{6} In_i \]</span> <span class="math display">\[ PH = \sum_{i = 2}^{6} Off_i \]</span> <span class="math display">\[ Weekdays = TD - \frac{5}{2} \times \left(PH +
-Day_1 + Day_7\right) \]</span></li>
+<li>On créé les “Working week-days” = jours ouvrables (TD), en
+opposition les “Publics Holydays” (PH) et les “Weekday contrast”
+(Weekdays) : <span class="math display">\[ TD = \sum_{i = 2}^{6} In_i
+\]</span> <span class="math display">\[ PH = \sum_{i = 2}^{6} Off_i
+\]</span> <span class="math display">\[ Weekdays = TD - \frac{5}{2}
+\times \left(PH + Day_1 + Day_7\right) \]</span></li>
 </ul>
 </div>
 <div id="retrait-des-moyennes-de-long-terme" class="section level3">
 <h3>Retrait des moyennes de long-terme</h3>
 <ul>
-<li>On va calculer les moyennes de long-terme pour les variables <span class="math inline">\(Day_i\)</span> et les <span class="math inline">\(Off_i\)</span>. Ces moyennes se calculent mois par
+<li><p>On va calculer les moyennes de long-terme pour les variables
+<span class="math inline">\(Day_i\)</span> et les <span class="math inline">\(Off_i\)</span>. Ces moyennes se calculent mois par
 mois : <span class="math inline">\(mean\_Day_{i, mois\_j} =
 \sum_{annees} Day_{i, mois\_j}\)</span> avec <span class="math inline">\(i\)</span> l’indice du jour de la semaine entre 1
-et 7 et <span class="math inline">\(mois\_\)</span> le numéro du mois
+et 7 et <span class="math inline">\(mois\_j\)</span> le numéro du mois
 entre 1 et 12. <span class="math inline">\(mean\_Off_{i, mois\_j} =
 \sum_{annees} Off_{i, mois\_j}\)</span> avec <span class="math inline">\(i\)</span> l’indice du jour de la semaine entre 1
 et 7 et <span class="math inline">\(mois\_j\)</span> le numéro du mois
-entre 1 et 12</li>
+entre 1 et 12</p></li>
+<li><p>On peut ensuite recalculer de nouvelles variables : <span class="math display">\[ Day_i\_corr = Day_i - mean\_Day_i \]</span>,
+<span class="math display">\[ Off_i\_corr = Off_i - mean\_Off_i
+\]</span>, <span class="math display">\[ In_i\_corr = Day_i\_corr -
+Off_i\_corr \]</span>, Ainsi que toutes les autres variables présentées
+précédemment avec les nouveaux <span class="math inline">\(Day_i\_corr\)</span>, <span class="math inline">\(Off_i\_corr\)</span> et <span class="math inline">\(In_i\_corr\)</span>.</p></li>
 </ul>
+</div>
+<div id="calcul-des-variables-de-regresseurs-à-partir-des-groupes" class="section level3">
+<h3>Calcul des variables de regresseurs à partir des groupes</h3>
+<p>Pour créer un jeu de régresseurs, nous regroupons les jours de
+certains types entre eux. Par exemple : - le jeu REG1 créé 2 groupes de
+jours * <span class="math inline">\(G_1\)</span> = jours ouvrables *
+<span class="math inline">\(G_0\)</span> = les autres - le jeu REG6 créé
+7 groupes de jours * <span class="math inline">\(G_1\)</span> = lundi
+ouvrables * <span class="math inline">\(G_2\)</span> = mardi ouvrables *
+<span class="math inline">\(G_3\)</span> = mercredi ouvrables * <span class="math inline">\(G_4\)</span> = jeudi ouvrables * <span class="math inline">\(G_5\)</span> = vendredi ouvrables * <span class="math inline">\(G_6\)</span> = samedi ouvrables * <span class="math inline">\(G_0\)</span> = les autres) - et d’autres (REG5,
+REG3, …)</p>
+<p>Nous allons ensuite créer les regresseurs de calendrier comme
+variable de contraste par rapport à une référence. On prend généralement
+le groupe 0 comme groupe de référence.</p>
+<p>Afin d’introduire de la comparabilité entre les groupes et avoir de
+l’homogénéité dans nos contrastes, nous allons pondérer le groupe 0 à la
+hauteur de la répartition du nombre de jour entre le groupe i et le
+groupe 0.</p>
+<p>Nos régresseurs s’écrivent ainsi :</p>
+<p><span class="math display">\[ REG_n\_AC_i = REG_i - \omega_i REG_0
+\]</span> avec ici <span class="math inline">\(n\)</span> qui vaut 1, 3,
+5, 6, … et <span class="math inline">\(i\)</span> entre 1 et <span class="math inline">\(n\)</span>.</p>
+<p>De manièrev générale, les <span class="math inline">\(\omega_i\)</span> sont calculés à partir de la
+taille des groupes : <span class="math display">\[ \omega_i = \frac{\#
+group_i}{\# group_0} \]</span></p>
+<ul>
+<li>Pour les jeux de régresseurs issus de JD+ (<em>package
+rjd3modelling</em>), les <span class="math inline">\(\omega_i\)</span>
+sont calculés entre les jours “In”. Ainsi dans une semaine “classique”,
+il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end
+(samedi et dimanche).
+<ul>
+<li>pour REG6, <span class="math inline">\(\omega_i = 1\)</span> car
+chaque groupe <span class="math inline">\(G_i\)</span> ne contient qu’un
+jour</li>
+<li>pour REG1, <span class="math inline">\(\omega_i =
+\frac{5}{2}\)</span> car le groupe 1 <span class="math inline">\(G_1\)</span> (jours ouvrables) contient les jours
+du lundi au vendredi et le groupe 0 <span class="math inline">\(G_0\)</span> contient le samedi et le
+dimanche.</li>
+<li>… selon les configurations des groupes</li>
+</ul></li>
+<li>Pour les jeux de régresseurs issus des programmes SAS, les jours
+comptabilisés dans les pondérations sont les jours “In” et les jours
+“Off”.
+<ul>
+<li>pour REG6, <span class="math inline">\(\omega_i =
+\frac{1}{8}\)</span> car chaque groupe <span class="math inline">\(G_i\)</span> (pour <span class="math inline">\(i\neq 0\)</span>) ne contient qu’un seul jour
+alors que le groupe 0 <span class="math inline">\(G_0\)</span> contient
+8 jours dans le sens : 1 dimanche en semaine classique (“In”) et 7 jours
+en semaine férié / vacances (“Off”)</li>
+<li>pour REG1, <span class="math inline">\(\omega_i =
+\frac{5}{9}\)</span> car le groupe 1 (jours ouvrables) contient 5 jours
+: les jours “In” du lundi au vendredi et le groupe 0 <span class="math inline">\(G_0\)</span> contient le samedi et le dimanche en
+semaine classique (“In”) et 7 jours en semaine férié / vacances
+(“Off”).</li>
+<li>… selon les configurations des groupes</li>
+</ul></li>
+</ul>
+<p>Les espaces formés par la combinaison de chaque jeu de régressurs
+(RJD ou SAS) sont les mêmes. Mais les coefficients seront différents et
+interprétés différemment.</p>
 </div>
 </div>
 

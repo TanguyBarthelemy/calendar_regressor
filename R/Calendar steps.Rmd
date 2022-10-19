@@ -38,7 +38,7 @@ $Off_i$ est le nombre de jour férié tombant un jour n°i dans le mois ($Off_1$
     * Noël (25 décembre)
     * les différents ponts (les lundi et vendredi à chaque fois qu'il y a un mardi ou un jeudi de férié) 
 
-Ainsi :
+Ainsi on peut définir les jours ouvrables :
 $In_i = Day_i - Off_i$ pour $i$ entre 1 et 7.
 
 - On créé les jours TD (tradings days) comme contrast par rapport à un référence (généralement le dimanche) :
@@ -51,7 +51,7 @@ On applique la formule plus générale :
 
 $$ reg_i = group_i - group_0 \times \frac{\# group_i}{\# group_0} $$ avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$ et $group_0 = {1, 7}$
 
-- On créé les "Working week-days" (TD), en opposition les "Publics Holydays" (PH) et les "Weekday contrast" (Weekdays) :
+- On créé les "Working week-days" = jours ouvrables (TD), en opposition les "Publics Holydays" (PH) et les "Weekday contrast" (Weekdays) :
 $$ TD = \sum_{i = 2}^{6} In_i $$
 $$ PH = \sum_{i = 2}^{6} Off_i $$
 $$ Weekdays = TD - \frac{5}{2} \times \left(PH + Day_1 + Day_7\right) $$
@@ -72,17 +72,37 @@ Ainsi que toutes les autres variables présentées précédemment avec les nouve
 
 Pour créer un jeu de régresseurs, nous regroupons les jours de certains types entre eux. Par exemple :
 - le jeu REG1 créé 2 groupes de jours 
-    * G1 = jours ouvrables
-    * G0 = les autres
+    * $G_1$ = jours ouvrables
+    * $G_0$ = les autres
 - le jeu REG6 créé 7 groupes de jours 
-    * G1 = lundi ouvrables
-    * G2 = mardi ouvrables
-    * G3 = mercredi ouvrables
-    * G4 = jeudi ouvrables
-    * G5 = vendredi ouvrables
-    * G6 = samedi ouvrables
-    * G0 = les autres)
+    * $G_1$ = lundi ouvrables
+    * $G_2$ = mardi ouvrables
+    * $G_3$ = mercredi ouvrables
+    * $G_4$ = jeudi ouvrables
+    * $G_5$ = vendredi ouvrables
+    * $G_6$ = samedi ouvrables
+    * $G_0$ = les autres)
 - et d'autres (REG5, REG3, ...)
 
-Nous allons ensuite 
+Nous allons ensuite créer les regresseurs de calendrier comme variable de contraste par rapport à une référence. On prend généralement le groupe 0 comme groupe de référence.
 
+Afin d'introduire de la comparabilité entre les groupes et avoir de l'homogénéité dans nos contrastes, nous allons pondérer le groupe 0 à la hauteur de la répartition du nombre de jour entre le groupe i et le groupe 0.
+
+Nos régresseurs s'écrivent ainsi :
+
+$$ REG_n\_AC_i = REG_i - \omega_i REG_0 $$ avec ici $n$ qui vaut 1, 3, 5, 6, ... et $i$ entre 1 et $n$.
+
+De manièrev générale, les $\omega_i$ sont calculés à partir de la taille des groupes :
+$$ \omega_i = \frac{\# group_i}{\# group_0} $$
+
+- Pour les jeux de régresseurs issus de JD+ (*package rjd3modelling*), les $\omega_i$ sont calculés entre les jours "In". Ainsi dans une semaine "classique", il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
+    * pour REG6, $\omega_i = 1$ car chaque groupe $G_i$ ne contient qu'un jour
+    * pour REG1, $\omega_i = \frac{5}{2}$ car le groupe 1 $G_1$ (jours ouvrables) contient les jours du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche.
+    * ... selon les configurations des groupes
+
+- Pour les jeux de régresseurs issus des programmes SAS, les jours comptabilisés dans les pondérations sont les jours "In" et les jours "Off". 
+    * pour REG6, $\omega_i = \frac{1}{8}$ car chaque groupe $G_i$ (pour $i\neq 0$) ne contient qu'un seul jour alors que le groupe 0 $G_0$ contient 8 jours dans le sens : 1 dimanche en semaine classique ("In") et 7 jours en semaine férié / vacances ("Off")
+    * pour REG1, $\omega_i = \frac{5}{9}$ car le groupe 1 (jours ouvrables) contient 5 jours : les jours "In" du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche en semaine classique ("In") et 7 jours en semaine férié / vacances ("Off").
+    * ... selon les configurations des groupes
+
+Les espaces formés par la combinaison de chaque jeu de régressurs (RJD ou SAS) sont les mêmes. Mais les coefficients seront différents et interprétés différemment.
