@@ -2,7 +2,34 @@
 library("magrittr")
 
 compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0), 
-                                groups_off = rep(0, 7)) {
+                                groups_off = rep(0, 7), 
+                                start_reg = c(1990, 1), 
+                                end_reg = c(2029, 4), 
+                                frequency_reg = 4) {
+    
+    if (!frequency_reg %in% c(4, 12)) {
+        stop("La fréquence doit être 4 (trimestrielle) ou 12 (mensuelle).")
+    }
+    
+    frequency_reg <- as.integer(frequency_reg)
+    
+    if ((!is.numeric(start_reg)) || 
+        (!is.numeric(end_reg)) ||
+        (length(start_reg) != 2) ||
+        (length(end_reg) != 2) ||
+        (any(c(start_reg, end_reg) <= 0)) ||
+        (start_reg[1] > end_reg[1]) ||
+        (start_reg[1] == end_reg[1] & start_reg[2] > end_reg[2]) ||
+        (start_reg[2] > frequency_reg) ||
+        (end_reg[2] > frequency_reg)) {
+        stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
+    }
+    
+    start_reg <- as.integer(start_reg)
+    end_reg <- as.integer(end_reg)
+    
+    length_reg <- (end_reg[1] - start_reg[1]) * frequency_reg + (end_reg[2] - start_reg[2] + 1)
+    
     
     if (is.numeric(groups_in)) {
         groups_in <- paste0("REG", groups_in)
@@ -19,7 +46,7 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     names(coeff_v) <- paste0("REG", 0:(length(coeff_v) - 1))
     
     #Import du calendrier
-    frenchCalendar_tab <- haven::read_sas("./output_calendar_sas/cal/cal1.sas7bdat") |> 
+    frenchCalendar_tab <- haven::read_sas("./data/french_calendar_brut.sas7bdat") |> 
         dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01"))
     
     #Calcul des moyennes

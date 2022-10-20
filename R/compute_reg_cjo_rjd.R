@@ -61,7 +61,7 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
         gsub(pattern = "-", replacement = "_")
     
     # Import du calendrier
-    frenchCalendar_tab <- haven::read_sas("./output_calendar_sas/cal/cal1.sas7bdat") |> 
+    frenchCalendar_tab <- haven::read_sas("./data/french_calendar_brut.sas7bdat") |> 
         dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01"))
     
     if (frequency_reg == 4L) {
