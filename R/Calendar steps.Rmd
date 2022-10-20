@@ -106,3 +106,14 @@ $$ \omega_i = \frac{\# group_i}{\# group_0} $$
     * ... selon les configurations des groupes
 
 Les espaces formés par la combinaison de chaque jeu de régressurs (RJD ou SAS) sont les mêmes. Mais les coefficients seront différents et interprétés différemment.
+
+Enfin on peut formuler une remarque sur l'ordre des opérations. 
+
+L'opération de calcul des moyennes prend une série (mensuelle ou trimestrielle) et retire sa moyenne par période :
+$$ \overline{X} = I_1 \times (X - X_mean_1) + I_2 \times (X - X_mean_2) + ... + I_n \times (X - X_mean_n) $$ avec $I_i$ l'indicatrice de la période $i$ et $n$ le nombre total de période.
+
+L'opération de contraste prend 2 séries et en fait une somme pondérée :
+$$ X_contraste = X + \omega Y $$
+
+Ces deux opérations sont des opérateurs linéaires ainsi on peut alterner ces 2 formules lors du calcul des constrastes :
+$$ \overline{X + \omega Y} = \overline{X} + \omega \overline{Y} $$
