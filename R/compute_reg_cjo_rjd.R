@@ -62,7 +62,8 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     
     # Import du calendrier
     frenchCalendar_tab <- haven::read_sas("./data/french_calendar_brut.sas7bdat") |> 
-        dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01"))
+        dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01")) |> 
+        dplyr::mutate(periode = dplyr::case_when(frequency_reg == 4 ~ qtr, TRUE ~ month))
     
     if (frequency_reg == 4L) {
         frenchCalendar_tab <- frenchCalendar_tab |> 
@@ -83,7 +84,7 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     # Calcul des variables REG par groupes
     REG_tab <- frenchCalendar_tab |> 
         dplyr::filter(year >= start_reg[1] & year <= end_reg[1]) |> 
-        dplyr::select(c("Date", dplyr::starts_with(c("In", "Off")))) |> 
+        dplyr::select(Date, dplyr::starts_with(c("In", "Off"))) |> 
         tidyr::pivot_longer(cols = -Date, names_to = "VAR", values_to = "VAL") |> 
         tidyr::pivot_wider(names_from = "Date", values_from = "VAL") |> 
         dplyr::mutate(GROUP = c(groups_in, groups_off)) |> 
@@ -138,12 +139,7 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     })
     
     # Calcul des contrastes
-    if (frequency_reg == 4) {
-        reg_cjo <- merge(REG_tab, means_mat, by.y = "periode", by.x = "qtr")
-    } else {
-        reg_cjo <- merge(REG_tab, means_mat, by.y = "periode", by.x = "month")
-    }
-    reg_cjo <- reg_cjo |> 
+    reg_cjo <- merge(REG_tab, means_mat, by = "periode") |> 
         dplyr::mutate(ref = REG0 - REG_mean0) |> 
         tidyr::pivot_longer(cols = c(dplyr::starts_with("REG")), 
                             names_to = c(".value", "var"), values_to = "VAL", 

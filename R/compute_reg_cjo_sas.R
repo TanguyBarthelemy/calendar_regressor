@@ -47,17 +47,34 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     
     #Import du calendrier
     frenchCalendar_tab <- haven::read_sas("./data/french_calendar_brut.sas7bdat") |> 
-        dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01"))
+        dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01")) |> 
+        dplyr::mutate(periode = dplyr::case_when(frequency_reg == 4 ~ qtr, TRUE ~ month))
+    
+    if (frequency_reg == 4L) {
+        frenchCalendar_tab <- frenchCalendar_tab |> 
+            dplyr::group_by(year, periode) |> 
+            dplyr::select(-Date, -EasterG) |>
+            dplyr::summarise_all(sum) |> 
+            dplyr::mutate(
+                month = dplyr::case_when(
+                    month == 6 ~ 1, 
+                    month == 15 ~ 4, 
+                    month == 24 ~ 7, 
+                    TRUE ~ 10, 
+                ), 
+                Date = as.Date(paste0(year, "-", sprintf("%02.f", month), "-01"))) |> 
+            dplyr::ungroup()
+    }
     
     #Calcul des moyennes
     means_tab <- frenchCalendar_tab |> 
-        dplyr::select(c("month", dplyr::starts_with(c("Day", "Off")))) |> 
-        dplyr::group_by(month) |> 
-        dplyr::summarise_all(.funs = list(mean = mean))
+            dplyr::select(periode, dplyr::starts_with(c("Day", "Off"))) |> 
+            dplyr::group_by(periode) |> 
+            dplyr::summarise_all(.funs = list(mean = mean))
     
     #Calcul des corrections (dû aux moyennes)
     frenchCalendar_corr <- merge(frenchCalendar_tab, means_tab, 
-                                 by = 'month', all = TRUE) |> 
+                                     by = 'periode', all = TRUE) |> 
         dplyr::mutate(
             Day1_corr = Day1 - Day1_mean, 
             Day2_corr = Day2 - Day2_mean, 
@@ -106,7 +123,7 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
                 Day5_corr + Day6_corr - 5 * (Day1_corr + Day7_corr) / 2
         ) |> 
         dplyr::filter(year >= 1990 & year < 2031) |> 
-        dplyr::arrange(year, month)
+        dplyr::arrange(year, qtr, month)
     
     #Calcul des coeff_vicients régresseurs CJO
     
