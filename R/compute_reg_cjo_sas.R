@@ -122,7 +122,10 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
             WD_corr = Day1_corr + Day2_corr + Day3_corr + Day4_corr +
                 Day5_corr + Day6_corr - 5 * (Day1_corr + Day7_corr) / 2
         ) |> 
-        dplyr::filter(year >= 1990 & year < 2031) |> 
+        dplyr::filter((year > start_reg[1] & 
+                          year < end_reg[1]) | 
+                          (year == start_reg[1] & periode >= start_reg[2]) | 
+                          (year == end_reg[1] & periode <= end_reg[2])) |> 
         dplyr::arrange(year, qtr, month)
     
     #Calcul des coeff_vicients régresseurs CJO
