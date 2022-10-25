@@ -19,7 +19,7 @@ frenchCalendar <- rjd3modelling::calendar.new()
 calendar.fixedday(frenchCalendar, month = 7, day = 14)
 # # att depuis 1982
 calendar.fixedday(frenchCalendar, month = 5, day = 8, start = "1982-05-08")
-calendar.easter(frenchCalendar,offset = 39) ## attention +39 et pas 40 jeudi ascension
+calendar.easter(frenchCalendar, offset = 39) ## attention +39 et pas 40 jeudi ascension
 calendar.holiday(frenchCalendar, "NEWYEAR") # Nouvelle année
 calendar.holiday(frenchCalendar, "EASTERMONDAY") # Lundi de Pâques
 calendar.holiday(frenchCalendar, "MAYDAY") # 1er mai

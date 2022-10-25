@@ -138,6 +138,8 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
         }
     })
     
+    print(means_mat)
+    
     # Calcul des contrastes
     reg_cjo <- merge(REG_tab, means_mat, by = "periode") |> 
         dplyr::mutate(ref = REG0 - REG_mean0) |> 
@@ -155,4 +157,4 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     return(reg_cjo)
 }
 
-compute_reg_cjo_rjd(groups_in = c(0, rep(1, 5), 0))
+compute_reg_cjo_rjd(groups_in = c(0, rep(1, 5), 0), start_reg = c(1990, 1), end_reg = c(2000, 1), frequency_reg = 12)

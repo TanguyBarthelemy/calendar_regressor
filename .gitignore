@@ -44,4 +44,4 @@ vignettes/*.pdf
 *.csv
 *.sas7bdat
 ./WS de ref avec regs cjo
-
+*.html

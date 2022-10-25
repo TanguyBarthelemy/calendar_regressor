@@ -156,4 +156,7 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
 
 
 
-compute_reg_cjo_sas(groups_in = c(0, rep(1, 5), 0))
+compute_reg_cjo_sas(groups_in = c(0, rep(1, 5), 0), 
+                    start_reg = c(1990, 1), 
+                    end_reg = c(1994, 1), 
+                    frequency_reg = 12)
