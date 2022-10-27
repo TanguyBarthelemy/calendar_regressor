@@ -1,7 +1,9 @@
 ---
 title: "Calendar steps"
 author: "Tanguy"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Notation
 
 Dans la suite :
+
 - $i$ désigne le jour de la semaine
+
 - $j$ ou $mois_j$ désigne le numéro du mois de l'année
 
 ### Préparation du calendrier
@@ -38,8 +42,7 @@ $Off_i$ est le nombre de jour férié tombant un jour n°i dans le mois ($Off_1$
     * Noël (25 décembre)
     * les différents ponts (les lundi et vendredi à chaque fois qu'il y a un mardi ou un jeudi de férié) 
 
-Ainsi on peut définir les jours ouvrables :
-$In_i = Day_i - Off_i$ pour $i$ entre 1 et 7.
+Ainsi on peut définir les jours ouvrables $In_i = Day_i - Off_i$ pour $i$ entre 1 et 7.
 
 - On créé les jours TD (tradings days) comme contrast par rapport à un référence (généralement le dimanche) :
 $TD_i = Day_i - Day_1$ pour $i$ entre 2 et 7. 
@@ -59,21 +62,47 @@ $$ Weekdays = TD - \frac{5}{2} \times \left(PH + Day_1 + Day_7\right) $$
 ### Retrait des moyennes de long-terme
 
 - On va calculer les moyennes de long-terme pour les variables $Day_i$ et les $Off_i$. Ces moyennes se calculent mois par mois :
-$mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j}$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12.
-$mean\_Off_{i, mois\_j} = \sum_{annees} Off_{i, mois\_j}$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12
+$$ mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j} $$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12.
+$$ mean\_Off_{i, mois\_j} = \sum_{annees} Off_{i, mois\_j} $$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12
 
 - On peut ensuite recalculer de nouvelles variables :
-$$ Day_i\_corr = Day_i - mean\_Day_i $$, 
-$$ Off_i\_corr = Off_i - mean\_Off_i $$, 
-$$ In_i\_corr = Day_i\_corr - Off_i\_corr $$, 
+$$ Day_i\_corr = Day_i - mean\_Day_i , $$ 
+$$ Off_i\_corr = Off_i - mean\_Off_i , $$ 
+$$ In_i\_corr = Day_i\_corr - Off_i\_corr , $$ 
 Ainsi que toutes les autres variables présentées précédemment avec les nouveaux $Day_i\_corr$, $Off_i\_corr$ et $In_i\_corr$.
+
+Remarques : Pour les régresseurs calculés par *rjd3modeling*, on ne retire pas les mêmes éléments :
+$$ In_i\_corr\_rjd = In_i + mean\_Off_i $$
 
 ### Calcul des variables de regresseurs à partir des groupes
 
-Pour créer un jeu de régresseurs, nous regroupons les jours de certains types entre eux. Par exemple :
-- le jeu REG1 créé 2 groupes de jours 
+#### Présentation des différents jeux de régresseurs
+
+Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur est composé d'unh ensemble de groupe (groupe de jour). Les groupes sont des regroupements de jours de certains types entre eux :
+
+- le jeu REG1 créé 2 groupes de jours :
     * $G_1$ = jours ouvrables
     * $G_0$ = les autres
+    
+- le jeu REG2 créé 3 groupes de jours :
+    * $G_1$ = jours ouvrables (sauf samedi)
+    * $G_2$ = les samedis ouvrables
+    * $G_0$ = les autres
+    
+- le jeu REG3 créé 3 groupes de jours :
+    * $G_1$ = les lundis ouvrables
+    * $G_2$ = jours ouvrables (sauflundi et samedi)
+    * $G_3$ = les samedis ouvrables
+    * $G_0$ = les autres
+    
+- le jeu REG5 créé 3 groupes de jours :
+    * $G_1$ = les lundis ouvrables
+    * $G_2$ = les mardis ouvrables
+    * $G_3$ = les mercredis ouvrables
+    * $G_4$ = les jeudis ouvrables
+    * $G_5$ = les vendredis ouvrables
+    * $G_0$ = les autres
+    
 - le jeu REG6 créé 7 groupes de jours 
     * $G_1$ = lundi ouvrables
     * $G_2$ = mardi ouvrables
@@ -82,9 +111,10 @@ Pour créer un jeu de régresseurs, nous regroupons les jours de certains types 
     * $G_5$ = vendredi ouvrables
     * $G_6$ = samedi ouvrables
     * $G_0$ = les autres)
-- et d'autres (REG5, REG3, ...)
 
-Nous allons ensuite créer les regresseurs de calendrier comme variable de contraste par rapport à une référence. On prend généralement le groupe 0 comme groupe de référence.
+#### Calculs des jeux de régresseurs
+
+Nous allons ensuite créer les regresseurs de calendrier comme variable de contraste par rapport à une référence. On prend généralement le groupe 0 comme groupe de référence. Ainsi pour un jeu de régresseur qui contient $n$ groupes, on calcule $n-1$ régresseurs.
 
 Afin d'introduire de la comparabilité entre les groupes et avoir de l'homogénéité dans nos contrastes, nous allons pondérer le groupe 0 à la hauteur de la répartition du nombre de jour entre le groupe i et le groupe 0.
 
@@ -95,25 +125,66 @@ $$ REG_n\_AC_i = REG_i - \omega_i REG_0 $$ avec ici $n$ qui vaut 1, 3, 5, 6, ...
 De manière générale, les $\omega_i$ sont calculés à partir de la taille des groupes :
 $$ \omega_i = \frac{\# group_i}{\# group_0} $$
 
-- Pour les jeux de régresseurs issus de JD+ (*package rjd3modelling*), les $\omega_i$ sont calculés entre les jours "In". Ainsi dans une semaine "classique", il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
-    * pour REG6, $\omega_i = 1$ car chaque groupe $G_i$ ne contient qu'un jour
+- Pour les jeux de régresseurs issus de JD+ (*package rjd3modelling*), les $\omega_i$ sont calculés entre les jours d'une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
+    * pour REG6, $\omega_i = 1$ car chaque groupe $G_i$ ne contient qu'un jour (du lundi au dimanche)
     * pour REG1, $\omega_i = \frac{5}{2}$ car le groupe 1 $G_1$ (jours ouvrables) contient les jours du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche.
     * ... selon les configurations des groupes
 
-- Pour les jeux de régresseurs issus des programmes SAS, les jours comptabilisés dans les pondérations sont les jours "In" et les jours "Off". 
-    * pour REG6, $\omega_i = \frac{1}{8}$ car chaque groupe $G_i$ (pour $i\neq 0$) ne contient qu'un seul jour alors que le groupe 0 $G_0$ contient 8 jours dans le sens : 1 dimanche en semaine classique ("In") et 7 jours en semaine férié / vacances ("Off")
-    * pour REG1, $\omega_i = \frac{5}{9}$ car le groupe 1 (jours ouvrables) contient 5 jours : les jours "In" du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche en semaine classique ("In") et 7 jours en semaine férié / vacances ("Off").
+- Pour les jeux de régresseurs issus des programmes SAS, les jours comptabilisés dans les pondérations sont les jours $In$ et les jours $Off$. 
+    * pour REG6, $\omega_i = \frac{1}{8}$ car chaque groupe $G_i$ (pour $i\neq 0$) ne contient qu'un seul jour alors que le groupe 0 $G_0$ contient 8 jours dans le sens : 1 dimanche en semaine classique ($In$) et 7 jours en semaine férié / vacances ($Off$)
+    * pour REG1, $\omega_i = \frac{5}{9}$ car le groupe 1 (jours ouvrables) contient 5 jours : les jours $In$ du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche en semaine classique ($In$) et 7 jours en semaine férié / vacances ($Off$).
     * ... selon les configurations des groupes
 
 Les espaces formés par la combinaison de chaque jeu de régressurs (RJD ou SAS) sont les mêmes. Mais les coefficients seront différents et interprétés différemment.
 
+
+## Remarques 
+
+
+### Ordre des opérations 
+
 Enfin on peut formuler une remarque sur l'ordre des opérations. 
 
 L'opération de calcul des moyennes prend une série (mensuelle ou trimestrielle) et retire sa moyenne par période :
-$$ \overline{X} = I_1 \times (X - X_mean_1) + I_2 \times (X - X_mean_2) + ... + I_n \times (X - X_mean_n) $$ avec $I_i$ l'indicatrice de la période $i$ et $n$ le nombre total de période.
+$$ \overline{X} = I_1 \times (X - X\_{mean}_1) + I_2 \times (X - X\_{mean}_2) + ... + I_n \times (X - X\_{mean}_n) $$ avec $I_i$ l'indicatrice de la période $i$ et $n$ le nombre total de période (exemple $n = 12$ pour une fréquence mensuelle).
 
 L'opération de contraste prend 2 séries et en fait une somme pondérée :
-$$ X_contraste = X + \omega Y $$
+$$ X\_contraste = X + \omega Y $$
 
 Ces deux opérations sont des opérateurs linéaires ainsi on peut alterner ces 2 formules lors du calcul des constrastes :
 $$ \overline{X + \omega Y} = \overline{X} + \omega \overline{Y} $$
+
+### Occurence du premier de l'an
+
+Les règles de création des calendriers sont stables dans le temps (on sait quel jour tombera le 26 mars dans 450 ans). Ainsi on peut calculer les fréquences des jours de la semaine.
+
+```{r echo = FALSE}
+premier_de_l_an <- rep(0, 7)
+names(premier_de_l_an) <- c("Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi")
+
+jour = 6 # samedi en l'an 2000
+for (year in 0:(400 * 1 - 1)) {
+    premier_de_l_an[jour + 1] <- premier_de_l_an[jour + 1] + 1
+    if (year %% 400 == 0) {
+        jour <- jour + 366
+    } else if (year %% 100 == 0) {
+        jour <- jour + 365
+    } else if (year %% 4 == 0) {
+        jour <- jour + 366
+    } else {
+        jour <- jour + 365
+    }
+    jour <- jour %% 7
+}
+```
+
+
+Nombre d'occurence en 400 ans :
+```{r echo = FALSE}
+premier_de_l_an |> t() |> knitr::kable()
+```
+
+Fréquence d'apparition un premier de l'an :
+```{r echo = FALSE}
+(premier_de_l_an / sum(premier_de_l_an)) |> t() |> knitr::kable()
+```
