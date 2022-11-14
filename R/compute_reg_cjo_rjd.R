@@ -5,13 +5,68 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
                                 groups_off = rep(0, 7), 
                                 start_reg = c(1990, 1), 
                                 end_reg = c(2029, 4), 
-                                frequency_reg = 4) {
+                                frequency_reg = 4, 
+                                length_reg = 4) {
+    
+    # Vérification des paramètres temporels
     if (!frequency_reg %in% c(4, 12)) {
         stop("La fréquence doit être 4 (trimestrielle) ou 12 (mensuelle).")
     }
     
     frequency_reg <- as.integer(frequency_reg)
     
+    if ((missing(length_reg) & (missing(start_reg) || missing(start_reg))) || 
+        (missing(start_reg) && missing(start_reg))) {
+        stop("Il manque les paramètres de début, de fin ou de longueur de la série.")
+    }
+    
+    if (!missing(start_reg)) {
+        if ((!is.numeric(start_reg)) || 
+            (length(start_reg) != 2) ||
+            (start_reg <= 0) ||
+            (start_reg[2] > frequency_reg)) {
+            stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
+        }
+        
+        start_reg <- as.integer(start_reg)
+    }
+    
+    if (!missing(end_reg)) {
+        if ((!is.numeric(end_reg)) ||
+            (length(end_reg) != 2) ||
+            (end_reg <= 0) ||
+            (start_reg[1] > end_reg[1]) ||
+            (end_reg[2] > frequency_reg)) {
+            stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
+        }
+        
+        end_reg <- as.integer(end_reg)
+    }
+    
+    if (!missing(start_reg) && !missing(start_reg)) {
+        if ((start_reg[1] > end_reg[1]) ||
+            (start_reg[1] == end_reg[1] & start_reg[2] > end_reg[2])) {
+            stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
+        }
+    }
+    
+    if (missing(length_reg)) {
+        length_reg <- (end_reg[1] - start_reg[1]) * frequency_reg + (end_reg[2] - start_reg[2] + 1)
+    }
+    
+    if (missing(start_reg)) {
+        start_reg <- c(end_reg[1] + (end_reg[2] - length_reg - 1) %/% frequency_reg, (end_reg[2] - length_reg - 1) %% frequency_reg + 1)
+    }
+    
+    if (missing(end_reg)) {
+        end_reg <- c(start_reg[1] + (start_reg[2] + length_reg - 1) %/% frequency_reg, (start_reg[2] + length_reg - 1) %% frequency_reg + 1)
+    }
+    
+    if (length_reg != (end_reg[1] - start_reg[1]) * frequency_reg + (end_reg[2] - start_reg[2] + 1)) {
+        stop("Il y a une incompatibilité temporelle entre length_reg, start_reg et end_reg.")
+    }
+    
+    # Vérification des groupes
     if (is.numeric(groups_in)) {
         groups_in <- paste0("REG", groups_in)
     }
@@ -32,23 +87,6 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     
     coeff_v <- table(groups_in) |> as.integer()
     names(coeff_v) <- paste0("REG", 0:(length(coeff_v) - 1))
-    
-    if ((!is.numeric(start_reg)) || 
-        (!is.numeric(end_reg)) ||
-        (length(start_reg) != 2) ||
-        (length(end_reg) != 2) ||
-        (any(c(start_reg, end_reg) <= 0)) ||
-        (start_reg[1] > end_reg[1]) ||
-        (start_reg[1] == end_reg[1] & start_reg[2] > end_reg[2]) ||
-        (start_reg[2] > frequency_reg) ||
-        (end_reg[2] > frequency_reg)) {
-        stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
-    }
-    
-    start_reg <- as.integer(start_reg)
-    end_reg <- as.integer(end_reg)
-    
-    length_reg <- (end_reg[1] - start_reg[1]) * frequency_reg + (end_reg[2] - start_reg[2] + 1)
     
     real_rjd_reg_ts <- rjd3modelling::htd(
         frenchCalendar, frequency = frequency_reg, start = start_reg, length = length_reg, 

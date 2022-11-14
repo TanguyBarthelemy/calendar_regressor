@@ -2,15 +2,21 @@
 title: "Calendar steps"
 author: "Tanguy"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Presentation
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+div.green { background-color:#e6ffe8; border-radius: 5px; padding: 20px;}
+</style>
+
+
+## Divergence entre regresseurs Insee (SAS) et RJD
 
 ### Notation
 
@@ -20,7 +26,11 @@ Dans la suite :
 
 - $j$ ou $mois_j$ désigne le numéro du mois de l'année
 
+- $t$ désigne la date à laquelle on se trouve (croisement de $j$ et de l'anée)
+
 ### Préparation du calendrier
+
+*Les formules appliquées ici sont expliquées dans la seconde partie du document.*
 
 - On compte les jours ($NbDays$ est le nombre total de jour du mois) :
 $Day_i$ est le nombre de jour n°i dans le mois ($Day_1$ est le dimanche, $Day_2$ le lundi, ... $Day_7$ est le samedi)
@@ -28,7 +38,7 @@ $Day_i$ est le nombre de jour n°i dans le mois ($Day_1$ est le dimanche, $Day_2
 - On compte les jours fériés 
 $Off_i$ est le nombre de jour férié tombant un jour n°i dans le mois ($Off_1$ pour tous les dimanches, $Off_2$ les lundis, ... et $Off_7$ les samedis)
 
-- On distingue alors jours IN et jours OFF (selon fériés et vacances). En France la liste des jours off est :
+- On distingue alors jours $In$ et jours $Off$ (selon fériés et vacances). En France la liste des jours $Off$ est :
     * 1er de l'an (1er janvier)
     * Lundi de Paques
     * Jeudi de l'ascension
@@ -78,7 +88,7 @@ $$ In_i\_corr\_rjd = In_i + mean\_Off_i $$
 
 #### Présentation des différents jeux de régresseurs
 
-Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur est composé d'unh ensemble de groupe (groupe de jour). Les groupes sont des regroupements de jours de certains types entre eux :
+Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur est composé d'un ensemble de groupe. Chaque groupe contient des types de jours :
 
 - le jeu REG1 créé 2 groupes de jours :
     * $G_1$ = jours ouvrables
@@ -120,26 +130,122 @@ Afin d'introduire de la comparabilité entre les groupes et avoir de l'homogén�
 
 Nos régresseurs s'écrivent ainsi :
 
-$$ REG_n\_AC_i = REG_i - \omega_i REG_0 $$ avec ici $n$ qui vaut 1, 3, 5, 6, ... et $i$ entre 1 et $n$.
+$$ REG_n\_AC_k = REG_k - \omega_k REG_0 $$ avec ici $n$ qui vaut 1, 3, 5, 6, ... et $k$ entre 1 et $n$.
 
-De manière générale, les $\omega_i$ sont calculés à partir de la taille des groupes :
-$$ \omega_i = \frac{\# group_i}{\# group_0} $$
+De manière générale, les $\omega_k$ sont calculés à partir de la taille des groupes :
+$$ \omega_k = \frac{\# group_k}{\# group_0} $$
 
-- Pour les jeux de régresseurs issus de JD+ (*package rjd3modelling*), les $\omega_i$ sont calculés entre les jours d'une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
-    * pour REG6, $\omega_i = 1$ car chaque groupe $G_i$ ne contient qu'un jour (du lundi au dimanche)
-    * pour REG1, $\omega_i = \frac{5}{2}$ car le groupe 1 $G_1$ (jours ouvrables) contient les jours du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche.
+- Pour les jeux de régresseurs issus de JD+ (*package rjd3modelling*), les $\omega_k$ sont calculés entre les jours d'une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
+    * pour REG6, $\omega_k = 1$ car chaque groupe $G_i$ ne contient qu'un jour (du lundi au dimanche)
+    * pour REG1, $\omega_k = \frac{5}{2}$ car le groupe 1 $G_1$ (jours ouvrables) contient les jours du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche.
     * ... selon les configurations des groupes
 
 - Pour les jeux de régresseurs issus des programmes SAS, les jours comptabilisés dans les pondérations sont les jours $In$ et les jours $Off$. 
-    * pour REG6, $\omega_i = \frac{1}{8}$ car chaque groupe $G_i$ (pour $i\neq 0$) ne contient qu'un seul jour alors que le groupe 0 $G_0$ contient 8 jours dans le sens : 1 dimanche en semaine classique ($In$) et 7 jours en semaine férié / vacances ($Off$)
-    * pour REG1, $\omega_i = \frac{5}{9}$ car le groupe 1 (jours ouvrables) contient 5 jours : les jours $In$ du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche en semaine classique ($In$) et 7 jours en semaine férié / vacances ($Off$).
+    * pour REG6, $\omega_k = \frac{1}{8}$ car chaque groupe $G_k$ (pour $k \neq 0$) ne contient qu'un seul jour alors que le groupe 0 $G_0$ contient 8 jours dans le sens : 1 dimanche en semaine classique ($In$) et 7 jours en semaine férié / vacances ($Off$)
+    * pour REG1, $\omega_k = \frac{5}{9}$ car le groupe 1 (jours ouvrables) contient 5 jours : les jours $In$ du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche en semaine classique ($In$) et 7 jours en semaine férié / vacances ($Off$).
     * ... selon les configurations des groupes
 
 Les espaces formés par la combinaison de chaque jeu de régressurs (RJD ou SAS) sont les mêmes. Mais les coefficients seront différents et interprétés différemment.
 
 
-## Remarques 
+## Théorie et pratique
 
+### Présentation du modèle théorique
+
+Le modèle initial s'écrit :
+
+$$ \tag{1} D_t = \sum ^{7}_{i=1} \alpha _{i} \times Day_{i, t} $$
+
+Avec $\alpha_i$ l'effet du jour i (au moment t) sur notre variable. On appelle $D_t$ l'effet déterministe du calendrier sur variable à étudier.
+
+Malheureusement, ce modèle n'est pas utilisable directement comme ça car :
+
+- les régresseurs $Day_{i, t}$ sont fortements corrélés (exemple : le nombre de lundi dans un mois vaut toujours entre 3 et 5, comme tous les autres jours)
+
+- les régresseurs sont saisonnier (exemple : en moyenne, il y aura plus de lundi en janvier qu'en février ou qu'en avril)
+
+Aussi on remarque que $\sum ^{7}_{i=1} Day_{i, t} = NbDays_t$ est constant (par mois) sauf en février.
+
+Pour contrer cela, on va chercher à séparer l'**effet cummulatif du nombre total de jour du mois** de l'**effet net du nombre de type de jour de la semaine** (exemple : nombre de lundi).
+
+On réécrit l'équation en intégrant $NbDays_t$, le nombre de jour total du mois et $\overline{\alpha}$ l'effet moyen d'un type de jour :
+
+$$ \tag{2} D_t = \overline{\alpha} \times NbDays_t + \sum ^{7}_{i=1} \beta_i \times Day_{i, t} $$
+
+Avec $\overline{\alpha} = \frac{1}{7} \sum ^{7}_{i=1} \alpha_i$ et $\beta_i = \alpha _{i} - \overline{\alpha}$
+
+On remarque alors que $\sum ^{7}_{i=1} \beta_i = 0$. Donc $\beta_7 = -\sum ^{6}_{i=1} \beta_i$ et on peut écrire nos régresseurs en constraste du dimanche (ou de n'importe quel autre jour) :
+
+$$ \tag{3} D_t = \overline{\alpha} \times NbDays_t + \sum ^{6}_{i=1} \beta_i \times (Day_{i, t} - Day_{7, t}) $$
+
+Ce modèle correspond *à peu près* au modèle REG6 mais on peut formuler des hypothèses plus fortes pour créer de nouveaux jeux de régresseurs :
+
+- Si je suppose que $\beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5$ et $\beta_6 = \beta_7$, j'obtiens le modèle $D_t = \overline{\alpha} \times NbDays_t + \beta_1 \times (\sum ^{5}_{i=1} Day_{i, t} - \frac{5}{2}(Day_{6, t} + Day_{7, t}))$ qui correpond au jeu de régresseur REG1.
+
+- Si je suppose que $\beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5$, j'obtiens le modèle $D_t = \overline{\alpha} \times NbDays_t + \beta_1 \times (\sum ^{5}_{i=1} Day_{i, t} - Day_{7, t}) + \beta_6 \times (Day_{6, t} - Day_{7, t})$ qui correpond au jeu de régresseur REG2.
+
+- ...
+
+Finalement quelque soit le jeu de régresseur (regroupement de jour) que l'on choisit, le modèle général s'écrit :
+
+$$ \tag{4} D_t = \beta_0 \times LY_t + \sum ^{n}_{k=1} \beta _{k} \times REC_{n}\_AC_{k, t} $$
+Avec $LY_t$ la variable relative aux années bissextiles, $\beta_k$ le coefficient de régression relatif au régresseur $REC_{n}\_AC_{k, t}$.
+$\beta_0 = \overline{\alpha}$ est l'effet moyen de chaque type de jour.
+
+Attention : les régresseurs que l'on considère ($REC_{n}\_AC_{k, t}$, $LY_t$) sont "désaisonnalisés" dans une certaine mesure. On leur a retiré la moyenne de long-terme. Ainsi $LY_t$ diffère de $NbDays_t$ par le retrait de sa moyenne de long-terme par mois et vaut 0 pour tous les mois de l'année sauf pour février pour lequel $LY_t$ vaut -0.25 les années non-bissetiles et 0.75 les années bissextiles.
+
+Ainsi le modèle présenté ci-dessus (4), diffèrent des modèles (1), (2) et (3) par le retrait d'un terme purement saisonnier.
+
+Cette remarque est importante car elle conditionne notre interprétation des coefficients. Le coefficient $\beta_0$ n'aura plus la même interprétation que $\overline{\alpha}$ car le régresseur n'est plus le même.
+
+### Interprétation des coefficients
+
+Finalement lorsqu'on a notre résultat final, on cherche à interpréter les coefficients finaux et comprendre quel régresseur / jour de la semaine participe. 
+
+Tout d'abord, comme on l'a vu entre l'étape (1) et (2), les coefficients que l'on a à commenter sont les $\beta_i$ (ou $\beta_k$ quand on fait des groupes) et non les $\alpha_i$. Donc on ne commente pas l'effet du type de jour $i$ mais sa comparaison par rapport un type de jour moyen. Cela explique que l'on peut avoir des coefficients négatifs pour des types de jour où il y a de l'activité.
+
+<div class = "green">
+
+Exemple : pour le tableau suivant :
+
+| Regresseur | Coefficients | T-Stat | P[\|T\| > t] |
+|:----------:|:------------:|:------:|:------------:|
+| Lundi      | 0,0007       | 0,12   | 0,9032       |
+| Mardi      | 0,0066       | 0,89   | 0,3856       |
+| Mercredi   | 0,0136       | 1,93   | 0,2280       |
+| Jeudi      | 0,0090       | 1,25   | 0,2280       |
+| Vendredi   | -0,0004      | -0,05  | 0,9632       |
+| Samedi     | -0,0111      | -1,43  | 0,1715       |
+  
+Donc $\beta_7 = -\sum ^{6}_{k=1} \beta _{k} = -0,0184$ pour le coefficient du dimanche.
+
+On aurait envie de commenter : *« L'ajout d'un samedi en plus dans le mois* **fait baisser l'activité** *de 0.0111. Cela est contradictoire avec le fait qu'il y a de l'activité le samedi donc un samedi en plus dans le mois devrait* **faire augmenter l'activité***. »*
+
+Cependant ce n'est pas vrai, ici on commente un effet en comparaison de l'effet moyen d'un type de jour moyen. La bonne explication est la suivante : *« Chaque mois a le même nombre de jour. L'ajout d'un samedi dans le mois retire obligatoirement un autre jour du mois. Il y a des jours où l'activité est plus intense qu'un samedi. Donc* **en moyenne***, le jour que l'on retire aurait apporté plus d'activité. L'ajout d'un samedi "en plus" (=  à la place d'un jour moyen) dans le mois a un impact négatif sur l'activité. »*
+
+</div>
+
+#### Remarque 1 : Les régresseurs sont désaisonnalisés
+
+Comme on l'a vu entre les équations (3) et (4), on retire les moyennes de long-terme. Ainsi les régresseurs ne sont pas EXACTEMENT des nombres de jours mais ce sont des séries désaisonnalisées (sans leur moyenne de long-terme par mois).
+
+#### Remarque 2 : le choix la variable mise en contraste n'a pas d'importance.
+
+Si on repart de l'équation (3), on remarque que le choix du dimanche en constraste est un choix arbitraire. On peut donc réécrire l'équation de REG1 (par exemple) en conséquence :
+$$ D_t = \overline{\alpha} \times NbDays_t - \frac{1}{5} \beta_7 \times (Day_{6, t} + Day_{7, t} - \frac{2}{5} \sum ^{5}_{i=1} Day_{i, t}) $$
+La réestimation de ce modèle donnera un $\beta_7 = \beta_6$ identique au modèle REG1 écrit plus haut et les autres $\beta_i = -\frac{2}{5} \beta_7$ (pour $i$ entre 1 et 5) seront aussi les mêmes.
+
+#### Remarque 3 : la réalité est plus complexe
+
+Ici on a considéré un modèle simpliste. On a considéré que chaque jour de l'année se partageait en 7 catégories (lundi, mardi, ..., dimanche). Seulement dans la réalité, les modèles de calendriers sont plus complexes. Tout d'abord, on peut distinguer les jours $In$ (jours ouvrés) et les jours $Off$ (jours fériés) : cela nous donne 14 types de jour différents.
+On peut aussi considérer des modèles personnalisés selon l'activité. 
+
+<div class = "green">
+Exemple : dans le transport routier, les camions peuvent rouler toute l'année, jours ouvrés comme fériés. Seulement certains samedis, la circulation des poids-lourds est interdite. Il faudrait idéalement, créer un nouveau type de jour "samedi interdit" pour ces samedis.
+</div>
+
+
+## Remarques générales
 
 ### Ordre des opérations 
 
