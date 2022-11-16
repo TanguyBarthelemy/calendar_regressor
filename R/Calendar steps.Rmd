@@ -69,6 +69,8 @@ $$ TD = \sum_{i = 2}^{6} In_i $$
 $$ PH = \sum_{i = 2}^{6} Off_i $$
 $$ Weekdays = TD - \frac{5}{2} \times \left(PH + Day_1 + Day_7\right) $$
 
+Ces variables s'appuient sur la structure de REG1 (lundi au vendredi contre samedi et dimanche).
+
 ### Retrait des moyennes de long-terme
 
 - On va calculer les moyennes de long-terme pour les variables $Day_i$ et les $Off_i$. Ces moyennes se calculent mois par mois :

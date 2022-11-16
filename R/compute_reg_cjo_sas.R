@@ -81,7 +81,7 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     coeff_v <- table(c(groups_in, groups_off)) |> as.integer()
     names(coeff_v) <- paste0("REG", 0:(length(coeff_v) - 1))
     
-    #Import du calendrier
+    # Création du calendrier
     frenchCalendar_tab <- haven::read_sas("./data/french_calendar_brut.sas7bdat") |> 
         dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01")) |> 
         dplyr::mutate(periode = dplyr::case_when(frequency_reg == 4 ~ qtr, TRUE ~ month))
