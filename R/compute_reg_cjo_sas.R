@@ -166,8 +166,8 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     
     # Calcul des coeff_vicients régresseurs CJO
     reg_cjo <- frenchCalendar_corr |> 
-        dplyr::select(c("Date", dplyr::starts_with(c("In", "Off")))) |> 
-        dplyr::select(c("Date", dplyr::ends_with("_corr"))) |> 
+        dplyr::select(Date, dplyr::starts_with(c("In", "Off"))) |> 
+        dplyr::select(Date, dplyr::ends_with("_corr")) |> 
         tidyr::pivot_longer(cols = -Date, names_to = "VAR", values_to = "VAL") |> 
         tidyr::pivot_wider(names_from = "Date", values_from = "VAL") |> 
         dplyr::mutate(GROUP = c(groups_in, groups_off)) %>% 

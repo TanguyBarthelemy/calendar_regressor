@@ -1,2 +1,7 @@
 Things to do :
 --------------
+
+- Ajouter paramètres de sélection de date + longueur pour le calendrier Tanguy
+- Ajouter possibilité de créer des jours personnalisés (Au dejà des In ou Off)
+    --> s'assurer qu'ils sont bien opposition avec les In et Off (que la somme 
+        est bien disjointe et forme l'ensemble des jours !)

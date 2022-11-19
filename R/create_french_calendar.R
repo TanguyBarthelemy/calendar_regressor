@@ -305,22 +305,21 @@ add_means <- function(summarised_calendar) {
     full_calendar <- summarised_calendar |> 
         dplyr::rename(Day0 = Day, Off0 = Off, In0 = In) |>
         tidyr::pivot_longer(cols = dplyr::starts_with(c("Day", "Off", "In"), ignore.case = FALSE), 
-                            names_to = c(".value", "var"), values_to = "VAL", 
-                            names_pattern = "(\\w+)(\\d)") |> 
-        dplyr::group_by(periode) |> 
+                            names_to = c("type"), values_to = "val") |> 
+        dplyr::group_by(periode, type) |> 
         dplyr::mutate(
-            Day_mean = mean(Day, na.rm = TRUE), 
-            Off_mean = mean(Off, na.rm = TRUE), 
-            Day_corr = Day - Day_mean, 
-            Off_corr = Off - Off_mean, 
-            In_mean = Day_mean - Off_mean, 
-            In_mean = Day_corr - Off_corr) |>  
+            mean = mean(val, na.rm = TRUE), 
+            corr = val - mean) |>  
         dplyr::ungroup() |> 
-        dplyr::mutate(var = dplyr::case_when(
-            var == "0" ~ "", 
-            TRUE ~ var
+        dplyr::mutate(type = dplyr::case_when(
+            substr(type, 4, 4) == "0" ~ substr(type, 1, 3), 
+            substr(type, 3, 3) == "0" ~ substr(type, 1, 2), 
+            TRUE ~ type
         )) |> 
-        tidyr::pivot_wider(names_from = var, values_from = c(Day, Off, In, ends_with(c("_mean", "_corr"))), names_sep = "")
+        tidyr::pivot_wider(names_from = type, 
+                           values_from = c(val, mean, corr), 
+                           names_glue = "{type}_{.value}") |> 
+        dplyr::rename_with(.cols = ends_with("val"), .fn = \(x) gsub(x = x, pattern = "_val", replacement = ""))
     
     return(full_calendar)
 }
@@ -392,6 +391,6 @@ replicate_sas_calendar <- function(start = 1950, end = 2022, starting_day = "dim
     return(calendar)
 }
 
-cal1 <- create_french_calendar(end = 3000, by = "month", mean_correction = TRUE)
+cal1 <- create_french_calendar(end = 2000, by = "month", mean_correction = TRUE)
 cal2 <- create_french_calendar(summary = FALSE, end = 1960)
 cal3 <- replicate_sas_calendar()
