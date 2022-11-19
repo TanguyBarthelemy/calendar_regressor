@@ -102,13 +102,13 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
             dplyr::ungroup()
     }
     
-    #Calcul des moyennes
+    # Calcul des moyennes
     means_tab <- frenchCalendar_tab |> 
             dplyr::select(periode, dplyr::starts_with(c("Day", "Off"))) |> 
             dplyr::group_by(periode) |> 
             dplyr::summarise_all(.funs = list(mean = mean))
     
-    #Calcul des corrections (dû aux moyennes)
+    # Calcul des corrections (dû aux moyennes)
     frenchCalendar_corr <- merge(frenchCalendar_tab, means_tab, 
                                      by = 'periode', all = TRUE) |> 
         dplyr::mutate(
@@ -164,8 +164,7 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
                           (year == end_reg[1] & periode <= end_reg[2])) |> 
         dplyr::arrange(year, qtr, month)
     
-    #Calcul des coeff_vicients régresseurs CJO
-    
+    # Calcul des coeff_vicients régresseurs CJO
     reg_cjo <- frenchCalendar_corr |> 
         dplyr::select(c("Date", dplyr::starts_with(c("In", "Off")))) |> 
         dplyr::select(c("Date", dplyr::ends_with("_corr"))) |> 

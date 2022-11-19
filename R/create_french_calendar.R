@@ -392,17 +392,6 @@ replicate_sas_calendar <- function(start = 1950, end = 2022, starting_day = "dim
     return(calendar)
 }
 
-cal1 <- create_french_calendar(by = "month", mean_correction = TRUE)
+cal1 <- create_french_calendar(end = 3000, by = "month", mean_correction = TRUE)
 cal2 <- create_french_calendar(summary = FALSE, end = 1960)
 cal3 <- replicate_sas_calendar()
-
-
-stop("repartir d'ici pour le aclcul des moyennes")
-stop("Retirer les variables Day, In et OFF ?? OU alors les ajouter aussi ??")
-
-
-
-
-
-
-
