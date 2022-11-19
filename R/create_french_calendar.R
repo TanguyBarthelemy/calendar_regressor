@@ -7,13 +7,14 @@ create_annual_calendar <- function(leap_year = FALSE) {
                              leap_year = leap_year) |> 
         dplyr::mutate(month_number = as.integer(factor(month_name, levels = month_name_vect))) |> 
         dplyr::group_by(month_name) |>  
-        dplyr::mutate(month_day_number = 1:dplyr::n())
+        dplyr::mutate(month_day_number = seq_len(dplyr::n()))
     
     return(annual_cal)
 }
 
 create_empty_calendar <- function(start = 1950, end = 2022, starting_day = "dimanche") {
     
+    starting_day <- tolower(starting_day)
     weekday_en <- c("sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday")
     weekday_fr <- c("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi")
     
@@ -38,9 +39,10 @@ create_empty_calendar <- function(start = 1950, end = 2022, starting_day = "dima
     empty_cal <- do.call(rbind, purrr::map2(.x = year, .y = bissextile, 
                                             .f = \(x, y) cbind(year = x, create_annual_calendar(leap_year = y)))) |> 
         dplyr::mutate(
-            week_number = c(rep(seq_len(dplyr::n() %/% 7), each = 7), 
-                            rep(dplyr::n() %/% 7, times = dplyr::n() %% 7)), 
-            Date = as.Date(paste(year, sprintf("%02.f", month_number), sprintf("%02.f", month_day_number), sep = "-"))
+            week_number = as.integer(c(rep(seq_len(dplyr::n() %/% 7), each = 7), 
+                            rep(dplyr::n() %/% 7, times = dplyr::n() %% 7))), 
+            Date = as.Date(paste(year, sprintf("%02.f", month_number), sprintf("%02.f", month_day_number), sep = "-")), 
+            quarter_number = as.integer(((month_number - 1) %/% 3) + 1)
         ) |> 
         dplyr::group_by(year, month_name, month_number) |> 
         dplyr::mutate(NbDays = dplyr::n()) |> 
@@ -231,8 +233,14 @@ add_in_off <- function(calendar) {
             friday_bridge = v1 & weekday_name == "vendredi", 
             monday_bridge = v2 & weekday_name == "lundi") |> 
         dplyr::select(-v1, -v2) |> 
-        dplyr::mutate(temp_weekday_number = weekday_number) |>
-        tidyr::pivot_wider(names_from = temp_weekday_number, values_from = c(Day, In, Off), names_sep = "", values_fill = 0L)
+        dplyr::mutate(temp_weekday_number = weekday_number, 
+                      temp_Day = Day, 
+                      temp_In = In, 
+                      temp_Off = Off) |>
+        tidyr::pivot_wider(names_from = temp_weekday_number, values_from = c(Day, In, Off), names_sep = "", values_fill = 0L) |> 
+        dplyr::rename(Day = temp_Day, 
+                      In = temp_In, 
+                      Off = temp_Off)
     return(full_calendar)
 }
 
@@ -255,24 +263,76 @@ add_french_publics_holydays <- function(calendar) {
     return(full_calendar)
 }
 
-format_to_sas <- function(calendar) {
+summarise_by_period <- function(calendar, frequency = "mensuelle") {
+    
+    frequency <- tolower(frequency)
+    
+    if (frequency %in% c(4, 12)) {
+        message("Tu as choisi la fréquence ", c("mensuelle", "trimestrielle")[1 + (frequency == 4)], ".")
+        frequency_num <- frequency |> as.integer()
+    } else if (frequency %in% c("mensuelle", "trimestrielle")) {
+        frequency_num <- c(12, 4)[c("mensuelle", "trimestrielle") == frequency]
+    } else if (frequency %in% c("monthly", "quaterly")) {
+        frequency_num <- c(12, 4)[c("monthly", "quaterly") == frequency]
+    } else { 
+        stop("L'argument frequency doit être dans la liste suivante :", 
+             paste0(c("mensuelle", "trimestrielle", "monthly", "quaterly", 4, 12), collapse = ", "))
+    }
+    
+    full_calendar <- calendar |> 
+        dplyr::mutate(
+            EasterG = dplyr::case_when(
+                easter ~ format(Date, "%d%h%Y") |> toupper(), 
+                TRUE ~ ""), 
+            periode = dplyr::case_when(frequency_num == 4 ~ quarter_number, TRUE ~ month_number)) |> 
+        dplyr::group_by(year, periode) |> 
+        dplyr::summarise(dplyr::across(.cols = -c(NbDays, leap_year, Date, EasterG, easter, 
+                                                  weekday_name, quarter_number, month_number, 
+                                                  month_name, temp_nb_day_tot, month_day_number, week_number, weekday_number), sum, na.rm = TRUE), 
+                         NbDays = length(NbDays), LeapYear = dplyr::first(leap_year), 
+                         month_number = dplyr::first(month_number), 
+                         quarter_number = dplyr::first(quarter_number), 
+                         month_name = dplyr::first(month_name), 
+                         EasterG = max(EasterG), 
+                         easter = any(easter), 
+                         Date = dplyr::first(Date)) |> 
+        dplyr::ungroup()
+    
+    return(full_calendar)
+}
+
+add_means <- function(summarised_calendar) {
+    full_calendar <- summarised_calendar |> 
+        dplyr::rename(Day0 = Day, Off0 = Off, In0 = In) |>
+        tidyr::pivot_longer(cols = dplyr::starts_with(c("Day", "Off", "In"), ignore.case = FALSE), 
+                            names_to = c(".value", "var"), values_to = "VAL", 
+                            names_pattern = "(\\w+)(\\d)") |> 
+        dplyr::group_by(periode) |> 
+        dplyr::mutate(
+            Day_mean = mean(Day, na.rm = TRUE), 
+            Off_mean = mean(Off, na.rm = TRUE), 
+            Day_corr = Day - Day_mean, 
+            Off_corr = Off - Off_mean, 
+            In_mean = Day_mean - Off_mean, 
+            In_mean = Day_corr - Off_corr) |>  
+        dplyr::ungroup() |> 
+        dplyr::mutate(var = dplyr::case_when(
+            var == "0" ~ "", 
+            TRUE ~ var
+        )) |> 
+        tidyr::pivot_wider(names_from = var, values_from = c(Day, Off, In, ends_with(c("_mean", "_corr"))), names_sep = "")
+    
+    return(full_calendar)
+}
+
+format_to_sas <- function(summarised_calendar, frequency = "mensuelle") {
     
     Sys.setlocale("LC_TIME", "English")
     
-    full_calendar <- calendar |> 
-        dplyr::mutate(EasterG = dplyr::case_when(
-            easter ~ format(Date, "%d%h%Y") |> toupper(), 
-            TRUE ~ ""
-        )) |> 
-        dplyr::group_by(year, month_number, month_name) |> 
-        dplyr::summarise(dplyr::across(.cols = -c(NbDays, leap_year, Date, EasterG, easter, weekday_name), sum, na.rm = TRUE), 
-                         NbDays = length(NbDays), LeapYear = dplyr::first(leap_year), 
-                         EasterG = max(EasterG), Date = dplyr::first(Date)) |> 
-        dplyr::ungroup() |> 
+    full_calendar <- summarised_calendar |> 
         dplyr::mutate(
-            qtr = ((month_number - 1) %/% 3) + 1, 
             PH = Off2 + Off3 + Off4 + Off5 + Off6, 
-            WD = Day2 + Day3 + Day4 + Day5 + Day6 - 5/2 * (Day1 + Day7),
+            WD = Day2 + Day3 + Day4 + Day5 + Day6 - 5 / 2 * (Day1 + Day7),
             TD1 = Day2 - Day1, 
             TD2 = Day3 - Day1, 
             TD3 = Day4 - Day1, 
@@ -284,6 +344,7 @@ format_to_sas <- function(calendar) {
             Bridges = monday_bridge + friday_bridge, 
             LeapYear = (month_number == 2) * (LeapYear - 0.25)) |> 
         dplyr::rename(month = month_number, 
+                      qtr = quarter_number, 
                       Monday_B = monday_bridge, Friday_B = friday_bridge) |> 
         dplyr::select(Date, year, month, qtr, NbDays, 
                       dplyr::starts_with("Day", ignore.case = FALSE), 
@@ -291,13 +352,13 @@ format_to_sas <- function(calendar) {
                       dplyr::starts_with("In", ignore.case = FALSE), 
                       dplyr::starts_with("TD", ignore.case = FALSE), 
                       WD, Monday_B, Friday_B, PH, Bridges,
-                      LeapYear, WeekDays, EasterG) |> 
+                      LeapYear, WeekDays, EasterG, -Day, -In, -Off) |> 
         dplyr::relocate(TD, .after = PH)
     
     return(full_calendar)
 }
 
-create_french_calendar <- function(start = 1950, end = 2022, starting_day = "dimanche", summary = TRUE) {
+create_french_calendar <- function(start = 1950, end = 2022, starting_day = "dimanche", summary = TRUE, by = "month", mean_correction = FALSE) {
     
     if (end < start) {
         stop("L'argument end doit se trouver après start.")
@@ -306,11 +367,42 @@ create_french_calendar <- function(start = 1950, end = 2022, starting_day = "dim
     calendar <- create_empty_calendar(start = start, end = end, starting_day = starting_day) |> 
         add_french_publics_holydays()
     
-    if (summary) calendar <- calendar |> format_to_sas()
+    if (summary) {
+        if (by %in% c("month", "mois")) {
+            calendar <- calendar |> summarise_by_period(frequency = 12)
+        } else if (by %in% c("quarter", "trimestre")) {
+            calendar <- calendar |> summarise_by_period(frequency = 4)
+        } else {
+            stop("L'argument frequency doit être dans la liste suivante :", 
+                 paste0(c("mois", "trimestre", "month", "quater"), collapse = ", "))
+        }
+        
+        if (mean_correction) {
+            calendar <- calendar |> add_means()
+        }
+    }
     
     return(calendar)
 }
 
+replicate_sas_calendar <- function(start = 1950, end = 2022, starting_day = "dimanche", summary = TRUE, by = "month") {
+    calendar <- create_french_calendar(start = start, end = end, starting_day = starting_day, summary = TRUE, by = "month") |> 
+        format_to_sas()
+    
+    return(calendar)
+}
 
-cal1 <- create_french_calendar()
-cal2 <- create_french_calendar(summary = FALSE)
+cal1 <- create_french_calendar(by = "month", mean_correction = TRUE)
+cal2 <- create_french_calendar(summary = FALSE, end = 1960)
+cal3 <- replicate_sas_calendar()
+
+
+stop("repartir d'ici pour le aclcul des moyennes")
+stop("Retirer les variables Day, In et OFF ?? OU alors les ajouter aussi ??")
+
+
+
+
+
+
+
