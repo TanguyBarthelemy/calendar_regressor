@@ -3,11 +3,11 @@ create_annual_calendar <- function(leap_year = FALSE) {
     month_length <- c(31, 28 + leap_year, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
     month_name_vect <- seq(as.Date("0-01-01"), as.Date("0-12-01"), by = "month") |> format("%B")
     
-    annual_cal <- data.frame(month_name =  do.call(c, purrr::map2(.x = month_name_vect, .y = month_length, .f = rep)), 
+    annual_cal <- data.frame(month_name = rep(x = month_name_vect, times = month_length), 
+                             month_number = rep(x = 1:12, times = month_length), 
                              leap_year = leap_year) |> 
-        dplyr::mutate(month_number = as.integer(factor(month_name, levels = month_name_vect))) |> 
         dplyr::group_by(month_name) |>  
-        dplyr::mutate(month_day_number = seq_len(dplyr::n()))
+        dplyr::mutate(month_day_number = dplyr::row_number())
     
     return(annual_cal)
 }
