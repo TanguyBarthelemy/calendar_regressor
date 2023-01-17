@@ -319,7 +319,7 @@ add_means <- function(summarised_calendar) {
         tidyr::pivot_wider(names_from = type, 
                            values_from = c(val, mean, corr), 
                            names_glue = "{type}_{.value}") |> 
-        dplyr::rename_with(.cols = ends_with("val"), .fn = \(x) gsub(x = x, pattern = "_val", replacement = ""))
+        dplyr::rename_with(.cols = dplyr::ends_with("val"), .fn = \(x) gsub(x = x, pattern = "_val", replacement = ""))
     
     return(full_calendar)
 }

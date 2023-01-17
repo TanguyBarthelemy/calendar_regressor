@@ -2,7 +2,7 @@
 library("magrittr")
 
 compute_reg_cjo_tanguy <- function(groups_in = c(0, rep(1, 5), 0), 
-                                groups_off = rep(0, 7)) {
+                                   groups_off = rep(0, 7)) {
     
     # # Vérification des paramètres temporels
     # if (!frequency_reg %in% c(4, 12)) {

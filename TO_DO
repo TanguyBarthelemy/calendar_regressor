@@ -12,4 +12,14 @@ Things to do :
     --> le second calcul théoriquement (avec calculs maths à l'appui)
 - Extraire les moyennes de long-terme de rjd et de sas
 - Comparer ces 4 tableaux et en tirer les conséquences adéquates !
-- Exporter ces moyennes de long-terme pour ne pas avoir à les recalculer à chaque fois /ou les calculer à chaque fois avec le programmes simple théorique que l'on a écrit + tôt
+- Exporter ces moyennes de long-terme pour ne pas avoir à les recalculer à 
+    chaque fois /ou les calculer à chaque fois avec le programmes simple 
+    théorique que l'on a écrit + tôt
+
+- Faire comparaison finale entre reg Tanguy, SAS et RJD
+- améliorer la doc sur la création de calendrier (+ remarque sur la fréquence 
+    avec Paques)
+- relire et nettoyer le dossier
+- créer un package ?
+- faire des tests sur les fonctions ?
+- doc + compréhensible ?
