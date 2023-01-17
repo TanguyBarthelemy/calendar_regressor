@@ -357,7 +357,9 @@ format_to_sas <- function(summarised_calendar, frequency = "mensuelle") {
     return(full_calendar)
 }
 
-create_french_calendar <- function(start = 1950, end = 2022, starting_day = "dimanche", summary = TRUE, by = "month", mean_correction = FALSE) {
+create_french_calendar <- function(
+        start = 1950, end = 2022, starting_day = "dimanche", 
+        summary = TRUE, by = "month", mean_correction = FALSE) {
     
     if (end < start) {
         stop("L'argument end doit se trouver après start.")
@@ -384,13 +386,15 @@ create_french_calendar <- function(start = 1950, end = 2022, starting_day = "dim
     return(calendar)
 }
 
-replicate_sas_calendar <- function(start = 1950, end = 2022, starting_day = "dimanche", summary = TRUE, by = "month") {
+replicate_sas_calendar <- function(
+        start = 1950, end = 2022, starting_day = "dimanche", 
+        summary = TRUE, by = "month") {
     calendar <- create_french_calendar(start = start, end = end, starting_day = starting_day, summary = TRUE, by = "month") |> 
         format_to_sas()
     
     return(calendar)
 }
 
-cal1 <- create_french_calendar(end = 2000, by = "month", mean_correction = TRUE)
+cal1 <- create_french_calendar(end = 1960, by = "month", mean_correction = TRUE)
 cal2 <- create_french_calendar(summary = FALSE, end = 1960)
 cal3 <- replicate_sas_calendar()

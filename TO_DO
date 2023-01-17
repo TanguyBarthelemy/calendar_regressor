@@ -1,12 +1,26 @@
 Things to do :
 --------------
 
-- Ajouter paramètres de sélection de date + longueur pour le calendrier Tanguy
+## Tri et nettoyage
+
+- relire et nettoyer le dossier
+- Faire du tri dans le dossier pour ne mettre que les programmes strictement 
+    nécessaires ainsi que les WS strictement nécessaires.
+- améliorer la doc sur la création de calendrier (+ remarque sur la fréquence 
+    avec Paques)
+- doc + compréhensible ?
+
+
+## Nouvelles fonctionnalités ?
+
 - Ajouter possibilité de créer des jours personnalisés (Au dejà des In ou Off)
     --> s'assurer qu'ils sont bien opposition avec les In et Off (que la somme 
         est bien disjointe et forme l'ensemble des jours !)
 
-- Créer des calendriers très grands, les comparer (hors bridges) à SAS
+
+## Tests
+
+- Calcul de la date de Paques --> fréquence
 - Créer 2 programmes qui calcule les moyennes de long-terme :
     --> le premier lit le calendrier très grand pour moyenner
     --> le second calcul théoriquement (avec calculs maths à l'appui)
@@ -15,11 +29,11 @@ Things to do :
 - Exporter ces moyennes de long-terme pour ne pas avoir à les recalculer à 
     chaque fois /ou les calculer à chaque fois avec le programmes simple 
     théorique que l'on a écrit + tôt
-
-- Faire comparaison finale entre reg Tanguy, SAS et RJD
-- améliorer la doc sur la création de calendrier (+ remarque sur la fréquence 
-    avec Paques)
-- relire et nettoyer le dossier
-- créer un package ?
 - faire des tests sur les fonctions ?
-- doc + compréhensible ?
+- Faire comparaison finale entre reg Tanguy, SAS et RJD
+- Créer des calendriers très grands, les comparer (hors bridges) à SAS
+
+
+## Pour plus tard ?
+
+- créer un package ?

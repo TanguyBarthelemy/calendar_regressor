@@ -1,5 +1,5 @@
 ---
-title: "Calendar steps"
+title: "Comment créer des régresseurs de calendrier ?"
 author: "Tanguy"
 output:
   html_document: default
@@ -16,7 +16,17 @@ div.green { background-color:#e6ffe8; border-radius: 5px; padding: 20px;}
 </style>
 
 
-## Divergence entre regresseurs Insee (SAS) et RJD
+## Divergence entre regresseurs Insee (**SAS**) et **RJD**
+
+### Couleur des paragraphes
+
+<div class = "green">
+Dans la suite, les paragraphes verts sont des exemples numériques.
+</div>
+
+<div class = "blue">
+Les paragraphes bleus font référence à ce qui se passe en pratique (sur **SAS** ou **rjd3modelling**).
+</div>
 
 ### Notation
 
@@ -50,7 +60,7 @@ $Off_i$ est le nombre de jour férié tombant un jour n°i dans le mois ($Off_1$
     * Toussaint (1 novembre)
     * Armistice de 1918 (11 novembre)
     * Noël (25 décembre)
-    * les différents ponts (les lundi et vendredi à chaque fois qu'il y a un mardi ou un jeudi de férié) 
+    * les différents ponts (les lundi et vendredi à chaque fois qu'il y a un mardi ou un jeudi de férié) **ne sont pas considérés comme jours fériés**
 
 Ainsi on peut définir les jours ouvrables $In_i = Day_i - Off_i$ pour $i$ entre 1 et 7.
 
@@ -83,8 +93,12 @@ $$ Off_i\_corr = Off_i - mean\_Off_i , $$
 $$ In_i\_corr = Day_i\_corr - Off_i\_corr , $$ 
 Ainsi que toutes les autres variables présentées précédemment avec les nouveaux $Day_i\_corr$, $Off_i\_corr$ et $In_i\_corr$.
 
+<div class = "blue">
+
 Remarques : Pour les régresseurs calculés par *rjd3modeling*, on ne retire pas les mêmes éléments :
 $$ In_i\_corr\_rjd = In_i + mean\_Off_i $$
+
+</div>
 
 ### Calcul des variables de regresseurs à partir des groupes
 
@@ -137,18 +151,21 @@ $$ REG_n\_AC_k = REG_k - \omega_k REG_0 $$ avec ici $n$ qui vaut 1, 3, 5, 6, ...
 De manière générale, les $\omega_k$ sont calculés à partir de la taille des groupes :
 $$ \omega_k = \frac{\# group_k}{\# group_0} $$
 
-- Pour les jeux de régresseurs issus de JD+ (*package rjd3modelling*), les $\omega_k$ sont calculés entre les jours d'une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
+<div class = "blue">
+
+- Pour les jeux de régresseurs issus de JD+ (*package* ***rjd3modelling***), les $\omega_k$ sont calculés entre les jours d'une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
     * pour REG6, $\omega_k = 1$ car chaque groupe $G_i$ ne contient qu'un jour (du lundi au dimanche)
     * pour REG1, $\omega_k = \frac{5}{2}$ car le groupe 1 $G_1$ (jours ouvrables) contient les jours du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche.
     * ... selon les configurations des groupes
 
-- Pour les jeux de régresseurs issus des programmes SAS, les jours comptabilisés dans les pondérations sont les jours $In$ et les jours $Off$. 
+- Pour les jeux de régresseurs issus des programmes **SAS**, les jours comptabilisés dans les pondérations sont les jours $In$ et les jours $Off$. 
     * pour REG6, $\omega_k = \frac{1}{8}$ car chaque groupe $G_k$ (pour $k \neq 0$) ne contient qu'un seul jour alors que le groupe 0 $G_0$ contient 8 jours dans le sens : 1 dimanche en semaine classique ($In$) et 7 jours en semaine férié / vacances ($Off$)
     * pour REG1, $\omega_k = \frac{5}{9}$ car le groupe 1 (jours ouvrables) contient 5 jours : les jours $In$ du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche en semaine classique ($In$) et 7 jours en semaine férié / vacances ($Off$).
     * ... selon les configurations des groupes
 
-Les espaces formés par la combinaison de chaque jeu de régressurs (RJD ou SAS) sont les mêmes. Mais les coefficients seront différents et interprétés différemment.
+Les espaces formés par la combinaison de chaque jeu de régressurs (**RJD** ou **SAS**) sont les mêmes. Mais les coefficients seront différents et interprétés différemment.
 
+</div>
 
 ## Théorie et pratique
 
@@ -267,23 +284,13 @@ $$ \overline{X + \omega Y} = \overline{X} + \omega \overline{Y} $$
 Les règles de création des calendriers sont stables dans le temps (on sait quel jour tombera le 26 mars dans 450 ans). Ainsi on peut calculer les fréquences des jours de la semaine.
 
 ```{r echo = FALSE}
-premier_de_l_an <- rep(0, 7)
-names(premier_de_l_an) <- c("Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi")
+jours <- data.frame(first_1 = c(6, rep(0, 399)), annee = 0:399) |> 
+    dplyr::mutate(
+        bisextile = annee %% 400 == 0 | (annee %% 4 == 0 & annee %% 100 != 0), 
+        first_2 = (cumsum(first_1 + 365 + bisextile) - 1) %% 7 + 1)
 
-jour = 6 # samedi en l'an 2000
-for (year in 0:(400 * 1 - 1)) {
-    premier_de_l_an[jour + 1] <- premier_de_l_an[jour + 1] + 1
-    if (year %% 400 == 0) {
-        jour <- jour + 366
-    } else if (year %% 100 == 0) {
-        jour <- jour + 365
-    } else if (year %% 4 == 0) {
-        jour <- jour + 366
-    } else {
-        jour <- jour + 365
-    }
-    jour <- jour %% 7
-}
+premier_de_l_an <- jours$first_2 |> table()
+names(premier_de_l_an) <- c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche")
 ```
 
 
