@@ -1,5 +1,5 @@
 
-search_easter_periodicity <- function(){}
+search_easter_periodicity <- function() {}
 
 calendar <- data.frame(year = 2000:6000000) |> 
     dplyr::mutate(
