@@ -138,6 +138,28 @@ Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur
     * $G_6$ = samedi ouvrables
     * $G_0$ = les autres)
 
+``` {r, echo = FALSE, warning = FALSE}
+library("flextable")
+
+read.csv("./data/reg_groups.csv", sep = ";") |> 
+    flextable() |> 
+    set_header_labels(
+        "Lundi.1" = "Lundi", 
+        "Mardi.1" = "Mardi", 
+        "Mercredi.1" = "Mercredi", 
+        "Jeudi.1" = "Jeudi", 
+        "Vendredi.1" = "Vendredi", 
+        "Samedi.1" = "Samedi", 
+        "Dimanche.1" = "Dimanche"
+    ) |> 
+    add_header_row(values = c("Ouvrable", "Férié"), colwidths = c(8, 7)) |> 
+    align(align = "center", part = "header") |> 
+    bg(i = 2, j = 2:8, bg = "#d7fff2", part = "header") |> 
+    bg(i = 2, j = 9:15, bg = "#fffdd7", part = "header") |> 
+    bg(j = -1, bg = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |> 
+    color(j = -1, color = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body")
+```
+
 #### Calculs des jeux de régresseurs
 
 Nous allons ensuite créer les regresseurs de calendrier comme variable de contraste par rapport à une référence. On prend généralement le groupe 0 comme groupe de référence. Ainsi pour un jeu de régresseur qui contient $n$ groupes, on calcule $n-1$ régresseurs.
