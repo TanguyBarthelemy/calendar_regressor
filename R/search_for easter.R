@@ -1,7 +1,13 @@
+################################################################################
+#####                  Calcul des moyennes de long-terme                   #####
+################################################################################
 
-search_easter_periodicity <- function() {}
 
-calendar <- data.frame(year = 2000:6000000) |> 
+# Calcul de la moyenne des jours fériés liés à Paques --------------------------
+
+## Create easter calendar ------------------------------------------------------
+
+calendar_easter <- data.frame(year = 0:(5700000 - 1)) |> 
     dplyr::mutate(
         n_cycle_meton = year %% 19, 
         c = year %/% 100, 
@@ -17,88 +23,100 @@ calendar <- data.frame(year = 2000:6000000) |>
         h_correction = (n_cycle_meton + 11 * e_epacte + 22 * L_dominicale) %/% 451,
         
         month_easter_meeus = (e_epacte + L_dominicale - 7 * h_correction + 114) %/% 31,
-        day_easter_meeus = (e_epacte + L_dominicale - 7 * h_correction + 114) %% 31 + 1
+        day_easter_meeus = (e_epacte + L_dominicale - 7 * h_correction + 114) %% 31 + 1, 
+        
+        date_easter_meeus = paste0("2000-", sprintf("%02.f", month_easter_meeus), "-", sprintf("%02.f", day_easter_meeus)), 
+        weekday_easter_number = (6L + dplyr::row_number() - 1L) %% 7L + 1L
+        # date_easter_meeus = as.Date(paste0("2000-", sprintf("%02.f", month_easter_meeus), "-", day_easter_meeus))
     ) |> 
-    dplyr::select(year, month_easter_meeus, day_easter_meeus) |>
+    dplyr::select(year, month_easter_meeus, day_easter_meeus, date_easter_meeus, weekday_easter_number)
+
+
+## Plot the easter dates ---------------------------------------------------
+
+calendar_easter$date_easter_meeus |> table() |> plot()
+
+
+## Summarise easter holidays -----------------------------------------------
+
+summary_table <- calendar_easter[, c("date_easter_meeus", "weekday_easter_number")] |> 
+    table() |> 
+    data.frame() |> 
     dplyr::mutate(
-        a = year %% 19, # période 19
-        b = year %% 4, # période 4
-        c = year %% 7, # période 7
-        k = year %/% 100, 
-        p = (13 + 8 * k) %/% 25, 
-        q = k %/% 4, 
-        M = (15 - p + k - q) %% 30, 
-        N = (4 + k - q) %% 7, # période 7
-        d = (19 * a + M) %% 30, # Période 30
-        e = (2 * b + 4 * c + 6 * d + N) %% 7, # période 7
-        H = 22 + d + e, # période 30 * 7
-        Q = H - 31,
-        
-        month_easter_gauss = 3 + (H > 31),
-        day_easter_gauss = dplyr::case_when(
-            month_easter_gauss == 3 ~ H, 
-            d == 29 & e == 6 ~ 19, 
-            d == 28 & e == 6 & (11 * M + 11) %% 30 < 19 ~ 18, 
-            TRUE ~ Q
+        date = as.Date(date_easter_meeus), 
+        weekday_number = weekday_easter_number
         )
+
+### All easter -----------------------------------------------------------------
+
+all_easter_holidays <- rbind(
+    summary_table |> dplyr::mutate(date = format(date + 1, format = "%B")), 
+    summary_table |> dplyr::mutate(date = format(date + 39, format = "%B")), 
+    summary_table |> dplyr::mutate(date = format(date + 50, format = "%B"))
+) |> dplyr::summarise(count = sum(Freq) / 5700000, .by = c(date, weekday_number))
+
+### Pure easter ----------------------------------------------------------------
+
+# Remove other french holiday to keep only the pure easter holyday
+
+pure_easter_holidays <- rbind(
+    summary_table |> dplyr::mutate(date = date + 1) |> 
+        dplyr::filter(!date %in% c(as.Date("2000-05-01"), as.Date("2000-05-08"))), 
+    summary_table |> dplyr::mutate(date = date + 39) |> 
+        dplyr::filter(!date %in% c(as.Date("2000-05-01"), as.Date("2000-05-08"))), 
+    summary_table |> dplyr::mutate(date = date + 50) |> 
+        dplyr::filter(!date %in% c(as.Date("2000-05-01"), as.Date("2000-05-08")))
+) |> 
+    dplyr::mutate(month_name = format(date, format = "%B")) |> 
+    dplyr::summarise(Off_easter = sum(Freq) / 5700000, .by = c(month_name, weekday_number))
+
+
+# Calcul des moyennes autres jours fériés --------------------------------------
+
+calendar_other_holidays <- create_empty_calendar(start = 2000, end = 2399, 
+                                  starting_day = "samedi") |> 
+    add_new_year() |> 
+    add_may_day() |> 
+    add_victory_day() |> 
+    add_fete_nationale() |> 
+    add_assumption() |> 
+    add_all_saints_day() |> 
+    add_armistice() |> 
+    add_christmas() |> 
+    add_new_year() |> 
+    dplyr::select(
+        year, month_name, weekday_number,
+        new_year, may_day, victory_day, fete_nationale, assumption, 
+        all_saints_day, armistice, christmas)
+
+other_holidays <- calendar_other_holidays |> 
+    dplyr::summarise(
+        Day = dplyr::n(), 
+        Off = sum(new_year, may_day, victory_day, fete_nationale, 
+                  assumption, all_saints_day, armistice, christmas), 
+        .by = c(year, month_name, weekday_number)
     ) |> 
-    dplyr::select(year, 
-                  month_easter_meeus, day_easter_meeus, 
-                  month_easter_gauss, day_easter_gauss)
-    
-
-find_periodicity <- function(v) {
-    
-    cond <- TRUE
-    p <- 0
-    while (cond) {
-        p <- p + 1
-        
-        while (v[1] != v[p + 1]) {
-            p <- p + 1
-            if (p >= length(v)) {
-                warning("La période actuelle est ", p, ". Je n'ai pas trouvé mieux.")
-                return(NA)
-            }
-        }
-        
-        j <- 1
-        cond <- FALSE
-        while ((j + p < length(v)) && (v[j] == v[j + p])) {
-            j <- j + 1
-        }
-        if (j + p < length(v)) cond <- TRUE
-        if (p >= length(v)) {
-            stop("La période actuelle est ", p, ". Je n'ai pas trouvé mieux.")
-            return(NA)
-        }
-    }
-    
-    return(p)
-    
-}
-
-res <- sapply(calendar[, -1], FUN = find_periodicity)
+    dplyr::summarise(Day = mean(Day),
+                     Off = mean(Off),
+                     .by = c(month_name, weekday_number))
 
 
-cond <- TRUE
-p <- 5690000
-while (cond) {
-    p <- p + 1
-    
-    while (!all(calendar[1, 2:3] == calendar[1 + p, 2:3])) {
-        p <- p + 1
-    }
-    print(p)
-    
-    j <- 1
-    cond <- FALSE
-    while (j < p && all(calendar[j, 2:3] == calendar[j + p, 2:3])) {
-        j <- j + 1
-        print(j)
-    }
-    if (j != p) cond <- TRUE
-}
-print(p)
+# Réunion des différents types de jours fériés ----------------------------
+
+all_holidays <- merge(other_holidays, pure_easter_holidays, all = TRUE) |> 
+    dplyr::rowwise() |> 
+    dplyr::mutate(
+        Off_mean = sum(Off, Off_easter, na.rm = TRUE), 
+        Day_mean = Day, 
+        In_mean = Day_mean - Off_mean) |> 
+    dplyr::select(month_name, weekday_number, 
+                  Day_mean, Off_mean, In_mean) |> 
+    tidyr::pivot_wider(names_from = weekday_number, 
+                       values_from = c(Day_mean, Off_mean, In_mean), 
+                       names_sep = "")
+
+
+
+
 
 
