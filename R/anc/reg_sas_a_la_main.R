@@ -82,7 +82,7 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     names(coeff_v) <- paste0("REG", 0:(length(coeff_v) - 1))
     
     # Création du calendrier
-    frenchCalendar_tab <- haven::read_sas("./data/french_calendar_brut.sas7bdat") |> 
+    frenchCalendar_tab <<- haven::read_sas("./data/french_calendar_brut.sas7bdat") |> 
         dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01")) |> 
         dplyr::mutate(periode = dplyr::case_when(frequency_reg == 4 ~ qtr, TRUE ~ month))
     
@@ -103,13 +103,13 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     }
     
     # Calcul des moyennes
-    means_tab <- frenchCalendar_tab |> 
+    means_tab <<- frenchCalendar_tab |> 
             dplyr::select(periode, dplyr::starts_with(c("Day", "Off"))) |> 
             dplyr::group_by(periode) |> 
             dplyr::summarise_all(.funs = list(mean = mean))
     
     # Calcul des corrections (dû aux moyennes)
-    frenchCalendar_corr <- merge(frenchCalendar_tab, means_tab, 
+    frenchCalendar_corr <<- merge(frenchCalendar_tab, means_tab, 
                                      by = 'periode', all = TRUE) |> 
         dplyr::mutate(
             Day1_corr = Day1 - Day1_mean, 
@@ -164,8 +164,10 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
                           (year == end_reg[1] & periode <= end_reg[2])) |> 
         dplyr::arrange(year, qtr, month)
     
-    # Calcul des coeff_vicients régresseurs CJO
-    reg_cjo <- frenchCalendar_corr |> 
+    
+    
+    # Calcul des coefficients régresseurs CJO
+    reg_cjo <<- frenchCalendar_corr |> 
         dplyr::select(Date, dplyr::starts_with(c("In", "Off"))) |> 
         dplyr::select(Date, dplyr::ends_with("_corr")) |> 
         tidyr::pivot_longer(cols = -Date, names_to = "VAR", values_to = "VAL") |> 
@@ -190,8 +192,7 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
 }
 
 
-
-compute_reg_cjo_sas(groups_in = c(0, rep(1, 5), 0), 
+a <- compute_reg_cjo_sas(groups_in = c(0, rep(1, 5), 0), 
                     start_reg = c(1990, 1), 
-                    end_reg = c(1994, 1), 
+                    end_reg = c(2029, 12), 
                     frequency_reg = 12)
