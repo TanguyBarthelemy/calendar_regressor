@@ -141,23 +141,20 @@ Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur
 ``` {r, echo = FALSE, warning = FALSE}
 library("flextable")
 
-read.csv("./data/reg_groups.csv", sep = ";") |> 
+reg_CJO <- read.csv("./data/reg_groups.csv", sep = ";")
+liste_names <- colnames(reg_CJO) |> substr(1, 3) |> as.list()
+names(liste_names) <- colnames(reg_CJO)
+
+reg_CJO |> 
     flextable() |> 
-    set_header_labels(
-        "Lundi.1" = "Lundi", 
-        "Mardi.1" = "Mardi", 
-        "Mercredi.1" = "Mercredi", 
-        "Jeudi.1" = "Jeudi", 
-        "Vendredi.1" = "Vendredi", 
-        "Samedi.1" = "Samedi", 
-        "Dimanche.1" = "Dimanche"
-    ) |> 
+    set_header_labels(values = liste_names) |> 
     add_header_row(values = c("Ouvrable", "Férié"), colwidths = c(8, 7)) |> 
     align(align = "center", part = "header") |> 
     bg(i = 2, j = 2:8, bg = "#d7fff2", part = "header") |> 
     bg(i = 2, j = 9:15, bg = "#fffdd7", part = "header") |> 
     bg(j = -1, bg = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |> 
-    color(j = -1, color = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body")
+    color(j = -1, color = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |> 
+    flextable::width(j = 2:15, .4)
 ```
 
 #### Calculs des jeux de régresseurs
