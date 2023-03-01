@@ -2,8 +2,8 @@
 title: "Comment créer des régresseurs de calendrier ?"
 author: "Tanguy"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -50,7 +50,7 @@ $Off_i$ est le nombre de jour férié tombant un jour n°i dans le mois ($Off_1$
 
 - On distingue alors jours $In$ et jours $Off$ (selon fériés et vacances). En France la liste des jours $Off$ est :
     * 1er de l'an (1er janvier)
-    * Lundi de Paques
+    * Lundi de Pâques
     * Jeudi de l'ascension
     * Lundi de pentecôte
     * Fête du travail (1er mai)
@@ -325,3 +325,18 @@ Fréquence d'apparition un premier de l'an :
 ```{r echo = FALSE}
 (premier_de_l_an / sum(premier_de_l_an)) |> t() |> knitr::kable()
 ```
+
+
+### Fréquence de Pâques
+
+On peut classer en 2 catégories les jours fériés français :
+- ceux qui tombent chaque année à la même date (1er janvier, 25 décembre, ...)
+- ceux qui tombent chaque année sur le même type de jour (lundi, mardi, ...) mais à des dates différentes (lundi de Pâques, jeudi de l'ascension, ...)
+
+Il existe 3 jours fériés de la seconde catégories et ils dépendent tous les 3 de la date de Pâques : lundi de Pâques, jeudi de l'ascension et lundi de pentecôte.
+
+Seulement la date de Pâques suit le calendrier lunaire. Et la fréquence de Pâques (combinant calendrier grégorien et calendrier lunaire) est de 5700000 ans.
+
+Mais faut-il donc prendre en compte la totalité de la série des dates de Paques pour calculer les moyennes de long-terme ou juste un extrait de quelques siècles voire les années sur lesquelles on effectue nos analyses ?
+
+
