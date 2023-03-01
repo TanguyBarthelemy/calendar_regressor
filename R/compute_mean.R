@@ -51,10 +51,7 @@ summary_table <- rbind(
     #     weekday_number = 1), 
     summary_table |> dplyr::mutate(
         date = date + 1, 
-        weekday_number = case_when(
-            ((date + 1) |> format("%Y") |> as.integer()) >= 4000 ~ 1, 
-            TRUE ~ 2
-        )), 
+        weekday_number = 2), 
     summary_table |> dplyr::mutate(
         date = date + 39, 
         weekday_number = 5), 
