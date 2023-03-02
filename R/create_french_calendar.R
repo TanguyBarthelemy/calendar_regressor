@@ -282,22 +282,32 @@ summarise_by_period <- function(calendar, frequency = "mensuelle") {
              paste0(c("mensuelle", "trimestrielle", "monthly", "quaterly", 4L, 12L), collapse = ", "))
     }
     
+    if (frequency_num == 4L) {
+        calendar <- calendar |> 
+            dplyr::mutate(periode = quarter_number)
+        mean_table <- mean_quarterly
+    } else if (frequency_num == 12L) {
+        calendar <- calendar |> 
+            dplyr::mutate(periode = month_number)
+        mean_table <- mean_monthly
+    }
+    
     cal_day_type <- calendar |> 
         dplyr::select(
-            year, month_number, weekday_number, 
+            year, periode, weekday_number, 
             dplyr::starts_with(c("Day", "Off", "In"), ignore.case = FALSE)
         ) |> 
         dplyr::summarise(dplyr::across(dplyr::everything(), sum), 
-                         .by = c(year, month_number, weekday_number))
+                         .by = c(year, periode, weekday_number))
     
     cal_day_general <- cal_day_type |> 
         dplyr::summarise(dplyr::across(dplyr::everything(), sum), 
-                         .by = c(year, month_number)) |> 
+                         .by = c(year, periode)) |> 
         dplyr::mutate(weekday_number = 0L)
     
     full_calendar <- 
         rbind(cal_day_type, cal_day_general) |> 
-        merge(y = mean_monthly, by = c("month_number", "weekday_number"), all = TRUE) |> 
+        merge(y = mean_table, by = c("periode", "weekday_number"), all = TRUE) |> 
         dplyr::mutate(
             Day_corr = Day - Day_mean, 
             Off_corr = Off - Off_mean, 
@@ -305,11 +315,14 @@ summarise_by_period <- function(calendar, frequency = "mensuelle") {
         ) |> 
         tidyr::pivot_wider(names_from = weekday_number, 
                            values_from = dplyr::starts_with(c("Day", "Off", "In"), ignore.case = FALSE)) |> 
-        dplyr::arrange(year, month_number) |> 
+        dplyr::arrange(year, periode) |> 
         dplyr::rename_with(~ substr(x = .x, start = 1, stop = nchar(.x) - 2), 
                            dplyr::ends_with("0")) |> 
         dplyr::rename_with(~ gsub("(\\w)_(mean|corr)_(\\d)", "\\1\\3_\\2", .x, perl=TRUE), 
                            dplyr::matches("mean|corr"))
+    
+    full_calendar <- full_calendar |>
+        dplyr::select(-periode)
     
     return(full_calendar)
 }
@@ -331,7 +344,7 @@ create_french_calendar <- function(
         } else if (by %in% c("quarter", "trimestre")) {
             calendar <- calendar |> summarise_by_period(frequency = 4L)
         } else {
-            stop("L'argument frequency doit être dans la liste suivante :", 
+            stop("L'argument frequency doit être dans la liste suivante : ", 
                  paste0(c("mois", "trimestre", "month", "quater"), collapse = ", "))
         }
     }
@@ -382,7 +395,7 @@ replicate_sas_calendar <- function(
 }
 
 
-cal1 <- create_french_calendar(summary = TRUE, start = 1990, end = 2030, starting_day = "lundi")
+cal1 <- create_french_calendar(summary = TRUE, start = 1990, end = 2030, starting_day = "lundi", by = "trimestre")
 
 cal2 <- cal1 |>
     dplyr::mutate(

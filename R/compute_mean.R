@@ -1,14 +1,14 @@
 ################################################################################
 #####                  Calcul des moyennes de long-terme                   #####
 ################################################################################
-library(tidyverse)
+
 
 # Calcul de la moyenne des jours fériés liés à Paques --------------------------
 
 ## Create easter calendar ------------------------------------------------------
 
 calendar_easter <- data.frame(year = 0:(5700000 - 1)) |>
-# calendar_easter <- data.frame(year = 1990:4789) |> 
+    # calendar_easter <- data.frame(year = 1990:4789) |> 
     dplyr::mutate(
         n_cycle_meton = year %% 19, 
         c = year %/% 100, 
@@ -32,12 +32,14 @@ calendar_easter <- data.frame(year = 0:(5700000 - 1)) |>
     dplyr::select(year, month_easter_meeus, day_easter_meeus, date_easter_meeus)
 
 
-## Plot the easter dates ---------------------------------------------------
+## Plot the easter dates -------------------------------------------------------
 
 calendar_easter$date_easter_meeus |> table() |> plot()
 
 
-## Summarise easter holidays -----------------------------------------------
+## Summarise easter holidays ---------------------------------------------------
+
+### Easter table ---------------------------------------------------------------
 
 summary_table <- calendar_easter$date_easter_meeus |> 
     table() |> 
@@ -58,28 +60,11 @@ summary_table <- rbind(
     summary_table |> dplyr::mutate(
         date = date + 50, 
         weekday_number = 2)
-) |> dplyr::mutate(month_number = format(date, format = "%m") |> 
-                       as.integer())
+) |> dplyr::mutate(
+    month_number = format(date, format = "%m") |> as.integer(), 
+    quarter_number = ((month_number - 1L) %/% 3L) |> as.integer() + 1L)
 
-
-### All easter -----------------------------------------------------------------
-
-all_easter_holidays <- summary_table |> 
-    dplyr::summarise(Off_easter = sum(Freq) / 5700000, #(4789 - 1989), 
-                     .by = c(month_number, weekday_number))
-
-### Pure easter ----------------------------------------------------------------
-
-# Remove other french holiday to keep only the pure easter holyday
-
-pure_easter_holidays <- summary_table |> 
-    dplyr::filter(!date %in% c(as.Date("2000-05-01"), 
-                               as.Date("2000-05-08"))) |> 
-    dplyr::summarise(Off_easter = sum(Freq) / 5700000, #(4789 - 1989), 
-                     .by = c(month_number, weekday_number))
-
-
-# Calcul des moyennes autres jours fériés --------------------------------------
+### Calcul des moyennes autres jours fériés ------------------------------------
 
 calendar_other_holidays <- create_empty_calendar(start = 2000, end = 2399, 
                                                  starting_day = "samedi") |> 
@@ -93,11 +78,31 @@ calendar_other_holidays <- create_empty_calendar(start = 2000, end = 2399,
     add_christmas() |> 
     add_new_year() |> 
     dplyr::select(
-        year, month_number, weekday_number,
+        year, month_number, quarter_number, weekday_number,
         new_year, may_day, victory_day, fete_nationale, assumption, 
         all_saints_day, armistice, christmas)
 
-other_holidays <- calendar_other_holidays |> 
+### Monthly --------------------------------------------------------------------
+
+#### All easter ----------------------------------------------------------------
+
+all_easter_holidays_monthly <- summary_table |> 
+    dplyr::summarise(Off_easter = sum(Freq) / 5700000, #(4789 - 1989), 
+                     .by = c(month_number, weekday_number))
+
+#### Pure easter ---------------------------------------------------------------
+
+# Remove other french holiday to keep only the pure easter holyday
+
+pure_easter_holidays_monthly <- summary_table |> 
+    dplyr::filter(!date %in% c(as.Date("2000-05-01"), 
+                               as.Date("2000-05-08"))) |> 
+    dplyr::summarise(Off_easter = sum(Freq) / 5700000, #(4789 - 1989), 
+                     .by = c(month_number, weekday_number))
+
+#### Other holydays ------------------------------------------------------------
+
+other_holidays_monthly <- calendar_other_holidays |> 
     dplyr::summarise(
         Day = dplyr::n(), 
         Off = sum(new_year, may_day, victory_day, fete_nationale, 
@@ -109,9 +114,10 @@ other_holidays <- calendar_other_holidays |>
                      .by = c(month_number, weekday_number))
 
 
-# Réunion des différents types de jours fériés ----------------------------
+#### Réunion des différents types de jours fériés ------------------------------
 
-all_holidays_type <- merge(other_holidays, pure_easter_holidays, all = TRUE) |> 
+all_holidays_type_monthly <- merge(other_holidays_monthly, 
+                                   pure_easter_holidays_monthly, all = TRUE) |> 
     dplyr::mutate(
         Off_mean = ifelse(is.na(Off_easter), Off, Off + Off_easter), 
         Day_mean = Day, 
@@ -119,13 +125,73 @@ all_holidays_type <- merge(other_holidays, pure_easter_holidays, all = TRUE) |>
     dplyr::select(month_number, weekday_number, 
                   Day_mean, Off_mean, In_mean)
 
-all_holidays_general <- all_holidays_type |> 
+all_holidays_general_monthly <- all_holidays_type_monthly |> 
     dplyr::summarise(dplyr::across(dplyr::everything(), sum), 
                      .by = month_number) |> 
     dplyr::mutate(weekday_number = 0L)
 
-all_holidays <- rbind(all_holidays_type, all_holidays_general)
+all_holidays_monthly <- rbind(
+    all_holidays_type_monthly, 
+    all_holidays_general_monthly)
 
-mean_monthly <- all_holidays
-save(mean_monthly, file = "./data/mean.RData")
 
+### quarterly ------------------------------------------------------------------
+
+#### All easter ----------------------------------------------------------------
+
+all_easter_holidays_quarterly <- summary_table |> 
+    dplyr::summarise(Off_easter = sum(Freq) / 5700000, #(4789 - 1989), 
+                     .by = c(quarter_number, weekday_number))
+
+#### Pure easter ---------------------------------------------------------------
+
+# Remove other french holiday to keep only the pure easter holyday
+
+pure_easter_holidays_quarterly <- summary_table |> 
+    dplyr::filter(!date %in% c(as.Date("2000-05-01"), 
+                               as.Date("2000-05-08"))) |> 
+    dplyr::summarise(Off_easter = sum(Freq) / 5700000, #(4789 - 1989), 
+                     .by = c(quarter_number, weekday_number))
+
+#### Other holydays ------------------------------------------------------------
+
+other_holidays_quarterly <- calendar_other_holidays |> 
+    dplyr::summarise(
+        Day = dplyr::n(), 
+        Off = sum(new_year, may_day, victory_day, fete_nationale, 
+                  assumption, all_saints_day, armistice, christmas), 
+        .by = c(year, quarter_number, weekday_number)
+    ) |> 
+    dplyr::summarise(Day = mean(Day),
+                     Off = mean(Off),
+                     .by = c(quarter_number, weekday_number))
+
+
+#### Réunion des différents types de jours fériés ------------------------------
+
+all_holidays_type_quarterly <- merge(other_holidays_quarterly, 
+                                    pure_easter_holidays_quarterly, 
+                                    all = TRUE) |> 
+    dplyr::mutate(
+        Off_mean = ifelse(is.na(Off_easter), Off, Off + Off_easter), 
+        Day_mean = Day, 
+        In_mean = Day_mean - Off_mean) |> 
+    dplyr::select(quarter_number, weekday_number, 
+                  Day_mean, Off_mean, In_mean)
+
+all_holidays_general_quarterly <- all_holidays_type_quarterly |> 
+    dplyr::summarise(dplyr::across(dplyr::everything(), sum), 
+                     .by = quarter_number) |> 
+    dplyr::mutate(weekday_number = 0L)
+
+all_holidays_quarterly <- rbind(
+    all_holidays_type_quarterly, 
+    all_holidays_general_quarterly)
+
+## Export mean -----------------------------------------------------------------
+
+mean_monthly <- all_holidays_monthly |> 
+    dplyr::mutate(periode = month_number)
+mean_quarterly <- all_holidays_quarterly |> 
+    dplyr::mutate(periode = quarter_number)
+save(mean_monthly, mean_quarterly, file = "./data/mean.RData")
