@@ -2,6 +2,7 @@
 #####                  Calcul des moyennes de long-terme                   #####
 ################################################################################
 
+source("./R/create_french_calendar.R")
 
 # Calcul de la moyenne des jours fériés liés à Paques --------------------------
 
@@ -34,7 +35,8 @@ calendar_easter <- data.frame(year = 0:(5700000 - 1)) |>
 
 ## Plot the easter dates -------------------------------------------------------
 
-calendar_easter$date_easter_meeus |> table() |> plot()
+easter_occurence <- calendar_easter$date_easter_meeus |> table()
+easter_occurence |> plot()
 
 
 ## Summarise easter holidays ---------------------------------------------------
@@ -194,4 +196,8 @@ mean_monthly <- all_holidays_monthly |>
     dplyr::mutate(periode = month_number)
 mean_quarterly <- all_holidays_quarterly |> 
     dplyr::mutate(periode = quarter_number)
+
 save(mean_monthly, mean_quarterly, file = "./data/mean.RData")
+easter_occurence |> 
+    write.table("output/easter_occurence.csv", quote = FALSE, 
+                row.names = FALSE, sep = ";")

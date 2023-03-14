@@ -14,7 +14,7 @@ create_annual_calendar <- function(leap_year = FALSE) {
     return(annual_cal)
 }
 
-# stop("Faire des vérifs sur les dates (année)")
+# stop("Faire des vérifs sur les dates (année en vecteur de longueur 1)")
 
 create_empty_calendar <- function(start = 1950L, end = 2022L, starting_day = "dimanche") {
     
@@ -393,17 +393,3 @@ replicate_sas_calendar <- function(
     
     return(calendar)
 }
-
-
-cal1 <- create_french_calendar(summary = TRUE, start = 1990, end = 2030, starting_day = "lundi", by = "trimestre")
-
-cal2 <- cal1 |>
-    dplyr::mutate(
-        G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
-        G0 = Off_corr + In1_corr + In7_corr,
-        REG1_SAS = G1 - G0 * 5 / 9,
-        REG1_RJD = G1 - G0 * 5 / 2,
-        Date = as.Date(paste(year, sprintf("%02.f", month_number), "01", sep = "-"))) |>
-    dplyr::select(Date, REG1_SAS, REG1_RJD)
-
-write.table(cal2, sep = ";", file = "./output/exp_reg1.csv", row.names = FALSE)
