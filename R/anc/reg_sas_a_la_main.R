@@ -110,7 +110,7 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     
     # Calcul des corrections (dû aux moyennes)
     frenchCalendar_corr <<- merge(frenchCalendar_tab, means_tab, 
-                                     by = 'periode', all = TRUE) |> 
+                                     by = "periode", all = TRUE) |> 
         dplyr::mutate(
             Day1_corr = Day1 - Day1_mean, 
             Day2_corr = Day2 - Day2_mean, 

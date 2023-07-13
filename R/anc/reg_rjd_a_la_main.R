@@ -138,7 +138,7 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
             qtr = lubridate::quarter(Date))
     
     # Calcul des moyennes de long-terme
-    tot_temp <- merge(REG_tab, real_rjd_reg_df, by = 'Date', all = TRUE)
+    tot_temp <- merge(REG_tab, real_rjd_reg_df, by = "Date", all = TRUE)
     means_mat <- cbind(seq.int(frequency_reg), 
                        matrix(NA, nrow = frequency_reg, ncol = length(coeff_v)))
     colnames(means_mat) <- c("periode", paste0("REG_mean", 0:(length(coeff_v) - 1)))

@@ -266,7 +266,9 @@ add_french_publics_holydays <- function(calendar, bridges = FALSE) {
     return(full_calendar)
 }
 
-summarise_by_period <- function(calendar, frequency = "mensuelle") {
+summarise_by_period <- function(calendar, 
+                                frequency = "mensuelle", 
+                                mean_table = mean_monthly) {
     
     frequency <- tolower(frequency)
     
@@ -285,11 +287,9 @@ summarise_by_period <- function(calendar, frequency = "mensuelle") {
     if (frequency_num == 4L) {
         calendar <- calendar |> 
             dplyr::mutate(periode = quarter_number)
-        mean_table <- mean_quarterly
     } else if (frequency_num == 12L) {
         calendar <- calendar |> 
             dplyr::mutate(periode = month_number)
-        mean_table <- mean_monthly
     }
     
     cal_day_type <- calendar |> 
@@ -340,9 +340,9 @@ create_french_calendar <- function(
     
     if (summary) {
         if (by %in% c("month", "mois")) {
-            calendar <- calendar |> summarise_by_period(frequency = 12L)
+            calendar <- calendar |> summarise_by_period(frequency = 12L, mean = mean_monthly)
         } else if (by %in% c("quarter", "trimestre")) {
-            calendar <- calendar |> summarise_by_period(frequency = 4L)
+            calendar <- calendar |> summarise_by_period(frequency = 4L, mean = mean_quaterly)
         } else {
             stop("L'argument frequency doit être dans la liste suivante : ", 
                  paste0(c("mois", "trimestre", "month", "quater"), collapse = ", "))

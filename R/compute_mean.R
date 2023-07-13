@@ -172,8 +172,8 @@ other_holidays_quarterly <- calendar_other_holidays |>
 #### Réunion des différents types de jours fériés ------------------------------
 
 all_holidays_type_quarterly <- merge(other_holidays_quarterly, 
-                                    pure_easter_holidays_quarterly, 
-                                    all = TRUE) |> 
+                                     pure_easter_holidays_quarterly, 
+                                     all = TRUE) |> 
     dplyr::mutate(
         Off_mean = ifelse(is.na(Off_easter), Off, Off + Off_easter), 
         Day_mean = Day, 
