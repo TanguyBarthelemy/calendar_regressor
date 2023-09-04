@@ -1,9 +1,14 @@
 ---
 title: "Comment créer des régresseurs de calendrier ?"
 author: "Tanguy"
+header-includes:
+   - \usepackage{pagecolor}
 output:
+  github_document: default
+  html_document: 
+    css: "style.css"
   pdf_document: default
-  html_document: default
+always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
@@ -29,7 +34,7 @@ Dans la suite, les paragraphes verts sont des exemples numériques.
 </div>
 
 <div class = "blue">
-Les paragraphes bleus font référence à ce qui se passe en pratique (sur **SAS** ou **rjd3modelling**).
+Les paragraphes bleus font référence à ce qui se passe en pratique (sur **SAS** ou **rjd3toolkit**).
 </div>
 
 ### Notation
@@ -99,12 +104,12 @@ Ainsi que toutes les autres variables présentées précédemment avec les nouve
 
 <div class = "blue">
 
-Remarques : Pour les régresseurs calculés par *rjd3modeling*, les moyennes de long-terme sont calculés de manière théorique. On suppose que chaque jour de l'année a autant de chance d'être un lundi, un mardi, ..., un dimanche.
+Remarques : Pour les régresseurs calculés par *rjd3toolkit*, les moyennes de long-terme sont calculés de manière théorique. On suppose que chaque jour de l'année a autant de chance d'être un lundi, un mardi, ..., un dimanche.
 Ainsi les moyennes de long-termes sont calculées par une somme de $1/7$.
 
-Par exemple, pour les jours Off du mois de janvier, les moyennes de long-terme des 7 types dr jours valent $1/7$. Pour le mois de novembre, c'est $2/7$.
+Par exemple, pour les jours Off du mois de janvier, les moyennes de long-terme des 7 types de jours valent $1/7$. Pour le mois de novembre, c'est $2/7$.
 
-Le calcul est aussi théorique pour les moyennes de la variable Day. Ainsi on retire le 29ème jour de février (pour les années bisextiles) pour laisser sont influence calculées par le régresseur LY (leap-year).
+Le calcul est aussi théorique pour les moyennes de la variable Day. Ainsi on retire le 29ème jour de février (pour les années bissextiles) pour laisser sont influence calculées par le régresseur LY (leap-year).
 
 </div>
 
@@ -349,7 +354,7 @@ easter_occurence <- calendar_easter$date_easter_meeus |> table()
 plot(easter_occurence, ylab = "Occurence de Pâques")
 ```
 
-Mais cette répartition des jours de Paques est différentes selon la période que l'on considère.
+Mais cette répartition des jours de Pâques est différente selon la période que l'on considère.
 
 Sur la période 2000-2399 (cycle du calendrier) :
 
@@ -440,3 +445,29 @@ merge(cal1, cal2, by = c("month_number", "weekday_number")) |> kableExtra::kable
 ```
 
 
+### Calcul sous **SAS**
+
+En **SAS**, le calcul de l'année bissextile se fait suivant des règles particulières.
+
+Règle classique : on considère que toutes les années divisibles par 4 sont bissextiles à l'exception des années divisibles par 100 mais pas par 400. 
+
+<div class = "green">
+Exemple : 
+
+- Les années 2003, 2021 et 2027 ne sont pas bissextiles.
+- Les années 2016, 2020 et 2024 sont bissextiles.
+- Les années 2100, 2200 et 1900 ne sont pas bissextiles.
+- Enfin, les années 2000, 1600 et 2400 sont bissextiles.
+</div>
+
+Ces règles permettent d'affiner la durée moyenne d'une année pour coller avec la durée de révolution de la terre autour du soleil (durée qui n'est pas un multiple de 24h...).
+
+Sur 400 ans, une année moyenne dure 365.2425 jours = 8765.82 h = 31556952 s.
+La période de révolution du soleil dure environ 365.242190
+
+Pour approcher un peu plus la période de révolution de la Terre, les années divisibles par 4000 sont non bissextiles. Cette règle n'est pas la règle officielle et n'est pas compatibles avec les calculs de date de Pâques (Gauss, Meeus, Conway...)
+
+Pourtant, **SAS** utilise cette règle pour son calcul de calendrier !
+Attention alors aux calculs des moyennes de long-terme sur ces calendriers qui peuvent être faussé (notamment pour les jours fériés relatifs à Pâques).
+
+Seulement en pratique, comme on l'a expliqué dans la remarque précédente, il y a de grandes chances que les moyennes de long-terme ne soit pas calculé sur des très grandes période.
