@@ -84,8 +84,11 @@ $$ reg_i = group_i - group_0 \times \frac{Card(group_i)}{Card(group_0)} $$
 avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$, $group_0 = {1, 7}$, $Card(x)$ le cardinal d'un ensemble.
 
 - On créé les "Working week-days" = jours ouvrables (TD), en opposition les "Publics Holydays" (PH) et les "Weekday contrast" (Weekdays) :
+
 $$ TD = \sum_{i = 2}^{6} In_i $$
+
 $$ PH = \sum_{i = 2}^{6} Off_i $$
+
 $$ Weekdays = TD - \frac{5}{2} \times \left(PH + Day_1 + Day_7\right) $$
 
 Ces variables s'appuient sur la structure de REG1 (lundi au vendredi contre samedi et dimanche).
@@ -93,13 +96,17 @@ Ces variables s'appuient sur la structure de REG1 (lundi au vendredi contre same
 ### Retrait des moyennes de long-terme
 
 - On va calculer les moyennes de long-terme pour les variables $Day_i$ et les $Off_i$. Ces moyennes se calculent mois par mois :
-$$ mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j} $$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12.
-$$ mean\_Off_{i, mois\_j} = \sum_{annees} Off_{i, mois\_j} $$ avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12
 
-- On peut ensuite recalculer de nouvelles variables :
-$$ Day_i\_corr = Day_i - mean\_Day_i , $$ 
-$$ Off_i\_corr = Off_i - mean\_Off_i , $$ 
-$$ In_i\_corr = Day_i\_corr - Off_i\_corr , $$ 
+$$ mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j} $$
+
+avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12.
+
+$$ mean\_Off_{i, mois\_j} = \sum_{annees} Off_{i, mois\_j} $$
+
+avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12
+
+- On peut ensuite recalculer de nouvelles variables : $Day_i\_corr = Day_i - mean\_Day_i$, $Off_i\_corr = Off_i - mean\_Off_i$ et $In_i\_corr = Day_i\_corr - Off_i\_corr$.
+
 Ainsi que toutes les autres variables présentées précédemment avec les nouveaux $Day_i\_corr$, $Off_i\_corr$ et $In_i\_corr$.
 
 <div class = "blue">
