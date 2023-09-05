@@ -46,10 +46,10 @@ Dans la suite :
 *Les formules appliquées ici sont expliquées dans la seconde partie du document.*
 
 - On compte les jours ($NbDays$ est le nombre total de jour du mois) :
-$Day_i$ est le nombre de jour n°i dans le mois ($Day_1$ est le dimanche, $Day_2$ le lundi, ... $Day_7$ est le samedi)
+$Day_{i}$ est le nombre de jour n°i dans le mois ($Day_1$ est le dimanche, $Day_2$ le lundi, ... $Day_7$ est le samedi)
 
 - On compte les jours fériés 
-$Off_i$ est le nombre de jour férié tombant un jour n°i dans le mois ($Off_1$ pour tous les dimanches, $Off_2$ les lundis, ... et $Off_7$ les samedis)
+$Off_{i}$ est le nombre de jour férié tombant un jour n°i dans le mois ($Off_1$ pour tous les dimanches, $Off_2$ les lundis, ... et $Off_7$ les samedis)
 
 - On distingue alors jours $In$ et jours $Off$ (selon fériés et vacances). En France la liste des jours $Off$ est :
     * 1er de l'an (1er janvier)
@@ -65,29 +65,29 @@ $Off_i$ est le nombre de jour férié tombant un jour n°i dans le mois ($Off_1$
     * Noël (25 décembre)
     * les différents ponts (les lundi et vendredi à chaque fois qu'il y a un mardi ou un jeudi de férié) **ne sont pas considérés comme jours fériés**
 
-Ainsi on peut définir les jours ouvrables $In_i = Day_i - Off_i$ pour $i$ entre 1 et 7.
+Ainsi on peut définir les jours ouvrables $In_{i} = Day_{i} - Off_{i}$ pour $i$ entre 1 et 7.
 
 - On créé les jours TD (tradings days) comme contrast par rapport à un référence (généralement le dimanche) :
-$TD_i = Day_i - Day_1$ pour $i$ entre 2 et 7. 
+$TD_{i} = Day_{i} - Day_1$ pour $i$ entre 2 et 7. 
 Par abus de notation, des fois i parcourt [1, 6] et non [2, 7] et alors 1 désigne le lundi et 6 le samedi.
 
 - On créé la variable WD (working days) qui calcule un nombre moyen de jours travaillé (en contraste)
 
-$$ WD = \left(\sum_{i = 2}^{6} Day_i\right) - \frac{5}{2} \times \left(Day_1 + Day_7\right) $$
+$$ WD = \left(\sum_{i = 2}^{6} Day_{i}\right) - \frac{5}{2} \times \left(Day_1 + Day_7\right) $$
 
 
 On applique la formule plus générale :
 
-$$ reg_i = group_i - group_0 \times \frac{Card(group_i)}{Card(group_0)} $$
+$$ reg_{i} = group_{i} - group_0 \times \frac{Card(group_{i})}{Card(group_0)} $$
 
 
 avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$, $group_0 = {1, 7}$, $Card(x)$ le cardinal d'un ensemble.
 
 - On créé les "Working week-days" = jours ouvrables (TD), en opposition les "Publics Holydays" (PH) et les "Weekday contrast" (Weekdays) :
 
-$$ TD = \sum_{i = 2}^{6} In_i $$
+$$ TD = \sum_{i = 2}^{6} In_{i} $$
 
-$$ PH = \sum_{i = 2}^{6} Off_i $$
+$$ PH = \sum_{i = 2}^{6} Off_{i} $$
 
 $$ Weekdays = TD - \frac{5}{2} \times \left(PH + Day_1 + Day_7\right) $$
 
@@ -95,7 +95,7 @@ Ces variables s'appuient sur la structure de REG1 (lundi au vendredi contre same
 
 ### Retrait des moyennes de long-terme
 
-- On va calculer les moyennes de long-terme pour les variables $Day_i$ et les $Off_i$. Ces moyennes se calculent mois par mois :
+- On va calculer les moyennes de long-terme pour les variables $Day_{i}$ et les $Off_{i}$. Ces moyennes se calculent mois par mois :
 
 $$ mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j} $$
 
@@ -105,9 +105,9 @@ $$ mean\_Off_{i, mois\_j} = \sum_{annees} Off_{i, mois\_j} $$
 
 avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\_j$ le numéro du mois entre 1 et 12
 
-- On peut ensuite recalculer de nouvelles variables : $Day_i\_corr = Day_i - mean\_Day_i$, $Off_i\_corr = Off_i - mean\_Off_i$ et $In_i\_corr = Day_i\_corr - Off_i\_corr$.
+- On peut ensuite recalculer de nouvelles variables : $Day_{i}\_corr = Day_{i} - mean\_Day_{i}$, $Off_{i}\_corr = Off_{i} - mean\_Off_{i}$ et $In_{i}\_corr = Day_{i}\_corr - Off_{i}\_corr$.
 
-Ainsi que toutes les autres variables présentées précédemment avec les nouveaux $Day_i\_corr$, $Off_i\_corr$ et $In_i\_corr$.
+Ainsi que toutes les autres variables présentées précédemment avec les nouveaux $Day_{i}\_corr$, $Off_{i}\_corr$ et $In_{i}\_corr$.
 
 <div class = "blue">
 
@@ -193,7 +193,7 @@ $$ \omega_k = \frac{\# group_k}{\# group_0} $$
 <div class = "blue">
 
 - Pour les jeux de régresseurs issus de JD+ (*package* ***rjd3modelling***), les $\omega_k$ sont calculés entre les jours d'une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
-    * pour REG6, $\omega_k = 1$ car chaque groupe $G_i$ ne contient qu'un jour (du lundi au dimanche)
+    * pour REG6, $\omega_k = 1$ car chaque groupe $G_{i}$ ne contient qu'un jour (du lundi au dimanche)
     * pour REG1, $\omega_k = \frac{5}{2}$ car le groupe 1 $G_1$ (jours ouvrables) contient les jours du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche.
     * ... selon les configurations des groupes
 
@@ -214,7 +214,7 @@ Le modèle initial s'écrit :
 
 $$ \tag{1} D_t = \sum ^{7}_{i=1} \alpha _{i} \times Day_{i, t} $$
 
-Avec $\alpha_i$ l'effet du jour i (au moment t) sur notre variable. On appelle $D_t$ l'effet déterministe du calendrier sur variable à étudier.
+Avec $\alpha_{i}$ l'effet du jour i (au moment t) sur notre variable. On appelle $D_t$ l'effet déterministe du calendrier sur variable à étudier.
 
 Malheureusement, ce modèle n'est pas utilisable directement comme ça car :
 
@@ -228,13 +228,13 @@ Pour contrer cela, on va chercher à séparer l'**effet cummulatif du nombre tot
 
 On réécrit l'équation en intégrant $NbDays_t$, le nombre de jour total du mois et $\overline{\alpha}$ l'effet moyen d'un type de jour :
 
-$$ \tag{2} D_t = \overline{\alpha} \times NbDays_t + \sum ^{7}_{i=1} \beta_i \times Day_{i, t} $$
+$$ \tag{2} D_t = \overline{\alpha} \times NbDays_t + \sum ^{7}_{i=1} \beta_{i} \times Day_{i, t} $$
 
-Avec $\overline{\alpha} = \frac{1}{7} \sum ^{7}_{i=1} \alpha_i$ et $\beta_i = \alpha _{i} - \overline{\alpha}$
+Avec $\overline{\alpha} = \frac{1}{7} \sum ^{7}_{i=1} \alpha_{i}$ et $\beta_{i} = \alpha _{i} - \overline{\alpha}$
 
-On remarque alors que $\sum ^{7}_{i=1} \beta_i = 0$. Donc $\beta_7 = -\sum ^{6}_{i=1} \beta_i$ et on peut écrire nos régresseurs en constraste du dimanche (ou de n'importe quel autre jour) :
+On remarque alors que $\sum ^{7}_{i=1} \beta_{i} = 0$. Donc $\beta_7 = -\sum ^{6}_{i=1} \beta_{i}$ et on peut écrire nos régresseurs en constraste du dimanche (ou de n'importe quel autre jour) :
 
-$$ \tag{3} D_t = \overline{\alpha} \times NbDays_t + \sum ^{6}_{i=1} \beta_i \times (Day_{i, t} - Day_{7, t}) $$
+$$ \tag{3} D_t = \overline{\alpha} \times NbDays_t + \sum ^{6}_{i=1} \beta_{i} \times (Day_{i, t} - Day_{7, t}) $$
 
 Ce modèle correspond *à peu près* au modèle REG6 mais on peut formuler des hypothèses plus fortes pour créer de nouveaux jeux de régresseurs :
 
@@ -260,7 +260,7 @@ Cette remarque est importante car elle conditionne notre interprétation des coe
 
 Finalement lorsqu'on a notre résultat final, on cherche à interpréter les coefficients finaux et comprendre quel régresseur / jour de la semaine participe. 
 
-Tout d'abord, comme on l'a vu entre l'étape (1) et (2), les coefficients que l'on a à commenter sont les $\beta_i$ (ou $\beta_k$ quand on fait des groupes) et non les $\alpha_i$. Donc on ne commente pas l'effet du type de jour $i$ mais sa comparaison par rapport un type de jour moyen. Cela explique que l'on peut avoir des coefficients négatifs pour des types de jour où il y a de l'activité.
+Tout d'abord, comme on l'a vu entre l'étape (1) et (2), les coefficients que l'on a à commenter sont les $\beta_{i}$ (ou $\beta_k$ quand on fait des groupes) et non les $\alpha_{i}$. Donc on ne commente pas l'effet du type de jour $i$ mais sa comparaison par rapport un type de jour moyen. Cela explique que l'on peut avoir des coefficients négatifs pour des types de jour où il y a de l'activité.
 
 <div class = "green">
 
@@ -291,7 +291,7 @@ Comme on l'a vu entre les équations (3) et (4), on retire les moyennes de long-
 
 Si on repart de l'équation (3), on remarque que le choix du dimanche en constraste est un choix arbitraire. On peut donc réécrire l'équation de REG1 (par exemple) en conséquence :
 $$ D_t = \overline{\alpha} \times NbDays_t - \frac{1}{5} \beta_7 \times (Day_{6, t} + Day_{7, t} - \frac{2}{5} \sum ^{5}_{i=1} Day_{i, t}) $$
-La réestimation de ce modèle donnera un $\beta_7 = \beta_6$ identique au modèle REG1 écrit plus haut et les autres $\beta_i = -\frac{2}{5} \beta_7$ (pour $i$ entre 1 et 5) seront aussi les mêmes.
+La réestimation de ce modèle donnera un $\beta_7 = \beta_6$ identique au modèle REG1 écrit plus haut et les autres $\beta_{i} = -\frac{2}{5} \beta_7$ (pour $i$ entre 1 et 5) seront aussi les mêmes.
 
 #### Remarque 3 : la réalité est plus complexe
 
@@ -310,7 +310,7 @@ Exemple : dans le transport routier, les camions peuvent rouler toute l'année, 
 Enfin on peut formuler une remarque sur l'ordre des opérations. 
 
 L'opération de calcul des moyennes prend une série (mensuelle ou trimestrielle) et retire sa moyenne par période :
-$$ \overline{X} = I_1 \times (X - X\_{mean}_1) + I_2 \times (X - X\_{mean}_2) + ... + I_n \times (X - X\_{mean}_n) $$ avec $I_i$ l'indicatrice de la période $i$ et $n$ le nombre total de période (exemple $n = 12$ pour une fréquence mensuelle).
+$$ \overline{X} = I_1 \times (X - X\_{mean}_1) + I_2 \times (X - X\_{mean}_2) + ... + I_n \times (X - X\_{mean}_n) $$ avec $I_{i}$ l'indicatrice de la période $i$ et $n$ le nombre total de période (exemple $n = 12$ pour une fréquence mensuelle).
 
 L'opération de contraste prend 2 séries et en fait une somme pondérée :
 $$ X\_contraste = X + \omega Y $$
