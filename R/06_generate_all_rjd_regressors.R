@@ -1,7 +1,8 @@
+
 library("rjd3toolkit")
 
 
-## Calendar creation ---------------------------------------------------------
+## Calendar creation -----------------------------------------------------------
 
 frenchCalendar <- national_calendar(days = list(
     fixed_day(7, 14), # Fete nationale
@@ -18,7 +19,7 @@ frenchCalendar <- national_calendar(days = list(
 ))
 
 
-## Regressor set creation ---------------------------------------------------------
+## Regressor set creation ------------------------------------------------------
 
 groups <- list(
     REG1 = c(1L, 1L, 1L, 1L, 1L, 0L, 0L),

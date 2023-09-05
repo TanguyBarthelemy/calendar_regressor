@@ -3,16 +3,16 @@
 ################################################################################
 
 
-# Chargement des tables ---------------------------------------------------
+# Chargement des tables --------------------------------------------------------
 
 # Moyennes de long-terme "théoriques" liés à Paques par rjd
 load("./data/easter_mean_rjd.RData")
 
 
-# Calcul des moyennes de long-terme ------------------------------------------------------------------
+# Calcul des moyennes de long-terme --------------------------------------------
 
 
-## Calcul des jours Off ----------------------------------------------------
+## Calcul des jours Off --------------------------------------------------------
 
 length_mois <- c(31L, 28L, 31L, 30L, 31L, 30L, 31L, 31L, 30L, 31L, 30L, 31L)
 
@@ -38,12 +38,12 @@ mean_rjd[mean_rjd$month_number %in% 5:6 & mean_rjd$weekday_number == 2, "Off_mea
 mean_rjd[mean_rjd$month_number %in% 4:6 & mean_rjd$weekday_number == 5, "Off_mean"] <- mean_ascension + mean_rjd[mean_rjd$month_number %in% 4:6 & mean_rjd$weekday_number == 5, "Off_mean"]
 
 
-## Calcul des jours In ----------------------------------------------------
+## Calcul des jours In ---------------------------------------------------------
 
 mean_rjd$In_mean <- mean_rjd$Day_mean - mean_rjd$Off_mean
 
 
-## Calcul des totaux ------------------------------------------------------------
+## Calcul des totaux -----------------------------------------------------------
 
 mean_rjd <- mean_rjd |>
     rbind(
@@ -58,6 +58,6 @@ mean_rjd <- mean_rjd |>
     )
 
 
-## Enregistrement ------------------------------------------------------------
+## Enregistrement --------------------------------------------------------------
 
 save(mean_rjd, file = "./data/mean-rjd.RData")

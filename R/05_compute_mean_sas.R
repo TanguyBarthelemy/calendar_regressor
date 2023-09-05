@@ -2,7 +2,7 @@
 #####         Calcul des moyennes de long-terme divergentes en SAS         #####
 ################################################################################
 
-## Contexte ------------------------------------------
+## Contexte --------------------------------------------------------------------
 
 # En l'an 4000, il n'y a pas de 29 fevrier (alors qu'il devrait y en avoir).
 # Ainsi, toutes les dates qui suivent le 28 février 4000 correspondent à leur veille
@@ -46,7 +46,7 @@ mean_sas <- cal1 |>
     dplyr::mutate(periode = month_number)
 
 
-## Calcul des totaux ------------------------------------------------------------
+## Calcul des totaux -----------------------------------------------------------
 
 mean_sas <- mean_sas |>
     rbind(
@@ -61,6 +61,6 @@ mean_sas <- mean_sas |>
     )
 
 
-## Enregistrement ------------------------------------------------------------
+## Enregistrement --------------------------------------------------------------
 
 save(mean_sas, file = "./data/mean-sas.RData")
