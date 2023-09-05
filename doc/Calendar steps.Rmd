@@ -86,6 +86,10 @@ $$reg_i = \text{group}_i - \text{group}_0 \times \frac{\# \text{group}_i}{\# \te
 
 $$ reg_i = \text{group}_i - \text{group}_0 \times \frac{\# \text{group}_i}{\# \text{group}_0} $$
 
+```math
+reg_i = group_i - group_0 * (# group_i) / (# group_0)
+```
+
 
 avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$ et $group_0 = {1, 7}$
 
