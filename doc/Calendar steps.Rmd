@@ -78,20 +78,10 @@ $$ WD = \left(\sum_{i = 2}^{6} Day_i\right) - \frac{5}{2} \times \left(Day_1 + D
 
 On applique la formule plus générale :
 
-$$
-reg_i = \text{group}_i - \text{group}_0 \times \frac{\# \text{group}_i}{\# \text{group}_0}
-$$
-
-$$reg_i = \text{group}_i - \text{group}_0 \times \frac{\# \text{group}_i}{\# \text{group}_0}$$
-
-$$ reg_i = \text{group}_i - \text{group}_0 \times \frac{\# \text{group}_i}{\# \text{group}_0} $$
-
-```math
-reg_i = group_i - group_0 * (# group_i) / (# group_0)
-```
+$$ reg_i = group_i - group_0 \times \frac{Card(group_i)}{Card(group_0)} $$
 
 
-avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$ et $group_0 = {1, 7}$
+avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$, $group_0 = {1, 7}$, $Card(x)$ le cardinal d'un ensemble.
 
 - On créé les "Working week-days" = jours ouvrables (TD), en opposition les "Publics Holydays" (PH) et les "Weekday contrast" (Weekdays) :
 $$ TD = \sum_{i = 2}^{6} In_i $$
