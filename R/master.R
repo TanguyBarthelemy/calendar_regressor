@@ -1,4 +1,3 @@
-
 ################################################################################
 #####                    Calcul des jeux de régresseurs                    #####
 ################################################################################
@@ -26,9 +25,10 @@ load(file = "./data/mean-sas.RData")
 ## Création variable générales ---------------------------------------------
 
 cal1 <- create_french_calendar(
-    summary = FALSE, 
-    start = 1990L, end = 2031L, 
-    starting_day = "lundi")
+    summary = FALSE,
+    start = 1990L, end = 2031L,
+    starting_day = "lundi"
+)
 
 
 # Replicate Dominique method ----------------------------------------------
@@ -41,11 +41,16 @@ reg1_sas <- cal_sas |>
         G0 = Off_corr + In1_corr + In7_corr,
         REG1_SAS = G1 - G0 * 5 / 9,
         Date = as.Date(paste(
-            year, sprintf("%02.f", month_number), "01", sep = "-"))) |>
+            year, sprintf("%02.f", month_number), "01",
+            sep = "-"
+        ))
+    ) |>
     dplyr::select(Date, REG1_SAS)
 
-write.table(reg1_sas, sep = ";", file = "./output/repr_REG1_sas.csv", 
-            row.names = FALSE)
+write.table(reg1_sas,
+    sep = ";", file = "./output/repr_REG1_sas.csv",
+    row.names = FALSE
+)
 
 
 # Correct Dominique method ------------------------------------------------
@@ -58,11 +63,16 @@ reg1_sas <- cal_sas |>
         G0 = Off_corr + In1_corr + In7_corr,
         REG1_SAS = G1 - G0 * 5 / 9,
         Date = as.Date(paste(
-            year, sprintf("%02.f", month_number), "01", sep = "-"))) |>
+            year, sprintf("%02.f", month_number), "01",
+            sep = "-"
+        ))
+    ) |>
     dplyr::select(Date, REG1_SAS)
 
-write.table(reg1_sas, sep = ";", file = "./output/repr_REG1_sas.csv", 
-            row.names = FALSE)
+write.table(reg1_sas,
+    sep = ";", file = "./output/repr_REG1_sas.csv",
+    row.names = FALSE
+)
 
 
 # With rjd3 packages ------------------------------------------------------
@@ -81,33 +91,29 @@ frenchCalendar <- national_calendar(days = list(
     special_day("WHITMONDAY"), # Lundi de Pentecôte (1/2 en 2005 a verif)
     special_day("ASSUMPTION"), # Assomption
     special_day("ALLSAINTSDAY"), # Toussaint
-    special_day("ARMISTICE"))
-)
+    special_day("ARMISTICE")
+))
 
 
 ## Regressor set creation ---------------------------------------------------------
 
 reg1 <- calendar_td(
-    calendar = frenchCalendar, 
-    frequency = 12L, 
-    start = c(1990L, 1L), 
-    length = 480L, 
-    groups = c(1L, 1L, 1L, 1L, 1L, 0L, 0L))
+    calendar = frenchCalendar,
+    frequency = 12L,
+    start = c(1990L, 1L),
+    length = 480L,
+    groups = c(1L, 1L, 1L, 1L, 1L, 0L, 0L)
+)
 
-reg_test <- calendar_td(
-    calendar = frenchCalendar, 
-    frequency = 12L, 
-    start = c(1990L, 1L), 
-    length = 480L, 
-    groups = c(1L, 0L, 0L, 2L, 0L, 0L, 0L))
-
-out <- data.frame(
-    date = reg1 |> time() |> zoo::as.Date(), 
+reg1 <- data.frame(
+    date = reg1 |> time() |> zoo::as.Date(),
     REG1_RJD = reg1 |> as.double()
 )
 
-write.table(out, sep = ";", file = "./output/REG1_by_rjd.csv", 
-            row.names = FALSE)
+write.table(reg1,
+    sep = ";", file = "./output/REG1_by_rjd.csv",
+    row.names = FALSE
+)
 
 
 # Replicate rjd3 package method -------------------------------------------
@@ -120,8 +126,13 @@ reg1_rjd <- cal_rjd |>
         G0 = Off_corr + In1_corr + In7_corr,
         REG1_RJD = G1 - G0 * 5 / 2,
         Date = as.Date(paste(
-            year, sprintf("%02.f", month_number), "01", sep = "-"))) |>
+            year, sprintf("%02.f", month_number), "01",
+            sep = "-"
+        ))
+    ) |>
     dplyr::select(Date, REG1_RJD)
 
-write.table(reg1_rjd, sep = ";", file = "./output/repr_REG1_rjd.csv", 
-            row.names = FALSE)
+write.table(reg1_rjd,
+    sep = ";", file = "./output/repr_REG1_rjd.csv",
+    row.names = FALSE
+)

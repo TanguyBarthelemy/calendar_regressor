@@ -30,6 +30,6 @@ calendar.holiday(frenchCalendar, "ARMISTICE")
 calendar.holiday(frenchCalendar, "CHRISTMAS") # Noël
 
 rjd3modelling::htd(
-    calendar = frenchCalendar, frequency = 12, start = c(1990, 1), length = 490, 
+    calendar = frenchCalendar, frequency = 12, start = c(1990, 1), length = 490,
     groups = c(1:6, 0), meanCorrection = TRUE, contrasts = TRUE, holiday = 7
 ) |> window(start = 2025)

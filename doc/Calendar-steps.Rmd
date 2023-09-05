@@ -162,18 +162,20 @@ Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur
 library("flextable")
 
 reg_CJO <- read.csv("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_Regresseurs_CJO/data/reg_groups.csv", sep = ";")
-liste_names <- colnames(reg_CJO) |> substr(1, 3) |> as.list()
+liste_names <- colnames(reg_CJO) |>
+    substr(1, 3) |>
+    as.list()
 names(liste_names) <- colnames(reg_CJO)
 
-reg_CJO |> 
-    flextable() |> 
-    set_header_labels(values = liste_names) |> 
-    add_header_row(values = c("Ouvrable", "Férié"), colwidths = c(8, 7)) |> 
-    align(align = "center", part = "header") |> 
-    bg(i = 2, j = 2:8, bg = "#d7fff2", part = "header") |> 
-    bg(i = 2, j = 9:15, bg = "#fffdd7", part = "header") |> 
-    bg(j = -1, bg = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |> 
-    color(j = -1, color = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |> 
+reg_CJO |>
+    flextable() |>
+    set_header_labels(values = liste_names) |>
+    add_header_row(values = c("Ouvrable", "Férié"), colwidths = c(8, 7)) |>
+    align(align = "center", part = "header") |>
+    bg(i = 2, j = 2:8, bg = "#d7fff2", part = "header") |>
+    bg(i = 2, j = 9:15, bg = "#fffdd7", part = "header") |>
+    bg(j = -1, bg = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |>
+    color(j = -1, color = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |>
     flextable::width(j = 2:15, .4)
 ```
 
@@ -323,10 +325,11 @@ $$ \overline{X + \omega Y} = \overline{X} + \omega \overline{Y} $$
 Les règles de création des calendriers sont stables dans le temps (on sait quel jour tombera le 26 mars dans 450 ans). Ainsi on peut calculer les fréquences des jours de la semaine.
 
 ```{r echo = FALSE}
-jours <- data.frame(first_1 = c(6, rep(0, 399)), annee = 0:399) |> 
+jours <- data.frame(first_1 = c(6, rep(0, 399)), annee = 0:399) |>
     dplyr::mutate(
-        bisextile = annee %% 400 == 0 | (annee %% 4 == 0 & annee %% 100 != 0), 
-        first_2 = (cumsum(first_1 + 365 + bisextile) - 1) %% 7 + 1)
+        bisextile = annee %% 400 == 0 | (annee %% 4 == 0 & annee %% 100 != 0),
+        first_2 = (cumsum(first_1 + 365 + bisextile) - 1) %% 7 + 1
+    )
 
 premier_de_l_an <- jours$first_2 |> table()
 names(premier_de_l_an) <- c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche")
@@ -335,12 +338,16 @@ names(premier_de_l_an) <- c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "
 
 Nombre d'occurence en 400 ans :
 ```{r echo = FALSE}
-premier_de_l_an |> t() |> kableExtra::kable()
+premier_de_l_an |>
+    t() |>
+    kableExtra::kable()
 ```
 
 Fréquence d'apparition un premier de l'an :
 ```{r echo = FALSE}
-(premier_de_l_an / sum(premier_de_l_an)) |> t() |> kableExtra::kable()
+(premier_de_l_an / sum(premier_de_l_an)) |>
+    t() |>
+    kableExtra::kable()
 ```
 
 
@@ -378,41 +385,43 @@ plot(reduce_calendar(1970, 2050)$date_easter_meeus |> table(), ylab = "Occurence
 En comparant le nombre de jour fériés par mois :
 
 ```{r, echo = FALSE}
-cal_2000_2399 <- reduce_calendar(2000, 2399) |> 
-    add_easter_holidays() |> 
+cal_2000_2399 <- reduce_calendar(2000, 2399) |>
+    add_easter_holidays() |>
     summarise_by_easter(name = "2000-2399", freq = 12)
 
-cal_1970_2050 <- reduce_calendar(1970, 2050) |> 
-    add_easter_holidays() |> 
+cal_1970_2050 <- reduce_calendar(1970, 2050) |>
+    add_easter_holidays() |>
     summarise_by_easter(name = "1970-2050", freq = 12)
 
-cal_0_57000000 <- calendar_easter |> 
-    add_easter_holidays() |> 
+cal_0_57000000 <- calendar_easter |>
+    add_easter_holidays() |>
     summarise_by_easter(name = "1-5700000", freq = 12)
 
-cal_0_57000000 |> 
-    merge(y = cal_2000_2399, all = TRUE) |> 
-    merge(y = cal_1970_2050, all = TRUE) |> kableExtra::kable()
+cal_0_57000000 |>
+    merge(y = cal_2000_2399, all = TRUE) |>
+    merge(y = cal_1970_2050, all = TRUE) |>
+    kableExtra::kable()
 ```
 
 Et par trimestre :
 
 ```{r, echo = FALSE}
-cal_2000_2399 <- reduce_calendar() |> 
-    add_easter_holidays() |> 
+cal_2000_2399 <- reduce_calendar() |>
+    add_easter_holidays() |>
     summarise_by_easter(name = "2000-2399", freq = 4)
 
-cal_1970_2050 <- reduce_calendar(1970, 2050) |> 
-    add_easter_holidays() |> 
+cal_1970_2050 <- reduce_calendar(1970, 2050) |>
+    add_easter_holidays() |>
     summarise_by_easter(name = "1970-2050", freq = 4)
 
-cal_0_57000000 <- calendar_easter |> 
-    add_easter_holidays() |> 
+cal_0_57000000 <- calendar_easter |>
+    add_easter_holidays() |>
     summarise_by_easter(name = "1-5700000", freq = 4)
 
-cal_0_57000000 |> 
-    merge(y = cal_2000_2399, all = TRUE) |> 
-    merge(y = cal_1970_2050, all = TRUE) |> kableExtra::kable()
+cal_0_57000000 |>
+    merge(y = cal_2000_2399, all = TRUE) |>
+    merge(y = cal_1970_2050, all = TRUE) |>
+    kableExtra::kable()
 ```
 
 Nos moyennes de long-terme diffèrent !
@@ -424,29 +433,37 @@ La remarque précédente est vraie pour tous les types de jours fériés. Les au
 Mais est ce une raison pour prendre en compte la totalité de la série ou peut-on se satisfaire d'un extrait avec les années sur lesquelles on effectue nos analyses ?
 
 ```{r, echo = FALSE}
-cal1 <- calendar_other_holidays |> 
-    dplyr::filter(year >= 2000 & year <= 2399) |> 
+cal1 <- calendar_other_holidays |>
+    dplyr::filter(year >= 2000 & year <= 2399) |>
     dplyr::summarise(
-        Day = dplyr::n(), 
-        Off = sum(new_year, may_day, victory_day, fete_nationale, 
-                  assumption, all_saints_day, armistice, christmas), 
+        Day = dplyr::n(),
+        Off = sum(
+            new_year, may_day, victory_day, fete_nationale,
+            assumption, all_saints_day, armistice, christmas
+        ),
         .by = c(year, month_number, weekday_number)
-    ) |> 
-    dplyr::summarise(Day = mean(Day),
-                     Off = mean(Off),
-                     .by = c(month_number, weekday_number))
+    ) |>
+    dplyr::summarise(
+        Day = mean(Day),
+        Off = mean(Off),
+        .by = c(month_number, weekday_number)
+    )
 
-cal2 <- calendar_other_holidays |> 
-    dplyr::filter(year >= 1970 & year <= 2050) |> 
+cal2 <- calendar_other_holidays |>
+    dplyr::filter(year >= 1970 & year <= 2050) |>
     dplyr::summarise(
-        Day = dplyr::n(), 
-        Off = sum(new_year, may_day, victory_day, fete_nationale, 
-                  assumption, all_saints_day, armistice, christmas), 
+        Day = dplyr::n(),
+        Off = sum(
+            new_year, may_day, victory_day, fete_nationale,
+            assumption, all_saints_day, armistice, christmas
+        ),
         .by = c(year, month_number, weekday_number)
-    ) |> 
-    dplyr::summarise(Day = mean(Day),
-                     Off = mean(Off),
-                     .by = c(month_number, weekday_number))
+    ) |>
+    dplyr::summarise(
+        Day = mean(Day),
+        Off = mean(Off),
+        .by = c(month_number, weekday_number)
+    )
 
 merge(cal1, cal2, by = c("month_number", "weekday_number")) |> kableExtra::kable()
 ```
