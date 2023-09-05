@@ -25,7 +25,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Lint root directory
-        run: lintr::lint_dir(linters = lintr::linters_with_defaults(line_length_linter = NULL, trailing_blank_lines_linter = NULL, lintr::indentation_linter(indent = 4L)))
+        run: lintr::lint_dir()
         shell: Rscript {0}
         env:
           LINTR_ERROR_ON_LINT: true
