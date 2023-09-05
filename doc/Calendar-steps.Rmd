@@ -158,7 +158,7 @@ Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur
     * $G_6$ = samedi ouvrables
     * $G_0$ = les autres)
 
-``` {r, echo = FALSE, warning = FALSE}
+``` {r cjo_sets_table, echo = FALSE, warning = FALSE}
 library("flextable")
 
 reg_cjo <- read.csv("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_Regresseurs_CJO/data/reg_groups.csv", sep = ";")
@@ -324,7 +324,7 @@ $$ \overline{X + \omega Y} = \overline{X} + \omega \overline{Y} $$
 
 Les règles de création des calendriers sont stables dans le temps (on sait quel jour tombera le 26 mars dans 450 ans). Ainsi on peut calculer les fréquences des jours de la semaine.
 
-```{r echo = FALSE}
+```{r occurence_week_day, echo = FALSE}
 jours <- data.frame(first_1 = c(6, rep(0, 399)), annee = 0:399) |>
     dplyr::mutate(
         bisextile = annee %% 400 == 0 | (annee %% 4 == 0 & annee %% 100 != 0),
@@ -337,14 +337,14 @@ names(premier_de_l_an) <- c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "
 
 
 Nombre d'occurence en 400 ans :
-```{r echo = FALSE}
+```{r occurence_week_day_400, echo = FALSE}
 premier_de_l_an |>
     t() |>
     kableExtra::kable()
 ```
 
 Fréquence d'apparition un premier de l'an :
-```{r echo = FALSE}
+```{r occurence_first_day, echo = FALSE}
 (premier_de_l_an / sum(premier_de_l_an)) |>
     t() |>
     kableExtra::kable()

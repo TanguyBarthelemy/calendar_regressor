@@ -25,11 +25,11 @@ Les paragraphes bleus font référence à ce qui se passe en pratique (sur
 
 Dans la suite :
 
-- $i$ désigne le jour de la semaine
+- $`i`$ désigne le jour de la semaine
 
-- $j$ ou $mois_j$ désigne le numéro du mois de l’année
+- $`j`$ ou $`mois_j`$ désigne le numéro du mois de l’année
 
-- $t$ désigne la date à laquelle on se trouve (croisement de $j$ et de
+- $`t`$ désigne la date à laquelle on se trouve (croisement de $`j`$ et de
   l’anée)
 
 ### Préparation du calendrier
@@ -37,16 +37,16 @@ Dans la suite :
 *Les formules appliquées ici sont expliquées dans la seconde partie du
 document.*
 
-- On compte les jours ($NbDays$ est le nombre total de jour du mois) :
-  $Day_{i}$ est le nombre de jour n°i dans le mois ($Day_1$ est le
-  dimanche, $Day_2$ le lundi, … $Day_7$ est le samedi)
+- On compte les jours ($`NbDays`$ est le nombre total de jour du mois) :
+  $`Day_{i}`$ est le nombre de jour n°i dans le mois ($`Day_1`$ est le
+  dimanche, $`Day_2`$ le lundi, … $`Day_7`$ est le samedi)
 
-- On compte les jours fériés $Off_{i}$ est le nombre de jour férié
-  tombant un jour n°i dans le mois ($Off_1$ pour tous les dimanches,
-  $Off_2$ les lundis, … et $Off_7$ les samedis)
+- On compte les jours fériés $`Off_{i}`$ est le nombre de jour férié
+  tombant un jour n°i dans le mois ($`Off_1`$ pour tous les dimanches,
+  $`Off_2`$ les lundis, … et $`Off_7`$ les samedis)
 
-- On distingue alors jours $In$ et jours $Off$ (selon fériés et
-  vacances). En France la liste des jours $Off$ est :
+- On distingue alors jours $`In`$ et jours $`Off`$ (selon fériés et
+  vacances). En France la liste des jours $`Off`$ est :
 
   - 1er de l’an (1er janvier)
   - Lundi de Pâques
@@ -63,12 +63,12 @@ document.*
     un mardi ou un jeudi de férié) **ne sont pas considérés comme jours
     fériés**
 
-Ainsi on peut définir les jours ouvrables $In_{i} = Day_{i} - Off_{i}$
-pour $i$ entre 1 et 7.
+Ainsi on peut définir les jours ouvrables $`In_{i} = Day_{i} - Off_{i}`$
+pour $`i`$ entre 1 et 7.
 
 - On créé les jours TD (tradings days) comme contrast par rapport à un
-  référence (généralement le dimanche) : $TD_{i} = Day_{i} - Day_1$ pour
-  $i$ entre 2 et 7. Par abus de notation, des fois i parcourt \[1, 6\]
+  référence (généralement le dimanche) : $`TD_{i} = Day_{i} - Day_1`$ pour
+  $`i`$ entre 2 et 7. Par abus de notation, des fois i parcourt \[1, 6\]
   et non \[2, 7\] et alors 1 désigne le lundi et 6 le samedi.
 
 - On créé la variable WD (working days) qui calcule un nombre moyen de
@@ -84,8 +84,8 @@ On applique la formule plus générale :
  reg_{i} = group_{i} - group_0 \times \frac{\#group_{i}}{\#group_0} 
 ```
 
-avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$, $group_0 = {1, 7}$,
-$\#x$ le cardinal d’un ensemble.
+avec ici $`i = 1`$ et $`group_1 = {2, 3, 4, 5, 6}`$, $`group_0 = {1, 7}`$,
+$`\#x`$ le cardinal d’un ensemble.
 
 - On créé les “Working week-days” = jours ouvrables (TD), en opposition
   les “Publics Holydays” (PH) et les “Weekday contrast” (Weekdays) :
@@ -107,30 +107,30 @@ contre samedi et dimanche).
 
 ### Retrait des moyennes de long-terme
 
-- On va calculer les moyennes de long-terme pour les variables $Day_{i}$
-  et les $Off_{i}$. Ces moyennes se calculent mois par mois :
+- On va calculer les moyennes de long-terme pour les variables $`Day_{i}`$
+  et les $`Off_{i}`$. Ces moyennes se calculent mois par mois :
 
 ```math
  mean\_Day_{i, j} = \sum_{annees} Day_{i, j} 
 ```
 
-avec $i$ l’indice du jour de la semaine entre 1 et 7 et $j$ le numéro du
+avec $`i`$ l’indice du jour de la semaine entre 1 et 7 et $`j`$ le numéro du
 mois entre 1 et 12.
 
 ```math
  mean\_Off_{i, j} = \sum_{annees} Off_{i, j} 
 ```
 
-avec $i$ l’indice du jour de la semaine entre 1 et 7 et $j$ le numéro du
+avec $`i`$ l’indice du jour de la semaine entre 1 et 7 et $`j`$ le numéro du
 mois entre 1 et 12
 
 - On peut ensuite recalculer de nouvelles variables :
-  $Day_{i}\_corr = Day_{i} - mean\_Day_{i}$,
-  $Off_{i}\_corr = Off_{i} - mean\_Off_{i}$ et
-  $In_{i}\_corr = Day_{i}\_corr - Off_{i}\_corr$.
+  $`Day_{i}\_corr = Day_{i} - mean\_Day_{i}`$,
+  $`Off_{i}\_corr = Off_{i} - mean\_Off_{i}`$ et
+  $`In_{i}\_corr = Day_{i}\_corr - Off_{i}\_corr`$.
 
 Ainsi que toutes les autres variables présentées précédemment avec les
-nouveaux $Day_{i}\_corr$, $Off_{i}\_corr$ et $In_{i}\_corr$.
+nouveaux $`Day_{i}\_corr`$, $`Off_{i}\_corr`$ et $`In_{i}\_corr`$.
 
 <div class="blue">
 
@@ -138,11 +138,11 @@ Remarques : Pour les régresseurs calculés par *rjd3toolkit*, les
 moyennes de long-terme sont calculés de manière théorique. On suppose
 que chaque jour de l’année a autant de chance d’être un lundi, un mardi,
 …, un dimanche. Ainsi les moyennes de long-termes sont calculées par une
-somme de $1/7$.
+somme de $`1/7`$.
 
 Par exemple, pour les jours Off du mois de janvier, les moyennes de
-long-terme des 7 types de jours valent $1/7$. Pour le mois de novembre,
-c’est $2/7$.
+long-terme des 7 types de jours valent $`1/7`$. Pour le mois de novembre,
+c’est $`2/7`$.
 
 Le calcul est aussi théorique pour les moyennes de la variable Day.
 Ainsi on retire le 29ème jour de février (pour les années bissextiles)
@@ -159,41 +159,41 @@ régresseur est composé d’un ensemble de groupe. Chaque groupe contient
 des types de jours :
 
 - le jeu REG1 créé 2 groupes de jours :
-  - $G_1$ = jours ouvrables
-  - $G_0$ = les autres
+  - $`G_1`$ = jours ouvrables
+  - $`G_0`$ = les autres
 - le jeu REG2 créé 3 groupes de jours :
-  - $G_1$ = jours ouvrables (sauf samedi)
-  - $G_2$ = les samedis ouvrables
-  - $G_0$ = les autres
+  - $`G_1`$ = jours ouvrables (sauf samedi)
+  - $`G_2`$ = les samedis ouvrables
+  - $`G_0`$ = les autres
 - le jeu REG3 créé 3 groupes de jours :
-  - $G_1$ = les lundis ouvrables
-  - $G_2$ = jours ouvrables (sauflundi et samedi)
-  - $G_3$ = les samedis ouvrables
-  - $G_0$ = les autres
+  - $`G_1`$ = les lundis ouvrables
+  - $`G_2`$ = jours ouvrables (sauflundi et samedi)
+  - $`G_3`$ = les samedis ouvrables
+  - $`G_0`$ = les autres
 - le jeu REG5 créé 3 groupes de jours :
-  - $G_1$ = les lundis ouvrables
-  - $G_2$ = les mardis ouvrables
-  - $G_3$ = les mercredis ouvrables
-  - $G_4$ = les jeudis ouvrables
-  - $G_5$ = les vendredis ouvrables
-  - $G_0$ = les autres
+  - $`G_1`$ = les lundis ouvrables
+  - $`G_2`$ = les mardis ouvrables
+  - $`G_3`$ = les mercredis ouvrables
+  - $`G_4`$ = les jeudis ouvrables
+  - $`G_5`$ = les vendredis ouvrables
+  - $`G_0`$ = les autres
 - le jeu REG6 créé 7 groupes de jours
-  - $G_1$ = lundi ouvrables
-  - $G_2$ = mardi ouvrables
-  - $G_3$ = mercredi ouvrables
-  - $G_4$ = jeudi ouvrables
-  - $G_5$ = vendredi ouvrables
-  - $G_6$ = samedi ouvrables
-  - $G_0$ = les autres)
+  - $`G_1`$ = lundi ouvrables
+  - $`G_2`$ = mardi ouvrables
+  - $`G_3`$ = mercredi ouvrables
+  - $`G_4`$ = jeudi ouvrables
+  - $`G_5`$ = vendredi ouvrables
+  - $`G_6`$ = samedi ouvrables
+  - $`G_0`$ = les autres)
 
-<div class="tabwid"><style>.cl-45a954da{}.cl-459b2022{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-459b2040{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(246, 206, 182, 1.00);background-color:transparent;}.cl-459b204a{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(179, 226, 205, 1.00);background-color:transparent;}.cl-459b204b{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(217, 210, 231, 1.00);background-color:transparent;}.cl-459b2054{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(238, 224, 215, 1.00);background-color:transparent;}.cl-459b2055{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(247, 243, 183, 1.00);background-color:transparent;}.cl-459b205e{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(244, 229, 199, 1.00);background-color:transparent;}.cl-459b205f{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(204, 204, 204, 1.00);background-color:transparent;}.cl-45a01db6{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-45a01dc0{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-45a01dca{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-45a05574{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a0557e{width:0.4in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a0557f{width:0.4in;background-color:rgba(215, 255, 242, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a05580{width:0.4in;background-color:rgba(255, 253, 215, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a05588{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a05589{width:0.4in;background-color:rgba(246, 206, 182, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a0558a{width:0.4in;background-color:rgba(179, 226, 205, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a05592{width:0.4in;background-color:rgba(217, 210, 231, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a05593{width:0.4in;background-color:rgba(238, 224, 215, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a05594{width:0.4in;background-color:rgba(247, 243, 183, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a0559c{width:0.4in;background-color:rgba(244, 229, 199, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a0559d{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a0559e{width:0.4in;background-color:rgba(246, 206, 182, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a055a6{width:0.4in;background-color:rgba(217, 210, 231, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a055a7{width:0.4in;background-color:rgba(238, 224, 215, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a055a8{width:0.4in;background-color:rgba(247, 243, 183, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a055a9{width:0.4in;background-color:rgba(244, 229, 199, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a055b0{width:0.4in;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-45a055b1{width:0.4in;background-color:rgba(179, 226, 205, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing='true' class='cl-45a954da'><thead><tr style="overflow-wrap:break-word;"><th  colspan="8"class="cl-45a05574"><p class="cl-45a01db6"><span class="cl-459b2022">Ouvrable</span></p></th><th  colspan="7"class="cl-45a0557e"><p class="cl-45a01db6"><span class="cl-459b2022">Férié</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-45a05574"><p class="cl-45a01db6"><span class="cl-459b2022">REG</span></p></th><th class="cl-45a0557f"><p class="cl-45a01db6"><span class="cl-459b2022">Lun</span></p></th><th class="cl-45a0557f"><p class="cl-45a01db6"><span class="cl-459b2022">Mar</span></p></th><th class="cl-45a0557f"><p class="cl-45a01db6"><span class="cl-459b2022">Mer</span></p></th><th class="cl-45a0557f"><p class="cl-45a01db6"><span class="cl-459b2022">Jeu</span></p></th><th class="cl-45a0557f"><p class="cl-45a01db6"><span class="cl-459b2022">Ven</span></p></th><th class="cl-45a0557f"><p class="cl-45a01db6"><span class="cl-459b2022">Sam</span></p></th><th class="cl-45a0557f"><p class="cl-45a01db6"><span class="cl-459b2022">Dim</span></p></th><th class="cl-45a05580"><p class="cl-45a01db6"><span class="cl-459b2022">Lun</span></p></th><th class="cl-45a05580"><p class="cl-45a01db6"><span class="cl-459b2022">Mar</span></p></th><th class="cl-45a05580"><p class="cl-45a01db6"><span class="cl-459b2022">Mer</span></p></th><th class="cl-45a05580"><p class="cl-45a01db6"><span class="cl-459b2022">Jeu</span></p></th><th class="cl-45a05580"><p class="cl-45a01db6"><span class="cl-459b2022">Ven</span></p></th><th class="cl-45a05580"><p class="cl-45a01db6"><span class="cl-459b2022">Sam</span></p></th><th class="cl-45a05580"><p class="cl-45a01db6"><span class="cl-459b2022">Dim</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-45a05588"><p class="cl-45a01dc0"><span class="cl-459b2022">REG1</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-45a05588"><p class="cl-45a01dc0"><span class="cl-459b2022">REG2</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05592"><p class="cl-45a01dca"><span class="cl-459b204b">2</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-45a05588"><p class="cl-45a01dc0"><span class="cl-459b2022">REG3</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05592"><p class="cl-45a01dca"><span class="cl-459b204b">2</span></p></td><td class="cl-45a05592"><p class="cl-45a01dca"><span class="cl-459b204b">2</span></p></td><td class="cl-45a05592"><p class="cl-45a01dca"><span class="cl-459b204b">2</span></p></td><td class="cl-45a05592"><p class="cl-45a01dca"><span class="cl-459b204b">2</span></p></td><td class="cl-45a05593"><p class="cl-45a01dca"><span class="cl-459b2054">3</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-45a05588"><p class="cl-45a01dc0"><span class="cl-459b2022">REG5</span></p></td><td class="cl-45a05589"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a05592"><p class="cl-45a01dca"><span class="cl-459b204b">2</span></p></td><td class="cl-45a05593"><p class="cl-45a01dca"><span class="cl-459b2054">3</span></p></td><td class="cl-45a05594"><p class="cl-45a01dca"><span class="cl-459b2055">4</span></p></td><td class="cl-45a0559c"><p class="cl-45a01dca"><span class="cl-459b205e">5</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a0558a"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-45a0559d"><p class="cl-45a01dc0"><span class="cl-459b2022">REG6</span></p></td><td class="cl-45a0559e"><p class="cl-45a01dca"><span class="cl-459b2040">1</span></p></td><td class="cl-45a055a6"><p class="cl-45a01dca"><span class="cl-459b204b">2</span></p></td><td class="cl-45a055a7"><p class="cl-45a01dca"><span class="cl-459b2054">3</span></p></td><td class="cl-45a055a8"><p class="cl-45a01dca"><span class="cl-459b2055">4</span></p></td><td class="cl-45a055a9"><p class="cl-45a01dca"><span class="cl-459b205e">5</span></p></td><td class="cl-45a055b0"><p class="cl-45a01dca"><span class="cl-459b205f">6</span></p></td><td class="cl-45a055b1"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a055b1"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a055b1"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a055b1"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a055b1"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a055b1"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a055b1"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td><td class="cl-45a055b1"><p class="cl-45a01dca"><span class="cl-459b204a">0</span></p></td></tr></tbody></table></div>
+<div class="tabwid"><style>.cl-656f812a{}.cl-65391c66{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-65391cb6{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(246, 206, 182, 1.00);background-color:transparent;}.cl-65391cc0{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(179, 226, 205, 1.00);background-color:transparent;}.cl-65391cd4{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(217, 210, 231, 1.00);background-color:transparent;}.cl-65391cde{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(238, 224, 215, 1.00);background-color:transparent;}.cl-65391ce8{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(247, 243, 183, 1.00);background-color:transparent;}.cl-65391cf2{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(244, 229, 199, 1.00);background-color:transparent;}.cl-65391cfc{font-family:'Arial';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(204, 204, 204, 1.00);background-color:transparent;}.cl-654f80aa{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-654f80d2{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-654f80dc{margin:0;text-align:right;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-654fea5e{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654fea7c{width:0.4in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654fea86{width:0.4in;background-color:rgba(215, 255, 242, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654fea87{width:0.4in;background-color:rgba(255, 253, 215, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654fea90{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654fea91{width:0.4in;background-color:rgba(246, 206, 182, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654fea9a{width:0.4in;background-color:rgba(179, 226, 205, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654fea9b{width:0.4in;background-color:rgba(217, 210, 231, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feaa4{width:0.4in;background-color:rgba(238, 224, 215, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feaae{width:0.4in;background-color:rgba(247, 243, 183, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feaaf{width:0.4in;background-color:rgba(244, 229, 199, 1.00);vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feab8{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feac2{width:0.4in;background-color:rgba(246, 206, 182, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feacc{width:0.4in;background-color:rgba(217, 210, 231, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feacd{width:0.4in;background-color:rgba(238, 224, 215, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654fead6{width:0.4in;background-color:rgba(247, 243, 183, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feae0{width:0.4in;background-color:rgba(244, 229, 199, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feaea{width:0.4in;background-color:rgba(204, 204, 204, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-654feaeb{width:0.4in;background-color:rgba(179, 226, 205, 1.00);vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing='true' class='cl-656f812a'><thead><tr style="overflow-wrap:break-word;"><th  colspan="8"class="cl-654fea5e"><p class="cl-654f80aa"><span class="cl-65391c66">Ouvrable</span></p></th><th  colspan="7"class="cl-654fea7c"><p class="cl-654f80aa"><span class="cl-65391c66">Férié</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-654fea5e"><p class="cl-654f80aa"><span class="cl-65391c66">REG</span></p></th><th class="cl-654fea86"><p class="cl-654f80aa"><span class="cl-65391c66">Lun</span></p></th><th class="cl-654fea86"><p class="cl-654f80aa"><span class="cl-65391c66">Mar</span></p></th><th class="cl-654fea86"><p class="cl-654f80aa"><span class="cl-65391c66">Mer</span></p></th><th class="cl-654fea86"><p class="cl-654f80aa"><span class="cl-65391c66">Jeu</span></p></th><th class="cl-654fea86"><p class="cl-654f80aa"><span class="cl-65391c66">Ven</span></p></th><th class="cl-654fea86"><p class="cl-654f80aa"><span class="cl-65391c66">Sam</span></p></th><th class="cl-654fea86"><p class="cl-654f80aa"><span class="cl-65391c66">Dim</span></p></th><th class="cl-654fea87"><p class="cl-654f80aa"><span class="cl-65391c66">Lun</span></p></th><th class="cl-654fea87"><p class="cl-654f80aa"><span class="cl-65391c66">Mar</span></p></th><th class="cl-654fea87"><p class="cl-654f80aa"><span class="cl-65391c66">Mer</span></p></th><th class="cl-654fea87"><p class="cl-654f80aa"><span class="cl-65391c66">Jeu</span></p></th><th class="cl-654fea87"><p class="cl-654f80aa"><span class="cl-65391c66">Ven</span></p></th><th class="cl-654fea87"><p class="cl-654f80aa"><span class="cl-65391c66">Sam</span></p></th><th class="cl-654fea87"><p class="cl-654f80aa"><span class="cl-65391c66">Dim</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-654fea90"><p class="cl-654f80d2"><span class="cl-65391c66">REG1</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-654fea90"><p class="cl-654f80d2"><span class="cl-65391c66">REG2</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea9b"><p class="cl-654f80dc"><span class="cl-65391cd4">2</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-654fea90"><p class="cl-654f80d2"><span class="cl-65391c66">REG3</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea9b"><p class="cl-654f80dc"><span class="cl-65391cd4">2</span></p></td><td class="cl-654fea9b"><p class="cl-654f80dc"><span class="cl-65391cd4">2</span></p></td><td class="cl-654fea9b"><p class="cl-654f80dc"><span class="cl-65391cd4">2</span></p></td><td class="cl-654fea9b"><p class="cl-654f80dc"><span class="cl-65391cd4">2</span></p></td><td class="cl-654feaa4"><p class="cl-654f80dc"><span class="cl-65391cde">3</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-654fea90"><p class="cl-654f80d2"><span class="cl-65391c66">REG5</span></p></td><td class="cl-654fea91"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654fea9b"><p class="cl-654f80dc"><span class="cl-65391cd4">2</span></p></td><td class="cl-654feaa4"><p class="cl-654f80dc"><span class="cl-65391cde">3</span></p></td><td class="cl-654feaae"><p class="cl-654f80dc"><span class="cl-65391ce8">4</span></p></td><td class="cl-654feaaf"><p class="cl-654f80dc"><span class="cl-65391cf2">5</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654fea9a"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-654feab8"><p class="cl-654f80d2"><span class="cl-65391c66">REG6</span></p></td><td class="cl-654feac2"><p class="cl-654f80dc"><span class="cl-65391cb6">1</span></p></td><td class="cl-654feacc"><p class="cl-654f80dc"><span class="cl-65391cd4">2</span></p></td><td class="cl-654feacd"><p class="cl-654f80dc"><span class="cl-65391cde">3</span></p></td><td class="cl-654fead6"><p class="cl-654f80dc"><span class="cl-65391ce8">4</span></p></td><td class="cl-654feae0"><p class="cl-654f80dc"><span class="cl-65391cf2">5</span></p></td><td class="cl-654feaea"><p class="cl-654f80dc"><span class="cl-65391cfc">6</span></p></td><td class="cl-654feaeb"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654feaeb"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654feaeb"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654feaeb"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654feaeb"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654feaeb"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654feaeb"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td><td class="cl-654feaeb"><p class="cl-654f80dc"><span class="cl-65391cc0">0</span></p></td></tr></tbody></table></div>
 
 #### Calculs des jeux de régresseurs
 
 Nous allons ensuite créer les regresseurs de calendrier comme variable
 de contraste par rapport à une référence. On prend généralement le
 groupe 0 comme groupe de référence. Ainsi pour un jeu de régresseur qui
-contient $n$ groupes, on calcule $n-1$ régresseurs.
+contient $`n`$ groupes, on calcule $`n-1`$ régresseurs.
 
 Afin d’introduire de la comparabilité entre les groupes et avoir de
 l’homogénéité dans nos contrastes, nous allons pondérer le groupe 0 à la
@@ -203,36 +203,36 @@ groupe 0.
 Nos régresseurs s’écrivent ainsi :
 
 ```math
- REG_n\_AC_k = REG_k - \omega_k REG_0 $$ avec ici $n$ qui vaut 1, 3,
+ REG_n\_AC_k = REG_k - \omega_k REG_0 $$` avec ici `$n$ qui vaut 1, 3,
 ```
-5, 6, … et $k$ entre 1 et $n$.
+5, 6, … et $`k`$ entre 1 et $`n`$.
 
-De manière générale, les $\omega_k$ sont calculés à partir de la taille
-des groupes : $$ \omega_k = \frac{\# group_k}{\# group_0} $$
+De manière générale, les $`\omega_k`$ sont calculés à partir de la taille
+des groupes : $$` \omega_k = \frac{\# group_k}{\# group_0} `$$
 
 <div class="blue">
 
 - Pour les jeux de régresseurs issus de JD+ (*package*
-  ***rjd3modelling***), les $\omega_k$ sont calculés entre les jours
+  ***rjd3modelling***), les $`\omega_k`$ sont calculés entre les jours
   d’une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au
   vendredi) et 2 jours de week-end (samedi et dimanche).
-  - pour REG6, $\omega_k = 1$ car chaque groupe $G_{i}$ ne contient
+  - pour REG6, $`\omega_k = 1`$ car chaque groupe $`G_{i}`$ ne contient
     qu’un jour (du lundi au dimanche)
-  - pour REG1, $\omega_k = \frac{5}{2}$ car le groupe 1 $G_1$ (jours
+  - pour REG1, $`\omega_k = \frac{5}{2}`$ car le groupe 1 $`G_1`$ (jours
     ouvrables) contient les jours du lundi au vendredi et le groupe 0
-    $G_0$ contient le samedi et le dimanche.
+    $`G_0`$ contient le samedi et le dimanche.
   - … selon les configurations des groupes
 - Pour les jeux de régresseurs issus des programmes **SAS**, les jours
-  comptabilisés dans les pondérations sont les jours $In$ et les jours
-  $Off$.
-  - pour REG6, $\omega_k = \frac{1}{8}$ car chaque groupe $G_k$ (pour
-    $k \neq 0$) ne contient qu’un seul jour alors que le groupe 0 $G_0$
+  comptabilisés dans les pondérations sont les jours $`In`$ et les jours
+  $`Off`$.
+  - pour REG6, $`\omega_k = \frac{1}{8}`$ car chaque groupe $`G_k`$ (pour
+    $`k \neq 0`$) ne contient qu’un seul jour alors que le groupe 0 $`G_0`$
     contient 8 jours dans le sens : 1 dimanche en semaine classique
-    ($In$) et 7 jours en semaine férié / vacances ($Off$)
-  - pour REG1, $\omega_k = \frac{5}{9}$ car le groupe 1 (jours
-    ouvrables) contient 5 jours : les jours $In$ du lundi au vendredi et
-    le groupe 0 $G_0$ contient le samedi et le dimanche en semaine
-    classique ($In$) et 7 jours en semaine férié / vacances ($Off$).
+    ($`In`$) et 7 jours en semaine férié / vacances ($`Off`$)
+  - pour REG1, $`\omega_k = \frac{5}{9}`$ car le groupe 1 (jours
+    ouvrables) contient 5 jours : les jours $`In`$ du lundi au vendredi et
+    le groupe 0 $`G_0`$ contient le samedi et le dimanche en semaine
+    classique ($`In`$) et 7 jours en semaine férié / vacances ($`Off`$).
   - … selon les configurations des groupes
 
 Les espaces formés par la combinaison de chaque jeu de régressurs
@@ -251,38 +251,38 @@ Le modèle initial s’écrit :
  \tag{1} D_t = \sum ^{7}_{i=1} \alpha _{i} \times Day_{i, t} 
 ```
 
-Avec $\alpha_{i}$ l’effet du jour i (au moment t) sur notre variable. On
-appelle $D_t$ l’effet déterministe du calendrier sur variable à étudier.
+Avec $`\alpha_{i}`$ l’effet du jour i (au moment t) sur notre variable. On
+appelle $`D_t`$ l’effet déterministe du calendrier sur variable à étudier.
 
 Malheureusement, ce modèle n’est pas utilisable directement comme ça car
 :
 
-- les régresseurs $Day_{i, t}$ sont fortements corrélés (exemple : le
+- les régresseurs $`Day_{i, t}`$ sont fortements corrélés (exemple : le
   nombre de lundi dans un mois vaut toujours entre 3 et 5, comme tous
   les autres jours)
 
 - les régresseurs sont saisonnier (exemple : en moyenne, il y aura plus
   de lundi en janvier qu’en février ou qu’en avril)
 
-Aussi on remarque que $\sum ^{7}_{i=1} Day_{i, t} = NbDays_t$ est
+Aussi on remarque que $`\sum ^{7}_{i=1} Day_{i, t} = NbDays_t`$ est
 constant (par mois) sauf en février.
 
 Pour contrer cela, on va chercher à séparer l’**effet cummulatif du
 nombre total de jour du mois** de l’**effet net du nombre de type de
 jour de la semaine** (exemple : nombre de lundi).
 
-On réécrit l’équation en intégrant $NbDays_t$, le nombre de jour total
-du mois et $\overline{\alpha}$ l’effet moyen d’un type de jour :
+On réécrit l’équation en intégrant $`NbDays_t`$, le nombre de jour total
+du mois et $`\overline{\alpha}`$ l’effet moyen d’un type de jour :
 
 ```math
  \tag{2} D_t = \overline{\alpha} \times NbDays_t + \sum ^{7}_{i=1} \beta_{i} \times Day_{i, t} 
 ```
 
-Avec $\overline{\alpha} = \frac{1}{7} \sum ^{7}_{i=1} \alpha_{i}$ et
-$\beta_{i} = \alpha _{i} - \overline{\alpha}$
+Avec $`\overline{\alpha} = \frac{1}{7} \sum ^{7}_{i=1} \alpha_{i}`$ et
+$`\beta_{i} = \alpha _{i} - \overline{\alpha}`$
 
-On remarque alors que $\sum ^{7}_{i=1} \beta_{i} = 0$. Donc
-$\beta_7 = -\sum ^{6}_{i=1} \beta_{i}$ et on peut écrire nos régresseurs
+On remarque alors que $`\sum ^{7}_{i=1} \beta_{i} = 0`$. Donc
+$`\beta_7 = -\sum ^{6}_{i=1} \beta_{i}`$ et on peut écrire nos régresseurs
 en constraste du dimanche (ou de n’importe quel autre jour) :
 
 ```math
@@ -292,14 +292,14 @@ en constraste du dimanche (ou de n’importe quel autre jour) :
 Ce modèle correspond *à peu près* au modèle REG6 mais on peut formuler
 des hypothèses plus fortes pour créer de nouveaux jeux de régresseurs :
 
-- Si je suppose que $\beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5$ et
-  $\beta_6 = \beta_7$, j’obtiens le modèle
-  $D_t = \overline{\alpha} \times NbDays_t + \beta_1 \times (\sum ^{5}_{i=1} Day_{i, t} - \frac{5}{2}(Day_{6, t} + Day_{7, t}))$
+- Si je suppose que $`\beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5`$ et
+  $`\beta_6 = \beta_7`$, j’obtiens le modèle
+  $`D_t = \overline{\alpha} \times NbDays_t + \beta_1 \times (\sum ^{5}_{i=1} Day_{i, t} - \frac{5}{2}(Day_{6, t} + Day_{7, t}))`$
   qui correpond au jeu de régresseur REG1.
 
-- Si je suppose que $\beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5$,
+- Si je suppose que $`\beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5`$,
   j’obtiens le modèle
-  $D_t = \overline{\alpha} \times NbDays_t + \beta_1 \times (\sum ^{5}_{i=1} Day_{i, t} - Day_{7, t}) + \beta_6 \times (Day_{6, t} - Day_{7, t})$
+  $`D_t = \overline{\alpha} \times NbDays_t + \beta_1 \times (\sum ^{5}_{i=1} Day_{i, t} - Day_{7, t}) + \beta_6 \times (Day_{6, t} - Day_{7, t})`$
   qui correpond au jeu de régresseur REG2.
 
 - …
@@ -310,23 +310,23 @@ l’on choisit, le modèle général s’écrit :
 ```math
  \tag{4} D_t = \beta_0 \times LY_t + \sum ^{n}_{k=1} \beta _{k} \times REC_{n}\_AC_{k, t} 
 ```
-Avec $LY_t$ la variable relative aux années bissextiles, $\beta_k$ le
-coefficient de régression relatif au régresseur $REC_{n}\_AC_{k, t}$.
-$\beta_0 = \overline{\alpha}$ est l’effet moyen de chaque type de jour.
+Avec $`LY_t`$ la variable relative aux années bissextiles, $`\beta_k`$ le
+coefficient de régression relatif au régresseur $`REC_{n}\_AC_{k, t}`$.
+$`\beta_0 = \overline{\alpha}`$ est l’effet moyen de chaque type de jour.
 
-Attention : les régresseurs que l’on considère ($REC_{n}\_AC_{k, t}$,
-$LY_t$) sont “désaisonnalisés” dans une certaine mesure. On leur a
-retiré la moyenne de long-terme. Ainsi $LY_t$ diffère de $NbDays_t$ par
+Attention : les régresseurs que l’on considère ($`REC_{n}\_AC_{k, t}`$,
+$`LY_t`$) sont “désaisonnalisés” dans une certaine mesure. On leur a
+retiré la moyenne de long-terme. Ainsi $`LY_t`$ diffère de $`NbDays_t`$ par
 le retrait de sa moyenne de long-terme par mois et vaut 0 pour tous les
-mois de l’année sauf pour février pour lequel $LY_t$ vaut -0.25 les
+mois de l’année sauf pour février pour lequel $`LY_t`$ vaut -0.25 les
 années non-bissetiles et 0.75 les années bissextiles.
 
 Ainsi le modèle présenté ci-dessus (4), diffèrent des modèles (1), (2)
 et (3) par le retrait d’un terme purement saisonnier.
 
 Cette remarque est importante car elle conditionne notre interprétation
-des coefficients. Le coefficient $\beta_0$ n’aura plus la même
-interprétation que $\overline{\alpha}$ car le régresseur n’est plus le
+des coefficients. Le coefficient $`\beta_0`$ n’aura plus la même
+interprétation que $`\overline{\alpha}`$ car le régresseur n’est plus le
 même.
 
 ### Interprétation des coefficients
@@ -336,9 +336,9 @@ les coefficients finaux et comprendre quel régresseur / jour de la
 semaine participe.
 
 Tout d’abord, comme on l’a vu entre l’étape (1) et (2), les coefficients
-que l’on a à commenter sont les $\beta_{i}$ (ou $\beta_k$ quand on fait
-des groupes) et non les $\alpha_{i}$. Donc on ne commente pas l’effet du
-type de jour $i$ mais sa comparaison par rapport un type de jour moyen.
+que l’on a à commenter sont les $`\beta_{i}`$ (ou $`\beta_k`$ quand on fait
+des groupes) et non les $`\alpha_{i}`$. Donc on ne commente pas l’effet du
+type de jour $`i`$ mais sa comparaison par rapport un type de jour moyen.
 Cela explique que l’on peut avoir des coefficients négatifs pour des
 types de jour où il y a de l’activité.
 
@@ -355,7 +355,7 @@ Exemple : pour le tableau suivant :
 |  Vendredi  |   -0,0004    | -0,05  |     0,9632      |
 |   Samedi   |   -0,0111    | -1,43  |     0,1715      |
 
-Donc $\beta_7 = -\sum ^{6}_{k=1} \beta _{k} = -0,0184$ pour le
+Donc $`\beta_7 = -\sum ^{6}_{k=1} \beta _{k} = -0,0184`$ pour le
 coefficient du dimanche.
 
 On aurait envie de commenter : *« L’ajout d’un samedi en plus dans le
@@ -389,9 +389,9 @@ REG1 (par exemple) en conséquence :
 ```math
  D_t = \overline{\alpha} \times NbDays_t - \frac{1}{5} \beta_7 \times (Day_{6, t} + Day_{7, t} - \frac{2}{5} \sum ^{5}_{i=1} Day_{i, t}) 
 ```
-La réestimation de ce modèle donnera un $\beta_7 = \beta_6$ identique au
+La réestimation de ce modèle donnera un $`\beta_7 = \beta_6`$ identique au
 modèle REG1 écrit plus haut et les autres
-$\beta_{i} = -\frac{2}{5} \beta_7$ (pour $i$ entre 1 et 5) seront aussi
+$`\beta_{i} = -\frac{2}{5} \beta_7`$ (pour $`i`$ entre 1 et 5) seront aussi
 les mêmes.
 
 #### Remarque 3 : la réalité est plus complexe
@@ -399,8 +399,8 @@ les mêmes.
 Ici on a considéré un modèle simpliste. On a considéré que chaque jour
 de l’année se partageait en 7 catégories (lundi, mardi, …, dimanche).
 Seulement dans la réalité, les modèles de calendriers sont plus
-complexes. Tout d’abord, on peut distinguer les jours $In$ (jours
-ouvrés) et les jours $Off$ (jours fériés) : cela nous donne 14 types de
+complexes. Tout d’abord, on peut distinguer les jours $`In`$ (jours
+ouvrés) et les jours $`Off`$ (jours fériés) : cela nous donne 14 types de
 jour différents. On peut aussi considérer des modèles personnalisés
 selon l’activité.
 
@@ -424,8 +424,8 @@ trimestrielle) et retire sa moyenne par période :
 ```math
  \overline{X} = I_1 \times (X - X\_{mean}_1) + I_2 \times (X - X\_{mean}_2) + ... + I_n \times (X - X\_{mean}_n) 
 ```
-avec $I_{i}$ l’indicatrice de la période $i$ et $n$ le nombre total de
-période (exemple $n = 12$ pour une fréquence mensuelle).
+avec $`I_{i}`$ l’indicatrice de la période $`i`$ et $`n`$ le nombre total de
+période (exemple $`n = 12`$ pour une fréquence mensuelle).
 
 L’opération de contraste prend 2 séries et en fait une somme pondérée :
 ```math
