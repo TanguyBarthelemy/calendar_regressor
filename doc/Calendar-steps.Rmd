@@ -97,17 +97,17 @@ Ces variables s'appuient sur la structure de REG1 (lundi au vendredi contre same
 
 - On va calculer les moyennes de long-terme pour les variables $Day_{i}$ et les $Off_{i}$. Ces moyennes se calculent mois par mois :
 
-$$ mean\\_Day_{i, mois\\_j} = \sum_{annees} Day_{i, mois\\_j} $$
+$$ mean\_Day_{i, j} = \sum_{annees} Day_{i, j} $$
 
-avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\\_j$ le numéro du mois entre 1 et 12.
+avec $i$ l'indice du jour de la semaine entre 1 et 7 et $j$ le numéro du mois entre 1 et 12.
 
-$$ mean\\_Off_{i, mois\\_j} = \sum_{annees} Off_{i, mois\\_j} $$
+$$ mean\_Off_{i, j} = \sum_{annees} Off_{i, j} $$
 
-avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\\_j$ le numéro du mois entre 1 et 12
+avec $i$ l'indice du jour de la semaine entre 1 et 7 et $j$ le numéro du mois entre 1 et 12
 
-- On peut ensuite recalculer de nouvelles variables : $Day_{i}\\_corr = Day_{i} - mean\\_Day_{i}$, $Off_{i}\\_corr = Off_{i} - mean\\_Off_{i}$ et $In_{i}\\_corr = Day_{i}\\_corr - Off_{i}\\_corr$.
+- On peut ensuite recalculer de nouvelles variables : $Day_{i}\_corr = Day_{i} - mean\_Day_{i}$, $Off_{i}\_corr = Off_{i} - mean\_Off_{i}$ et $In_{i}\_corr = Day_{i}\_corr - Off_{i}\_corr$.
 
-Ainsi que toutes les autres variables présentées précédemment avec les nouveaux $Day_{i}\\_corr$, $Off_{i}\\_corr$ et $In_{i}\\_corr$.
+Ainsi que toutes les autres variables présentées précédemment avec les nouveaux $Day_{i}\_corr$, $Off_{i}\_corr$ et $In_{i}\_corr$.
 
 <div class = "blue">
 
@@ -185,7 +185,7 @@ Afin d'introduire de la comparabilité entre les groupes et avoir de l'homogén�
 
 Nos régresseurs s'écrivent ainsi :
 
-$$ REG_n\\_AC_k = REG_k - \omega_k REG_0 $$ avec ici $n$ qui vaut 1, 3, 5, 6, ... et $k$ entre 1 et $n$.
+$$ REG_n\_AC_k = REG_k - \omega_k REG_0 $$ avec ici $n$ qui vaut 1, 3, 5, 6, ... et $k$ entre 1 et $n$.
 
 De manière générale, les $\omega_k$ sont calculés à partir de la taille des groupes :
 $$ \omega_k = \frac{\# group_k}{\# group_0} $$
@@ -246,11 +246,11 @@ Ce modèle correspond *à peu près* au modèle REG6 mais on peut formuler des h
 
 Finalement quelque soit le jeu de régresseur (regroupement de jour) que l'on choisit, le modèle général s'écrit :
 
-$$ \tag{4} D_t = \beta_0 \times LY_t + \sum ^{n}_{k=1} \beta _{k} \times REC_{n}\\_AC_{k, t} $$
-Avec $LY_t$ la variable relative aux années bissextiles, $\beta_k$ le coefficient de régression relatif au régresseur $REC_{n}\\_AC_{k, t}$.
+$$ \tag{4} D_t = \beta_0 \times LY_t + \sum ^{n}_{k=1} \beta _{k} \times REC_{n}\_AC_{k, t} $$
+Avec $LY_t$ la variable relative aux années bissextiles, $\beta_k$ le coefficient de régression relatif au régresseur $REC_{n}\_AC_{k, t}$.
 $\beta_0 = \overline{\alpha}$ est l'effet moyen de chaque type de jour.
 
-Attention : les régresseurs que l'on considère ($REC_{n}\\_AC_{k, t}$, $LY_t$) sont "désaisonnalisés" dans une certaine mesure. On leur a retiré la moyenne de long-terme. Ainsi $LY_t$ diffère de $NbDays_t$ par le retrait de sa moyenne de long-terme par mois et vaut 0 pour tous les mois de l'année sauf pour février pour lequel $LY_t$ vaut -0.25 les années non-bissetiles et 0.75 les années bissextiles.
+Attention : les régresseurs que l'on considère ($REC_{n}\_AC_{k, t}$, $LY_t$) sont "désaisonnalisés" dans une certaine mesure. On leur a retiré la moyenne de long-terme. Ainsi $LY_t$ diffère de $NbDays_t$ par le retrait de sa moyenne de long-terme par mois et vaut 0 pour tous les mois de l'année sauf pour février pour lequel $LY_t$ vaut -0.25 les années non-bissetiles et 0.75 les années bissextiles.
 
 Ainsi le modèle présenté ci-dessus (4), diffèrent des modèles (1), (2) et (3) par le retrait d'un terme purement saisonnier.
 
@@ -310,10 +310,10 @@ Exemple : dans le transport routier, les camions peuvent rouler toute l'année, 
 Enfin on peut formuler une remarque sur l'ordre des opérations. 
 
 L'opération de calcul des moyennes prend une série (mensuelle ou trimestrielle) et retire sa moyenne par période :
-$$ \overline{X} = I_1 \times (X - X\\_{mean}_1) + I_2 \times (X - X\\_{mean}_2) + ... + I_n \times (X - X\\_{mean}_n) $$ avec $I_{i}$ l'indicatrice de la période $i$ et $n$ le nombre total de période (exemple $n = 12$ pour une fréquence mensuelle).
+$$ \overline{X} = I_1 \times (X - X\_{mean}_1) + I_2 \times (X - X\_{mean}_2) + ... + I_n \times (X - X\_{mean}_n) $$ avec $I_{i}$ l'indicatrice de la période $i$ et $n$ le nombre total de période (exemple $n = 12$ pour une fréquence mensuelle).
 
 L'opération de contraste prend 2 séries et en fait une somme pondérée :
-$$ X\\_contraste = X + \omega Y $$
+$$ X\_contraste = X + \omega Y $$
 
 Ces deux opérations sont des opérateurs linéaires ainsi on peut alterner ces 2 formules lors du calcul des constrastes :
 $$ \overline{X + \omega Y} = \overline{X} + \omega \overline{Y} $$
