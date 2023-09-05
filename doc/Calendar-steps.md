@@ -79,12 +79,12 @@ $$ WD = \left(\sum_{i = 2}^{6} Day_i\right) - \frac{5}{2} \times \left(Day_1 + D
 On applique la formule plus générale :
 
 $$
-reg_i = \text{group}_i - \text{group}_0 \times \frac{# \text{group}_i}{\# \text{group}_0}
+reg_i = \text{group}_i - \text{group}_0 \times \frac{# \text{group}_i}{# \text{group}_0}
 $$
 
-$$reg_i = \text{group}_i - \text{group}_0 \times \frac{# \text{group}_i}{\# \text{group}_0}$$
+$$reg_i = \text{group}_i - \text{group}_0 \times \frac{# \text{group}_i}{# \text{group}_0}$$
 
-$$ reg_i = \text{group}_i - \text{group}_0 \times \frac{# \text{group}_i}{\# \text{group}_0} $$
+$$ reg_i = \text{group}_i - \text{group}_0 \times \frac{# \text{group}_i}{# \text{group}_0} $$
 
 ``` math
 reg_i = group_i - group_0 * (# group_i) / (# group_0)
