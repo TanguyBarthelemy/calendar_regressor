@@ -97,7 +97,7 @@ Ces variables s'appuient sur la structure de REG1 (lundi au vendredi contre same
 
 - On va calculer les moyennes de long-terme pour les variables $Day_{i}$ et les $Off_{i}$. Ces moyennes se calculent mois par mois :
 
-$$ mean\\_Day_{i, mois\\_j} = \sum_{annees} Day_{i, mois\\_j} $$
+$$ mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j} $$
 
 avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\\_j$ le numéro du mois entre 1 et 12.
 
