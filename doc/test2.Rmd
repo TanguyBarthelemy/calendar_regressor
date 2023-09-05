@@ -1,0 +1,31 @@
+---
+title: "Mon Document"
+output:
+  github_document:
+    pandoc_args:
+      - --lua-filter=replace-math.lua
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE}
+library(stringr)
+
+replace_math <- function(input) {
+    # Remplacer $$ par ```math```
+    output <- str_replace_all(input, "\\$\\$", "```math```")
+    return(output)
+}
+
+# Lire le contenu du Rmd
+input <- readLines("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_Regresseurs_CJO/doc/test.Rmd", warn = FALSE, encoding = "UTF-8")
+
+# Appliquer la fonction de remplacement
+output <- replace_math(input)
+
+# Écrire le contenu modifié
+cat(output, sep = "\n")
+```
