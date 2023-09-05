@@ -167,7 +167,7 @@ liste_names <- colnames(reg_cjo) |>
     as.list()
 names(liste_names) <- colnames(reg_cjo)
 
-reg_cjo |>
+tbl <- reg_cjo |>
     flextable() |>
     set_header_labels(values = liste_names) |>
     add_header_row(values = c("Ouvrable", "Férié"), colwidths = c(8, 7)) |>
@@ -177,6 +177,8 @@ reg_cjo |>
     bg(j = -1, bg = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |>
     color(j = -1, color = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |>
     flextable::width(j = 2:15, .4)
+
+tbl
 ```
 
 #### Calculs des jeux de régresseurs
@@ -374,7 +376,7 @@ Seulement la date de Pâques suit le calendrier lunaire. Et la fréquence de Pâ
 
 La répartition des occurences de la date de Paques sur 57000000 ans est la suivante :
 
-```{r, echo = FALSE}
+```{r easter_occurence, echo = FALSE}
 easter_occurence <- calendar_easter$date_easter_meeus |> table()
 plot(easter_occurence, ylab = "Occurence de Pâques")
 ```
@@ -383,19 +385,19 @@ Mais cette répartition des jours de Pâques est différente selon la période q
 
 Sur la période 2000-2399 (cycle du calendrier) :
 
-```{r, echo = FALSE}
+```{r easter_occurence_400, echo = FALSE}
 plot(reduce_calendar(2000, 2399)$date_easter_meeus |> table(), ylab = "Occurence de Pâques")
 ```
 
 Sur la période 1970-2050 (cycle du calendrier) :
 
-```{r, echo = FALSE}
+```{r easter_occurence_1970_2050, echo = FALSE}
 plot(reduce_calendar(1970, 2050)$date_easter_meeus |> table(), ylab = "Occurence de Pâques")
 ```
 
 En comparant le nombre de jour fériés par mois :
 
-```{r, echo = FALSE}
+```{r comparing_trading_days, echo = FALSE}
 cal_2000_2399 <- reduce_calendar(2000, 2399) |>
     add_easter_holidays() |>
     summarise_by_easter(name = "2000-2399", freq = 12)
@@ -416,7 +418,7 @@ cal_0_57000000 |>
 
 Et par trimestre :
 
-```{r, echo = FALSE}
+```{r comparing_trading_days_quaterly, echo = FALSE}
 cal_2000_2399 <- reduce_calendar() |>
     add_easter_holidays() |>
     summarise_by_easter(name = "2000-2399", freq = 4)
@@ -443,7 +445,7 @@ La remarque précédente est vraie pour tous les types de jours fériés. Les au
 
 Mais est ce une raison pour prendre en compte la totalité de la série ou peut-on se satisfaire d'un extrait avec les années sur lesquelles on effectue nos analyses ?
 
-```{r, echo = FALSE}
+```{r long-term-mean, echo = FALSE}
 cal1 <- calendar_other_holidays |>
     dplyr::filter(year >= 2000 & year <= 2399) |>
     dplyr::summarise(
