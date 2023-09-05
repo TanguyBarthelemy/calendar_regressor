@@ -25,7 +25,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Lint root directoryA
-        run: Rscript -e 'print(0)'
+        run: Rscript 'print(0)'
         shell: Rscript {0}
         env:
           LINTR_ERROR_ON_LINT: true
