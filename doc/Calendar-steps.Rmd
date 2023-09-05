@@ -78,6 +78,10 @@ $$ WD = \left(\sum_{i = 2}^{6} Day_{i}\right) - \frac{5}{2} \times \left(Day_1 +
 
 On applique la formule plus générale :
 
+```math
+reg_{i} = group_{i} - group_0 \times \frac{Card(group_{i})}{Card(group_0)}
+```
+
 $$ reg_{i} = group_{i} - group_0 \times \frac{Card(group_{i})}{Card(group_0)} $$
 
 
