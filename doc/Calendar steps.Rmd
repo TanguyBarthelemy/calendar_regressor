@@ -99,6 +99,8 @@ Ces variables s'appuient sur la structure de REG1 (lundi au vendredi contre same
 
 $$ mean\_Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j} $$
 
+$$ \text{mean_}Day_{i, mois\_j} = \sum_{annees} Day_{i, mois\_j} $$
+
 avec $i$ l'indice du jour de la semaine entre 1 et 7 et $mois\\_j$ le numéro du mois entre 1 et 12.
 
 $$ mean\\_Off_{i, mois\\_j} = \sum_{annees} Off_{i, mois\\_j} $$
