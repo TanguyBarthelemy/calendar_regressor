@@ -3,7 +3,7 @@ Comment créer des régresseurs de calendrier ?
 Tanguy
 
 
-\[mean\_off{i,j}=4\]
+$\[mean\_off{i,j}=4\]$
 
 
 
