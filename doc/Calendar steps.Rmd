@@ -5,9 +5,9 @@ header-includes:
    - \usepackage{pagecolor}
 output:
   github_document: default
+  pdf_document: default
   html_document: 
     css: "style.css"
-  pdf_document: default
 always_allow_html: true
 ---
 
@@ -16,14 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r, echo = FALSE}
-load("./data/data4rmd.RData")
+load("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_Regresseurs_CJO/data/data4rmd.RData")
 ```
-
-<style>
-div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
-div.green { background-color:#e6ffe8; border-radius: 5px; padding: 20px;}
-</style>
-
 
 ## Divergence entre regresseurs Insee (**SAS**) et **RJD**
 
@@ -154,7 +148,7 @@ Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur
 ``` {r, echo = FALSE, warning = FALSE}
 library("flextable")
 
-reg_CJO <- read.csv("./data/reg_groups.csv", sep = ";")
+reg_CJO <- read.csv("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_Regresseurs_CJO/data/reg_groups.csv", sep = ";")
 liste_names <- colnames(reg_CJO) |> substr(1, 3) |> as.list()
 names(liste_names) <- colnames(reg_CJO)
 
@@ -465,9 +459,18 @@ Ces règles permettent d'affiner la durée moyenne d'une année pour coller avec
 Sur 400 ans, une année moyenne dure 365.2425 jours = 8765.82 h = 31556952 s.
 La période de révolution du soleil dure environ 365.242190
 
-Pour approcher un peu plus la période de révolution de la Terre, les années divisibles par 4000 sont non bissextiles. Cette règle n'est pas la règle officielle et n'est pas compatibles avec les calculs de date de Pâques (Gauss, Meeus, Conway...)
+Pour approcher un peu plus la période de révolution de la Terre, en SAS, les années divisibles par 4000 sont non bissextiles. Cette règle n'est pas la règle officielle et n'est pas compatibles avec les calculs de date de Pâques (Gauss, Meeus, Conway...)
 
 Pourtant, **SAS** utilise cette règle pour son calcul de calendrier !
 Attention alors aux calculs des moyennes de long-terme sur ces calendriers qui peuvent être faussé (notamment pour les jours fériés relatifs à Pâques).
+
+Ainsi en l'an 4000, il n'y a pas de 29 fevrier (alors qu'il devrait y en avoir). Toutes les dates qui suivent le 28 février 4000 correspondent au type de jour de leur veille.
+
+<div class = "green">
+Exemple : Le lundi de Pâques tombe le 10 avril 4000, et bien le 10 avril 4000 sera alors (dans le calendrier de SAS) un dimanche. 
+</div>
+
+Ainsi les jour férié ne changent pas de période (même année, même mois) mais de type de jour !
+
 
 Seulement en pratique, comme on l'a expliqué dans la remarque précédente, il y a de grandes chances que les moyennes de long-terme ne soit pas calculés sur des très grandes périodes.
