@@ -470,4 +470,4 @@ Pour approcher un peu plus la période de révolution de la Terre, les années d
 Pourtant, **SAS** utilise cette règle pour son calcul de calendrier !
 Attention alors aux calculs des moyennes de long-terme sur ces calendriers qui peuvent être faussé (notamment pour les jours fériés relatifs à Pâques).
 
-Seulement en pratique, comme on l'a expliqué dans la remarque précédente, il y a de grandes chances que les moyennes de long-terme ne soit pas calculé sur des très grandes période.
+Seulement en pratique, comme on l'a expliqué dans la remarque précédente, il y a de grandes chances que les moyennes de long-terme ne soit pas calculés sur des très grandes périodes.
