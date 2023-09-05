@@ -33,16 +33,19 @@ reg_mens <- lapply(
     calendar = frenchCalendar,
     frequency = 12L,
     start = c(1990L, 1L),
-    length = 480L
+    length = 480L, 
+    s = NULL
 ) |>
     data.frame(date = seq.Date(
         from = as.Date("1990-01-01"),
         length.out = 480L, by = "month"
     )) |>
     dplyr::relocate(date, .before = 1L) |>
+    dplyr::rename(REG1 = group_1) |> 
     dplyr::rename_all(~ gsub(pattern = ".group_", replacement = "_AC", .))
 
 write.table(reg_mens,
-    sep = ";", file = "./output/regs_mens_rjd.csv",
-    row.names = FALSE
+            sep = ";", file = "./regresseurs/regs_mens_rjd.csv",
+            row.names = FALSE
 )
+openxlsx::write.xlsx(reg_mens, file = "./regresseurs/regs_mens_rjd.xlsx")
