@@ -7,12 +7,12 @@ output <- ""
 # Parcourir les lignes
 for (line in input) {
     if (grepl("^\\$\\$", line)) {
-        
-        new_line <- gsub(pattern = "^\\$\\$|\\$\\$$", 
+
+        new_line <- gsub(pattern = "^\\$\\$|\\$\\$$",
                          replacement = "", x = line)
-        
+
         output <- paste0(output, paste("```math", new_line, "```", sep = "\n"), "\n")
-        
+
     } else {
         output <- paste0(output, line, "\n")
     }
