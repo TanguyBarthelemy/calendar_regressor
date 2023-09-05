@@ -72,10 +72,21 @@ $TD_i = Day_i - Day_1$ pour $i$ entre 2 et 7.
 Par abus de notation, des fois i parcourt [1, 6] et non [2, 7] et alors 1 désigne le lundi et 6 le samedi.
 
 - On créé la variable WD (working days) qui calcule un nombre moyen de jours travaillé (en contraste)
+
 $$ WD = \left(\sum_{i = 2}^{6} Day_i\right) - \frac{5}{2} \times \left(Day_1 + Day_7\right) $$
+
+$$WD = \left(\sum_{i = 2}^{6} Day_i\right) - \frac{5}{2} \times \left(Day_1 + Day_7\right)$$
+
+
+$$
+WD = \left(\sum_{i = 2}^{6} Day_i\right) - \frac{5}{2} \times \left(Day_1 + Day_7\right)
+$$
+
 On applique la formule plus générale :
 
-$$ reg_i = group_i - group_0 \times \frac{\# group_i}{\# group_0} $$ avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$ et $group_0 = {1, 7}$
+$$ reg_i = group_i - group_0 \times \frac{\# group_i}{\# group_0} $$
+
+avec ici $i = 1$ et $group_1 = {2, 3, 4, 5, 6}$ et $group_0 = {1, 7}$
 
 - On créé les "Working week-days" = jours ouvrables (TD), en opposition les "Publics Holydays" (PH) et les "Weekday contrast" (Weekdays) :
 $$ TD = \sum_{i = 2}^{6} In_i $$
