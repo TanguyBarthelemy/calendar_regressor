@@ -1,15 +1,22 @@
 # find mean easter rjd
 
+source("./R/01_create_french_calendar.R")
 
 # etude des easter calcul par rjd
 
+cal1 <- create_french_calendar(
+    summary = FALSE, 
+    start = 1990L, end = 2031L, 
+    starting_day = "lundi")
+
+# On ne garde que les jeudi
 cal1_bis <- cal1 |> 
     dplyr::filter(weekday_number == 5) |> 
     dplyr::summarise(
         # whit_monday = sum(whit_monday),
         # easter_monday = sum(easter_monday), 
         ascension = sum(ascension),
-        lundi = dplyr::n(), 
+        Days = dplyr::n(), 
         NbDays = dplyr::first(NbDays), 
         .by = c("year", "month_number"))
 
@@ -29,6 +36,7 @@ simplifiedCalendar <- national_calendar(days = list(
 )
 )
 
+#
 reg_test <- calendar_td(
     calendar = simplifiedCalendar, 
     frequency = 12L, start = c(1990L, 1L), length = 480L, 
@@ -37,15 +45,17 @@ reg_test <- calendar_td(
 out <- cbind(
     year = reg_test |> time() |> zoo::as.Date() |> format("%Y") |> as.integer(), 
     month_number = reg_test |> time() |> zoo::as.Date() |> format("%m") |> as.integer(), 
-    REG1_monday = reg_test |> as.double()
+    REG1_tuesday = reg_test |> as.double()
 ) |> 
     as.data.frame() |> 
     merge(y = cal1_bis) |> 
     # dplyr::filter(month_number > 2 & month_number < 7) |>
     dplyr::mutate(
-        reg_lundi = -(NbDays / 6) + (lundi - ascension) * (1 + 1/6),
-        mean_lundi = (REG1_monday - reg_lundi) / (1 + 1/6),
-        mean_round = round(mean_lundi, 3)
+        reg_tuesday = -(NbDays / 6) + (Days - ascension) * (1 + 1/6),
+        mean_tuesday = (REG1_tuesday - reg_tuesday) / (1 + 1/6),
+        mean_round = round(mean_tuesday, 3)
     )
 
-
+mean_ascension_tuesday <- out |> 
+    dplyr::filter(year == 1990 & month_number %in% 4:6) |> 
+    dplyr::pull(mean_tuesday)

@@ -1,4 +1,8 @@
 
+################################################################################
+#####                       Création des calendriers                       #####
+################################################################################
+
 load("./data/mean.RData")
 
 create_annual_calendar <- function(leap_year = FALSE) {
@@ -13,8 +17,6 @@ create_annual_calendar <- function(leap_year = FALSE) {
     
     return(annual_cal)
 }
-
-# stop("Faire des vérifs sur les dates (année en vecteur de longueur 1)")
 
 create_empty_calendar <- function(start = 1950L, end = 2022L, starting_day = "dimanche") {
     
@@ -245,7 +247,7 @@ add_bridges <- function(calendar) {
     return(full_calendar)
 }
 
-add_french_publics_holydays <- function(calendar, bridges = FALSE) {
+add_french_publics_holidays <- function(calendar, bridges = FALSE) {
     full_calendar <- calendar |> 
         add_new_year() |> 
         add_may_day() |> 
@@ -336,7 +338,7 @@ create_french_calendar <- function(
     }
     
     calendar <- create_empty_calendar(start = start, end = end, starting_day = starting_day) |> 
-        add_french_publics_holydays()
+        add_french_publics_holidays()
     
     if (summary) {
         if (by %in% c("month", "mois")) {
