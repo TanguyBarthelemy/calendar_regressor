@@ -53,18 +53,22 @@ all_easter_holidays <- rbind(
     summary_table |> dplyr::mutate(date = format(date + 1, format = "%B")),
     summary_table |> dplyr::mutate(date = format(date + 39, format = "%B")),
     summary_table |> dplyr::mutate(date = format(date + 50, format = "%B"))
-) |> dplyr::summarise(count = sum(Freq) / 5700000, .by = c(date, weekday_number))
+) |>
+    dplyr::summarise(count = sum(Freq) / 5700000, .by = c(date, weekday_number))
 
 ### Pure easter ----------------------------------------------------------------
 
 # Remove other french holiday to keep only the pure easter holyday
 
 pure_easter_holidays <- rbind(
-    summary_table |> dplyr::mutate(date = date + 1) |>
+    summary_table |>
+        dplyr::mutate(date = date + 1) |>
         dplyr::filter(!date %in% c(as.Date("2000-05-01"), as.Date("2000-05-08"))),
-    summary_table |> dplyr::mutate(date = date + 39) |>
+    summary_table |>
+        dplyr::mutate(date = date + 39) |>
         dplyr::filter(!date %in% c(as.Date("2000-05-01"), as.Date("2000-05-08"))),
-    summary_table |> dplyr::mutate(date = date + 50) |>
+    summary_table |>
+        dplyr::mutate(date = date + 50) |>
         dplyr::filter(!date %in% c(as.Date("2000-05-01"), as.Date("2000-05-08")))
 ) |>
     dplyr::mutate(month_name = format(date, format = "%B")) |>

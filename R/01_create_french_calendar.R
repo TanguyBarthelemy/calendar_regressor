@@ -238,10 +238,11 @@ add_in_off <- function(calendar) {
     full_calendar <- calendar |>
         dplyr::mutate(
             Day = 1L,
-            Off = pmin(new_year + may_day + victory_day + easter_monday +
-                ascension + whit_monday + fete_nationale +
-                assumption + all_saints_day + armistice +
-                christmas, 1L),
+            Off = pmin(new_year
+                       + may_day + victory_day + easter_monday
+                       + ascension + whit_monday + fete_nationale
+                       + assumption + all_saints_day + armistice
+                       + christmas, 1L),
             In = Day - Off
         )
     return(full_calendar)

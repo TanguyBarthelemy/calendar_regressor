@@ -4,6 +4,8 @@ linters: linters_with_defaults(
         indentation_linter(indent = 4L), 
         object_usage_linter = NULL,
         brace_linter = NULL,
-        object_length_linter = NULL
+        object_length_linter = NULL, 
+        commented_code_linter = NULL, 
+        cyclocomp_linter = NULL
     )
 encoding: "UTF-8"

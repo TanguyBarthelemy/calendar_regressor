@@ -161,13 +161,13 @@ Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur
 ``` {r, echo = FALSE, warning = FALSE}
 library("flextable")
 
-reg_CJO <- read.csv("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_Regresseurs_CJO/data/reg_groups.csv", sep = ";")
-liste_names <- colnames(reg_CJO) |>
+reg_cjo <- read.csv("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_Regresseurs_CJO/data/reg_groups.csv", sep = ";")
+liste_names <- colnames(reg_cjo) |>
     substr(1, 3) |>
     as.list()
-names(liste_names) <- colnames(reg_CJO)
+names(liste_names) <- colnames(reg_cjo)
 
-reg_CJO |>
+reg_cjo |>
     flextable() |>
     set_header_labels(values = liste_names) |>
     add_header_row(values = c("Ouvrable", "Férié"), colwidths = c(8, 7)) |>

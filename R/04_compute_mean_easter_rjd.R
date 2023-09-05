@@ -23,7 +23,7 @@ cal1_bis <- cal1 |>
     )
 
 
-simplifiedCalendar <- national_calendar(days = list(
+simplified_calendar <- national_calendar(days = list(
     # fixed_day(7, 14) # Fete nationale
     # fixed_day(5, 8, validity = list(start = "1982-05-08")), # Victoire 2nd guerre mondiale
     # special_day("NEWYEAR"), # Nouvelle année
@@ -39,7 +39,7 @@ simplifiedCalendar <- national_calendar(days = list(
 
 #
 reg_test <- calendar_td(
-    calendar = simplifiedCalendar,
+    calendar = simplified_calendar,
     frequency = 12L, start = c(1990L, 1L), length = 480L,
     groups = c(0L, 0L, 0L, 1L, 0L, 0L, 0L)
 )

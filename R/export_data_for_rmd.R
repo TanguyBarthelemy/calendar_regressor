@@ -31,10 +31,11 @@ add_easter_holidays <- function(x) {
             date = date + 50,
             weekday_number = 2
         )
-    ) |> dplyr::mutate(
-        month_number = format(date, format = "%m") |> as.integer(),
-        quarter_number = ((month_number - 1L) %/% 3L) |> as.integer() + 1L
-    )
+    ) |>
+        dplyr::mutate(
+            month_number = format(date, format = "%m") |> as.integer(),
+            quarter_number = ((month_number - 1L) %/% 3L) |> as.integer() + 1L
+        )
 }
 
 summarise_by_easter <- function(x, freq = 12, name = "aha") {

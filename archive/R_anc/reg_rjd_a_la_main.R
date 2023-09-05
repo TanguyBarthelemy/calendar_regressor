@@ -13,16 +13,16 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
 
     frequency_reg <- as.integer(frequency_reg)
 
-    if ((missing(length_reg) & (missing(start_reg) || missing(start_reg))) ||
-        (missing(start_reg) && missing(start_reg))) {
+    if ((missing(length_reg) && (missing(start_reg) || missing(start_reg)))
+        || (missing(start_reg) && missing(start_reg))) {
         stop("Il manque les paramètres de début, de fin ou de longueur de la série.")
     }
 
     if (!missing(start_reg)) {
-        if ((!is.numeric(start_reg)) ||
-            (length(start_reg) != 2) ||
-            (start_reg <= 0) ||
-            (start_reg[2] > frequency_reg)) {
+        if ((!is.numeric(start_reg))
+            || (length(start_reg) != 2)
+            || (start_reg <= 0)
+            || (start_reg[2] > frequency_reg)) {
             stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
         }
 
@@ -30,11 +30,11 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     }
 
     if (!missing(end_reg)) {
-        if ((!is.numeric(end_reg)) ||
-            (length(end_reg) != 2) ||
-            (end_reg <= 0) ||
-            (start_reg[1] > end_reg[1]) ||
-            (end_reg[2] > frequency_reg)) {
+        if ((!is.numeric(end_reg))
+            || (length(end_reg) != 2)
+            || (end_reg <= 0)
+            || (start_reg[1] > end_reg[1])
+            || (end_reg[2] > frequency_reg)) {
             stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
         }
 
@@ -42,8 +42,8 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     }
 
     if (!missing(start_reg) && !missing(start_reg)) {
-        if ((start_reg[1] > end_reg[1]) ||
-            (start_reg[1] == end_reg[1] & start_reg[2] > end_reg[2])) {
+        if ((start_reg[1] > end_reg[1])
+            || (start_reg[1] == end_reg[1] && start_reg[2] > end_reg[2])) {
             stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
         }
     }
@@ -89,7 +89,7 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     names(coeff_v) <- paste0("REG", 0:(length(coeff_v) - 1))
 
     real_rjd_reg_ts <- rjd3modelling::htd(
-        frenchCalendar,
+        french_calendar,
         frequency = frequency_reg, start = start_reg, length = length_reg,
         groups = c(groups_in[-1], groups_in[1]) |> gsub(pattern = "REG", replacement = "") |> as.numeric(),
         meanCorrection = TRUE, contrasts = FALSE
@@ -103,12 +103,12 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
         gsub(pattern = "-", replacement = "_")
 
     # Import du calendrier
-    frenchCalendar_tab <- haven::read_sas("./data/french_calendar_brut.sas7bdat") |>
+    french_calendar_tab <- haven::read_sas("./data/french_calendar_brut.sas7bdat") |>
         dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01")) |>
         dplyr::mutate(periode = dplyr::case_when(frequency_reg == 4 ~ qtr, TRUE ~ month))
 
     if (frequency_reg == 4L) {
-        frenchCalendar_tab <- frenchCalendar_tab |>
+        french_calendar_tab <- french_calendar_tab |>
             dplyr::group_by(year, qtr) |>
             dplyr::select(-Date, -EasterG) |>
             dplyr::summarise_all(sum) |>
@@ -125,7 +125,7 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     }
 
     # Calcul des variables REG par groupes
-    REG_tab <- frenchCalendar_tab |>
+    reg_tab <- french_calendar_tab |>
         dplyr::filter(year >= start_reg[1] & year <= end_reg[1]) |>
         dplyr::select(Date, dplyr::starts_with(c("In", "Off"))) |>
         tidyr::pivot_longer(cols = -Date, names_to = "VAR", values_to = "VAL") |>
@@ -144,7 +144,7 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
         )
 
     # Calcul des moyennes de long-terme
-    tot_temp <- merge(REG_tab, real_rjd_reg_df, by = "Date", all = TRUE)
+    tot_temp <- merge(reg_tab, real_rjd_reg_df, by = "Date", all = TRUE)
     means_mat <- cbind(
         seq.int(frequency_reg),
         matrix(NA, nrow = frequency_reg, ncol = length(coeff_v))
@@ -198,7 +198,7 @@ compute_reg_cjo_rjd <- function(groups_in = c(0, rep(1, 5), 0),
     print(means_mat)
 
     # Calcul des contrastes
-    reg_cjo <- merge(REG_tab, means_mat, by = "periode") |>
+    reg_cjo <- merge(reg_tab, means_mat, by = "periode") |>
         dplyr::mutate(ref = REG0 - REG_mean0) |>
         tidyr::pivot_longer(
             cols = c(dplyr::starts_with("REG")),

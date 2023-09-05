@@ -13,16 +13,16 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
 
     frequency_reg <- as.integer(frequency_reg)
 
-    if ((missing(length_reg) & (missing(start_reg) || missing(start_reg))) ||
-        (missing(start_reg) && missing(start_reg))) {
+    if ((missing(length_reg) && (missing(start_reg) || missing(start_reg)))
+        || (missing(start_reg) && missing(start_reg))) {
         stop("Il manque les paramètres de début, de fin ou de longueur de la série.")
     }
 
     if (!missing(start_reg)) {
-        if ((!is.numeric(start_reg)) ||
-            (length(start_reg) != 2) ||
-            (start_reg <= 0) ||
-            (start_reg[2] > frequency_reg)) {
+        if ((!is.numeric(start_reg))
+            || (length(start_reg) != 2)
+            || (start_reg <= 0)
+            || (start_reg[2] > frequency_reg)) {
             stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
         }
 
@@ -30,11 +30,11 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     }
 
     if (!missing(end_reg)) {
-        if ((!is.numeric(end_reg)) ||
-            (length(end_reg) != 2) ||
-            (end_reg <= 0) ||
-            (start_reg[1] > end_reg[1]) ||
-            (end_reg[2] > frequency_reg)) {
+        if ((!is.numeric(end_reg))
+            || (length(end_reg) != 2)
+            || (end_reg <= 0)
+            || (start_reg[1] > end_reg[1])
+            || (end_reg[2] > frequency_reg)) {
             stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
         }
 
@@ -42,8 +42,8 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     }
 
     if (!missing(start_reg) && !missing(start_reg)) {
-        if ((start_reg[1] > end_reg[1]) ||
-            (start_reg[1] == end_reg[1] & start_reg[2] > end_reg[2])) {
+        if ((start_reg[1] > end_reg[1])
+            || (start_reg[1] == end_reg[1] && start_reg[2] > end_reg[2])) {
             stop("Les dates start_reg et end_reg doivent être au format c(AAAA, MM) en numeric.\n Le nombre de période doit être cohérent avec la fréquence.\n Il ne peut pas y avoir d'année négatives.")
         }
     }
@@ -80,12 +80,12 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     names(coeff_v) <- paste0("REG", 0:(length(coeff_v) - 1))
 
     # Création du calendrier
-    frenchCalendar_tab <<- haven::read_sas("./data/french_calendar_brut.sas7bdat") |>
+    french_calendar_tab <<- haven::read_sas("./data/french_calendar_brut.sas7bdat") |>
         dplyr::mutate(Date = as.Date(Date, origin = "1960-01-01")) |>
         dplyr::mutate(periode = dplyr::case_when(frequency_reg == 4 ~ qtr, TRUE ~ month))
 
     if (frequency_reg == 4L) {
-        frenchCalendar_tab <- frenchCalendar_tab |>
+        french_calendar_tab <- french_calendar_tab |>
             dplyr::group_by(year, periode) |>
             dplyr::select(-Date, -EasterG) |>
             dplyr::summarise_all(sum) |>
@@ -102,13 +102,13 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
     }
 
     # Calcul des moyennes
-    means_tab <<- frenchCalendar_tab |>
+    means_tab <<- french_calendar_tab |>
         dplyr::select(periode, dplyr::starts_with(c("Day", "Off"))) |>
         dplyr::group_by(periode) |>
         dplyr::summarise_all(.funs = list(mean = mean))
 
     # Calcul des corrections (dû aux moyennes)
-    frenchCalendar_corr <<- merge(frenchCalendar_tab, means_tab,
+    french_calendar_corr <<- merge(french_calendar_tab, means_tab,
         by = "periode", all = TRUE
     ) |>
         dplyr::mutate(
@@ -151,22 +151,22 @@ compute_reg_cjo_sas <- function(groups_in = c(0, rep(1, 5), 0),
             WD_corr = Day1_corr + Day2_corr + Day3_corr + Day4_corr +
                 Day5_corr + Day6_corr - 5 * (Day1_corr + Day7_corr) / 2
         ) |>
-        dplyr::filter((year > start_reg[1] &
-            year < end_reg[1]) |
-            (year == start_reg[1] & periode >= start_reg[2]) |
-            (year == end_reg[1] & periode <= end_reg[2])) |>
+        dplyr::filter((year > start_reg[1] & year < end_reg[1])
+                      | (year == start_reg[1] & periode >= start_reg[2])
+                      | (year == end_reg[1] & periode <= end_reg[2])) |>
         dplyr::arrange(year, qtr, month)
 
 
 
     # Calcul des coefficients régresseurs CJO
-    reg_cjo <<- frenchCalendar_corr |>
+    reg_cjo <<- french_calendar_corr |>
         dplyr::select(Date, dplyr::starts_with(c("In", "Off"))) |>
         dplyr::select(Date, dplyr::ends_with("_corr")) |>
         tidyr::pivot_longer(cols = -Date, names_to = "VAR", values_to = "VAL") |>
         tidyr::pivot_wider(names_from = "Date", values_from = "VAL") |>
         dplyr::mutate(GROUP = c(groups_in, groups_off)) %>%
-        dplyr::bind_rows(... = . |> dplyr::mutate(GROUP = "Nbdays")) |>
+        dplyr::bind_rows(... = . |>
+                             dplyr::mutate(GROUP = "Nbdays")) |>
         dplyr::group_by(GROUP) |>
         dplyr::select(-VAR) |>
         dplyr::summarise_all(sum) |>

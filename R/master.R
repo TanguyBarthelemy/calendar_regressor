@@ -80,7 +80,7 @@ write.table(reg1_sas,
 
 ## Calendar creation ---------------------------------------------------------
 
-frenchCalendar <- national_calendar(days = list(
+french_calendar <- national_calendar(days = list(
     fixed_day(7, 14), # Fete nationale
     fixed_day(5, 8, validity = list(start = "1982-05-08")), # Victoire 2nd guerre mondiale
     special_day("NEWYEAR"), # Nouvelle année
@@ -98,7 +98,7 @@ frenchCalendar <- national_calendar(days = list(
 ## Regressor set creation ---------------------------------------------------------
 
 reg1 <- calendar_td(
-    calendar = frenchCalendar,
+    calendar = french_calendar,
     frequency = 12L,
     start = c(1990L, 1L),
     length = 480L,

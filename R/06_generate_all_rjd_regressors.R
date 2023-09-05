@@ -4,7 +4,7 @@ library("rjd3toolkit")
 
 ## Calendar creation -----------------------------------------------------------
 
-frenchCalendar <- national_calendar(days = list(
+french_calendar <- national_calendar(days = list(
     fixed_day(7, 14), # Fete nationale
     fixed_day(5, 8, validity = list(start = "1982-05-08")), # Victoire 2nd guerre mondiale
     special_day("NEWYEAR"), # Nouvelle année
@@ -31,10 +31,10 @@ groups <- list(
 
 reg_mens <- lapply(
     X = groups, FUN = calendar_td,
-    calendar = frenchCalendar,
+    calendar = french_calendar,
     frequency = 12L,
     start = c(1990L, 1L),
-    length = 480L, 
+    length = 480L,
     s = NULL
 ) |>
     data.frame(date = seq.Date(
@@ -42,11 +42,12 @@ reg_mens <- lapply(
         length.out = 480L, by = "month"
     )) |>
     dplyr::relocate(date, .before = 1L) |>
-    dplyr::rename(REG1 = group_1) |> 
+    dplyr::rename(REG1 = group_1) |>
     dplyr::rename_all(~ gsub(pattern = ".group_", replacement = "_AC", .))
 
-write.table(reg_mens,
-            sep = ";", file = "./regresseurs/regs_mens_rjd.csv",
-            row.names = FALSE
+write.table(
+    reg_mens,
+    sep = ";", file = "./regresseurs/regs_mens_rjd.csv",
+    row.names = FALSE
 )
 openxlsx::write.xlsx(reg_mens, file = "./regresseurs/regs_mens_rjd.xlsx")

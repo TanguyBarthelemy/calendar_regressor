@@ -1,8 +1,8 @@
-cal_sas <- frenchCalendar_corr
+cal_sas <- french_calendar_corr
 mean_sas <- means_tab
 
-cal_R <- cal1
-mean_R <- mean_monthly
+cal_r <- cal1
+mean_r <- mean_monthly
 
 tab1 <- mean_sas |>
     pivot_longer(-periode) |>
@@ -15,7 +15,7 @@ tab1 <- mean_sas |>
     select(mn, wn, n, v) |>
     arrange(mn, wn, n)
 
-tab2 <- mean_R |>
+tab2 <- mean_r |>
     pivot_longer(-c(month_number, weekday_number)) |>
     mutate(
         wn = weekday_number,
@@ -35,7 +35,7 @@ cbind(tab1, tab2$v) |>
     ) |>
     View()
 
-a <- frenchCalendar_tab$EasterG |>
+a <- french_calendar_tab$EasterG |>
     gsub(pattern = "APR", replacement = "04") |>
     gsub(pattern = "MAR", replacement = "03") |>
     substr(1, 4) |>
@@ -47,7 +47,7 @@ b <- a |>
     table()
 b[2] / sum(b)
 
-frenchCalendar_tab |>
+french_calendar_tab |>
     dplyr::mutate(Off1 = case_when(
         month >= 3 & month <= 6 ~ 0,
         TRUE ~ Off1

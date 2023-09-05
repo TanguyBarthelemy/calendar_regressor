@@ -63,10 +63,11 @@ summary_table <- rbind(
         date = date + 50,
         weekday_number = 2
     )
-) |> dplyr::mutate(
-    month_number = format(date, format = "%m") |> as.integer(),
-    quarter_number = ((month_number - 1L) %/% 3L) |> as.integer() + 1L
-)
+) |>
+    dplyr::mutate(
+        month_number = format(date, format = "%m") |> as.integer(),
+        quarter_number = ((month_number - 1L) %/% 3L) |> as.integer() + 1L
+    )
 
 ### Calcul des moyennes autres jours fériés ------------------------------------
 
@@ -133,7 +134,8 @@ other_holidays_monthly <- calendar_other_holidays |>
 
 #### Réunion des différents types de jours fériés ------------------------------
 
-all_holidays_type_monthly <- merge(other_holidays_monthly,
+all_holidays_type_monthly <- merge(
+    other_holidays_monthly,
     pure_easter_holidays_monthly,
     all = TRUE
 ) |>
@@ -148,7 +150,8 @@ all_holidays_type_monthly <- merge(other_holidays_monthly,
     )
 
 all_holidays_general_monthly <- all_holidays_type_monthly |>
-    dplyr::summarise(dplyr::across(dplyr::everything(), sum),
+    dplyr::summarise(
+        dplyr::across(dplyr::everything(), sum),
         .by = month_number
     ) |>
     dplyr::mutate(weekday_number = 0L)
@@ -203,7 +206,8 @@ other_holidays_quarterly <- calendar_other_holidays |>
 
 #### Réunion des différents types de jours fériés ------------------------------
 
-all_holidays_type_quarterly <- merge(other_holidays_quarterly,
+all_holidays_type_quarterly <- merge(
+    other_holidays_quarterly,
     pure_easter_holidays_quarterly,
     all = TRUE
 ) |>
@@ -218,7 +222,8 @@ all_holidays_type_quarterly <- merge(other_holidays_quarterly,
     )
 
 all_holidays_general_quarterly <- all_holidays_type_quarterly |>
-    dplyr::summarise(dplyr::across(dplyr::everything(), sum),
+    dplyr::summarise(
+        dplyr::across(dplyr::everything(), sum),
         .by = quarter_number
     ) |>
     dplyr::mutate(weekday_number = 0L)
@@ -237,7 +242,8 @@ mean_quarterly <- all_holidays_quarterly |>
 
 save(mean_monthly, mean_quarterly, file = "./data/mean.RData")
 easter_occurence |>
-    write.table("output/easter_occurence.csv",
+    write.table(
+        file = "output/easter_occurence.csv",
         quote = FALSE,
         row.names = FALSE, sep = ";"
     )
