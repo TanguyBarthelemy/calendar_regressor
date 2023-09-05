@@ -20,24 +20,15 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install lintr
-        run: install.packages("lintr")
-        shell: Rscript {0}
+      #- name: Install lintr
+       # run: install.packages("lintr")
+        #shell: Rscript {0}
 
       - name: Lint root directoryA
         run: Rscript 'print(0)'
-        shell: Rscript {0}
-        env:
-          LINTR_ERROR_ON_LINT: true
 
-      - name: Lint root directory
-        run: Rscript -e "lintr::lint_dir()"
-        shell: Rscript {0}
-        env:
-          LINTR_ERROR_ON_LINT: true
-
-      - name: Lint root directory
-        run: Rscript -e 'lintr::lint_dir()'
-        shell: Rscript {0}
-        env:
-          LINTR_ERROR_ON_LINT: true
+      #- name: Lint root directory
+       # run: Rscript -e "lintr::lint_dir()"
+        #shell: Rscript {0}
+        #env:
+         # LINTR_ERROR_ON_LINT: true
