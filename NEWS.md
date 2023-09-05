@@ -1,5 +1,10 @@
 # Mises à jour du projet
 
+## Version stable du 05/09/2023
+
+- Ré-écriture des programmes pour générer des régresseurs
+- Organisation du dossier
+
 ## Développement version
 
 - Typo corrections
