@@ -11,6 +11,7 @@ file <- "./doc/Calendar-steps.md"
 remove_double_dollar(file)
 modify_simple_dollar(file)
 modify_table(file)
+modify_sum(file)
 
 # rmarkdown::render(input = "./doc/Calendar-steps.Rmd",
 #                   output_format = "html_document", output_dir = "./doc")
