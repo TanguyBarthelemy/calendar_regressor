@@ -3,82 +3,167 @@
 ################################################################################
 
 
-# Introduction ------------------------------------------------------------
+# Introduction -----------------------------------------------------------------
 
 
-## Chargement des packages -------------------------------------------------
+## Chargement des packages -----------------------------------------------------
 
 library("rjd3toolkit")
 
 
-## Chargement des fonctions principales ------------------------------------
+## Chargement des fonctions principales ----------------------------------------
 
 source("./R/01_create_french_calendar.R")
 
 
-## Chargement des jeux de données utiles -----------------------------------
+## Chargement des jeux de données utiles ---------------------------------------
 
 load(file = "./data/mean-rjd.RData")
 load(file = "./data/mean-sas.RData")
 
 
-## Création variable générales ---------------------------------------------
+## Création variable générales -------------------------------------------------
 
 cal1 <- create_french_calendar(
     summary = FALSE,
-    start = 1990L, end = 2031L,
+    start = 1990L, end = 2030L,
     starting_day = "lundi"
 )
 
+# Actual SAS regressors --------------------------------------------------------
 
-# Replicate Dominique method ----------------------------------------------
+regs_mens_sas <- read.csv("./regresseurs/reg_cjo_m.csv", sep = ";")
+
+# Replicate Dominique method ---------------------------------------------------
 
 cal_sas <- cal1 |> summarise_by_period(frequency = 12L, mean_table = mean_sas)
 
-reg1_sas <- cal_sas |>
+repr_regs_mens_sas <- cal_sas |>
     dplyr::mutate(
         G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
         G0 = Off_corr + In1_corr + In7_corr,
-        REG1_SAS = G1 - G0 * 5 / 9,
-        Date = as.Date(paste(
+        REG1_AC1 = G1 - G0 * 5 / 9,
+
+        G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
+        G2 = In7_corr,
+        G0 = Off_corr + In1_corr,
+        REG2_AC1 = G1 - G0 * 5 / 8,
+        REG2_AC2 = G2 - G0 * 1 / 8,
+
+        G1 = In2_corr,
+        G2 = In3_corr + In4_corr + In5_corr + In6_corr,
+        G3 = In7_corr,
+        G0 = Off_corr + In1_corr,
+        REG3_AC1 = G1 - G0 * 1 / 8,
+        REG3_AC2 = G2 - G0 * 4 / 8,
+        REG3_AC3 = G3 - G0 * 1 / 8,
+
+        G1 = In2_corr,
+        G2 = In3_corr,
+        G3 = In4_corr,
+        G4 = In5_corr,
+        G5 = In6_corr,
+        G0 = Off_corr + In1_corr + In7_corr,
+        REG5_AC1 = G1 - G0 * 1 / 9,
+        REG5_AC2 = G2 - G0 * 1 / 9,
+        REG5_AC3 = G3 - G0 * 1 / 9,
+        REG5_AC4 = G4 - G0 * 1 / 9,
+        REG5_AC5 = G5 - G0 * 1 / 9,
+
+        G1 = In2_corr,
+        G2 = In3_corr,
+        G3 = In4_corr,
+        G4 = In5_corr,
+        G5 = In6_corr,
+        G6 = In7_corr,
+        G0 = Off_corr + In1_corr,
+        REG6_AC1 = G1 - G0 * 1 / 8,
+        REG6_AC2 = G2 - G0 * 1 / 8,
+        REG6_AC3 = G3 - G0 * 1 / 8,
+        REG6_AC4 = G4 - G0 * 1 / 8,
+        REG6_AC5 = G5 - G0 * 1 / 8,
+        REG6_AC6 = G6 - G0 * 1 / 8,
+
+        date = as.Date(paste(
             year, sprintf("%02.f", month_number), "01",
             sep = "-"
         ))
     ) |>
-    dplyr::select(Date, REG1_SAS)
+    dplyr::select(date, dplyr::starts_with("REG"))
 
-write.table(reg1_sas,
-    sep = ";", file = "./output/repr_REG1_sas.csv",
+write.table(repr_regs_mens_sas,
+    sep = ";", file = "./output/repr_regs_mens_sas.csv",
     row.names = FALSE
 )
 
 
-# Correct Dominique method ------------------------------------------------
+# Correct Dominique method -----------------------------------------------------
 
-cal_sas <- cal1 |> summarise_by_period(frequency = 12L, mean_table = mean_monthly)
+cal_sas_corrected <- cal1 |> summarise_by_period(frequency = 12L, mean_table = mean_monthly)
 
-reg1_sas <- cal_sas |>
+regs_mens_sas_corrected <- cal_sas_corrected |>
     dplyr::mutate(
         G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
         G0 = Off_corr + In1_corr + In7_corr,
-        REG1_SAS = G1 - G0 * 5 / 9,
-        Date = as.Date(paste(
+        REG1_AC1 = G1 - G0 * 5 / 9,
+
+        G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
+        G2 = In7_corr,
+        G0 = Off_corr + In1_corr,
+        REG2_AC1 = G1 - G0 * 5 / 8,
+        REG2_AC2 = G2 - G0 * 1 / 8,
+
+        G1 = In2_corr,
+        G2 = In3_corr + In4_corr + In5_corr + In6_corr,
+        G3 = In7_corr,
+        G0 = Off_corr + In1_corr,
+        REG3_AC1 = G1 - G0 * 1 / 8,
+        REG3_AC2 = G2 - G0 * 4 / 8,
+        REG3_AC3 = G3 - G0 * 1 / 8,
+
+        G1 = In2_corr,
+        G2 = In3_corr,
+        G3 = In4_corr,
+        G4 = In5_corr,
+        G5 = In6_corr,
+        G0 = Off_corr + In1_corr + In7_corr,
+        REG5_AC1 = G1 - G0 * 1 / 9,
+        REG5_AC2 = G2 - G0 * 1 / 9,
+        REG5_AC3 = G3 - G0 * 1 / 9,
+        REG5_AC4 = G4 - G0 * 1 / 9,
+        REG5_AC5 = G5 - G0 * 1 / 9,
+
+        G1 = In2_corr,
+        G2 = In3_corr,
+        G3 = In4_corr,
+        G4 = In5_corr,
+        G5 = In6_corr,
+        G6 = In7_corr,
+        G0 = Off_corr + In1_corr,
+        REG6_AC1 = G1 - G0 * 1 / 8,
+        REG6_AC2 = G2 - G0 * 1 / 8,
+        REG6_AC3 = G3 - G0 * 1 / 8,
+        REG6_AC4 = G4 - G0 * 1 / 8,
+        REG6_AC5 = G5 - G0 * 1 / 8,
+        REG6_AC6 = G6 - G0 * 1 / 8,
+
+        date = as.Date(paste(
             year, sprintf("%02.f", month_number), "01",
             sep = "-"
         ))
     ) |>
-    dplyr::select(Date, REG1_SAS)
+    dplyr::select(date, dplyr::starts_with("REG"))
 
-write.table(reg1_sas,
-    sep = ";", file = "./output/repr_REG1_sas.csv",
+write.table(regs_mens_sas_corrected,
+    sep = ";", file = "./output/regs_mens_sas_corrected.csv",
     row.names = FALSE
 )
 
 
-# With rjd3 packages ------------------------------------------------------
+# With rjd3 packages -----------------------------------------------------------
 
 
-## Calendar creation ---------------------------------------------------------
+## Calendar creation -----------------------------------------------------------
 
 french_calendar <- national_calendar(days = list(
     fixed_day(7, 14), # Fete nationale
@@ -95,44 +180,99 @@ french_calendar <- national_calendar(days = list(
 ))
 
 
-## Regressor set creation ---------------------------------------------------------
+## Regressor set creation ------------------------------------------------------
 
-reg1 <- calendar_td(
-    calendar = french_calendar,
-    frequency = 12L,
-    start = c(1990L, 1L),
-    length = 480L,
-    groups = c(1L, 1L, 1L, 1L, 1L, 0L, 0L)
+regs_mens_rjd <- lapply(
+    X = list(c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
+             c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
+             c(1L, 2L, 2L, 2L, 2L, 3L, 0L),
+             c(1L, 2L, 3L, 4L, 5L, 0L, 0L),
+             c(1L, 2L, 3L, 4L, 5L, 6L, 0L)),
+    FUN = \(group) {
+        calendar_td(
+            calendar = french_calendar,
+            frequency = 12L,
+            start = c(1990L, 1L),
+            length = 492L,
+            groups = group
+        )
+    }
+) |>
+    do.call(what = cbind)
+
+colnames(regs_mens_rjd) <- sapply(c(1, 2, 3, 5, 6), \(k) paste0("REG", k, "_AC", 1:k)) |> do.call(what = c)
+
+regs_mens_rjd <- data.frame(
+    date = regs_mens_rjd |> time() |> zoo::as.Date(),
+    regs_mens_rjd
 )
 
-reg1 <- data.frame(
-    date = reg1 |> time() |> zoo::as.Date(),
-    REG1_RJD = reg1 |> as.double()
-)
-
-write.table(reg1,
-    sep = ";", file = "./output/REG1_by_rjd.csv",
+write.table(regs_mens_rjd,
+    sep = ";", file = "./output/regs_mens_rjd.csv",
     row.names = FALSE
 )
 
 
-# Replicate rjd3 package method -------------------------------------------
+# Replicate rjd3 package method ------------------------------------------------
 
-cal_rjd <- cal1 |> summarise_by_period(frequency = 12L, mean_table = mean_rjd)
+repr_cal_rjd <- cal1 |> summarise_by_period(frequency = 12L, mean_table = mean_rjd)
 
-reg1_rjd <- cal_rjd |>
+repr_regs_mens_rjd <- repr_cal_rjd |>
     dplyr::mutate(
         G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
         G0 = Off_corr + In1_corr + In7_corr,
-        REG1_RJD = G1 - G0 * 5 / 2,
-        Date = as.Date(paste(
+        REG1_AC1 = G1 - G0 * 5 / 2,
+
+        G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
+        G2 = In7_corr,
+        G0 = Off_corr + In1_corr,
+        REG2_AC1 = G1 - G0 * 5 / 1,
+        REG2_AC2 = G2 - G0 * 1 / 1,
+
+        G1 = In2_corr,
+        G2 = In3_corr + In4_corr + In5_corr + In6_corr,
+        G3 = In7_corr,
+        G0 = Off_corr + In1_corr,
+        REG3_AC1 = G1 - G0 * 1 / 1,
+        REG3_AC2 = G2 - G0 * 4 / 1,
+        REG3_AC3 = G3 - G0 * 1 / 1,
+
+        G1 = In2_corr,
+        G2 = In3_corr,
+        G3 = In4_corr,
+        G4 = In5_corr,
+        G5 = In6_corr,
+        G0 = Off_corr + In1_corr + In7_corr,
+        REG5_AC1 = G1 - G0 * 1 / 2,
+        REG5_AC2 = G2 - G0 * 1 / 2,
+        REG5_AC3 = G3 - G0 * 1 / 2,
+        REG5_AC4 = G4 - G0 * 1 / 2,
+        REG5_AC5 = G5 - G0 * 1 / 2,
+
+        G1 = In2_corr,
+        G2 = In3_corr,
+        G3 = In4_corr,
+        G4 = In5_corr,
+        G5 = In6_corr,
+        G6 = In7_corr,
+        G0 = Off_corr + In1_corr,
+        REG6_AC1 = G1 - G0 * 1 / 1,
+        REG6_AC2 = G2 - G0 * 1 / 1,
+        REG6_AC3 = G3 - G0 * 1 / 1,
+        REG6_AC4 = G4 - G0 * 1 / 1,
+        REG6_AC5 = G5 - G0 * 1 / 1,
+        REG6_AC6 = G6 - G0 * 1 / 1,
+
+        date = as.Date(paste(
             year, sprintf("%02.f", month_number), "01",
             sep = "-"
         ))
     ) |>
-    dplyr::select(Date, REG1_RJD)
+    dplyr::select(date, dplyr::starts_with("REG"))
 
-write.table(reg1_rjd,
-    sep = ";", file = "./output/repr_REG1_rjd.csv",
+write.table(repr_regs_mens_rjd,
+    sep = ";", file = "./output/repr_regs_mens_rjd.csv",
     row.names = FALSE
 )
+
+
