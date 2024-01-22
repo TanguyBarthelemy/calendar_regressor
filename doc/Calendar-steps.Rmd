@@ -170,6 +170,8 @@ liste_names <- colnames(reg_cjo) |>
     as.list()
 names(liste_names) <- colnames(reg_cjo)
 
+choose_color <- \(x) c("#FFB6C1", "#87CEEB", "#98FB98", "#FFFF99", "#D8BFD8", "#FFDAB9", "#AFEEEE")[x + 1]
+
 tbl <- reg_cjo |>
     flextable() |>
     set_header_labels(values = liste_names) |>
@@ -177,8 +179,8 @@ tbl <- reg_cjo |>
     align(align = "center", part = "header") |>
     bg(i = 2, j = 2:8, bg = "#d7fff2", part = "header") |>
     bg(i = 2, j = 9:15, bg = "#fffdd7", part = "header") |>
-    bg(j = -1, bg = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |>
-    color(j = -1, color = scales::col_numeric(palette = "Pastel2", domain = 0:6), part = "body") |>
+    bg(j = -1, bg = choose_color, part = "body") |>
+    color(j = -1, color = choose_color, part = "body") |>
     flextable::width(j = 2:15, .4)
 
 tbl
