@@ -182,6 +182,8 @@ french_calendar <- national_calendar(days = list(
 
 ## Regressor set creation ------------------------------------------------------
 
+### Regressor monthly ----------------------------------------------------------
+
 regs_mens_rjd <- lapply(
     X = list(c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
              c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
@@ -207,8 +209,42 @@ regs_mens_rjd <- data.frame(
     regs_mens_rjd
 )
 
-write.table(regs_mens_rjd,
+write.table(
+    x = regs_mens_rjd,
     sep = ";", file = "./output/regs_mens_rjd.csv",
+    row.names = FALSE
+)
+
+### Regressor quaterly ---------------------------------------------------------
+
+regs_trim_rjd <- lapply(
+    X = list(c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
+             c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
+             c(1L, 2L, 2L, 2L, 2L, 3L, 0L),
+             c(1L, 2L, 3L, 4L, 5L, 0L, 0L),
+             c(1L, 2L, 3L, 4L, 5L, 6L, 0L)),
+    FUN = \(group) {
+        calendar_td(
+            calendar = french_calendar,
+            frequency = 4L,
+            start = c(1990L, 1L),
+            length = 164,
+            groups = group
+        )
+    }
+) |>
+    do.call(what = cbind)
+
+colnames(regs_trim_rjd) <- sapply(c(1, 2, 3, 5, 6), \(k) paste0("REG", k, "_AC", 1:k)) |> do.call(what = c)
+
+regs_trim_rjd <- data.frame(
+    date = regs_trim_rjd |> time() |> zoo::as.Date(),
+    regs_trim_rjd
+)
+
+write.table(
+    x = regs_trim_rjd,
+    sep = ";", file = "./output/regs_trim_rjd.csv",
     row.names = FALSE
 )
 
