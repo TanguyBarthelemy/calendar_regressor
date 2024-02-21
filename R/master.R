@@ -310,5 +310,3 @@ write.table(repr_regs_mens_rjd,
     sep = ";", file = "./output/repr_regs_mens_rjd.csv",
     row.names = FALSE
 )
-
-

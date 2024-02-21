@@ -75,7 +75,6 @@ calendar_easter <- data.frame(year = 0:(5700000 - 1)) |>
         month_easter_meeus = (e_epacte + L_dominicale - 7 * h_correction + 114) %/% 31,
         day_easter_meeus = (e_epacte + L_dominicale - 7 * h_correction + 114) %% 31 + 1,
         date_easter_meeus = paste0("2000-", sprintf("%02.f", month_easter_meeus), "-", sprintf("%02.f", day_easter_meeus))
-        # date_easter_meeus = as.Date(paste0("2000-", sprintf("%02.f", month_easter_meeus), "-", day_easter_meeus))
     ) |>
     dplyr::select(year, month_easter_meeus, day_easter_meeus, date_easter_meeus)
 

@@ -1,7 +1,14 @@
+################################################################################
+#######                   Generate regressors with JD+                   #######
+################################################################################
+
+
+# Chargement packages ----------------------------------------------------------
+
 library("rjd3toolkit")
 
 
-## Calendar creation -----------------------------------------------------------
+# Calendar creation ------------------------------------------------------------
 
 french_calendar <- national_calendar(days = list(
     fixed_day(7, 14), # Fete nationale
@@ -18,35 +25,70 @@ french_calendar <- national_calendar(days = list(
 ))
 
 
-## Regressor set creation ------------------------------------------------------
+# Regressor set creation -------------------------------------------------------
 
-groups <- list(
-    REG1 = c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
-    REG2 = c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
-    REG3 = c(1L, 2L, 2L, 2L, 2L, 3L, 0L),
-    REG5 = c(1L, 2L, 3L, 4L, 5L, 0L, 0L),
-    REG6 = c(1L, 2L, 3L, 4L, 5L, 6L, 0L)
-)
+## Regressor monthly -----------------------------------------------------------
 
-reg_mens <- lapply(
-    X = groups, FUN = calendar_td,
-    calendar = french_calendar,
-    frequency = 12L,
-    start = c(1990L, 1L),
-    length = 480L,
-    s = NULL
+regs_mens_rjd <- lapply(
+    X = list(c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
+             c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
+             c(1L, 2L, 2L, 2L, 2L, 3L, 0L),
+             c(1L, 2L, 3L, 4L, 5L, 0L, 0L),
+             c(1L, 2L, 3L, 4L, 5L, 6L, 0L)),
+    FUN = \(group) {
+        calendar_td(
+            calendar = french_calendar,
+            frequency = 12L,
+            start = c(1990L, 1L),
+            length = 492L,
+            groups = group
+        )
+    }
 ) |>
-    data.frame(date = seq.Date(
-        from = as.Date("1990-01-01"),
-        length.out = 480L, by = "month"
-    )) |>
-    dplyr::relocate(date, .before = 1L) |>
-    dplyr::rename(REG1 = group_1) |>
-    dplyr::rename_all(~ gsub(pattern = ".group_", replacement = "_AC", .))
+    do.call(what = cbind)
+
+colnames(regs_mens_rjd) <- sapply(c(1, 2, 3, 5, 6), \(k) paste0("REG", k, "_AC", 1:k)) |> do.call(what = c)
+
+regs_mens_rjd <- data.frame(
+    date = regs_mens_rjd |> time() |> zoo::as.Date(),
+    regs_mens_rjd
+)
 
 write.table(
-    reg_mens,
-    sep = ";", file = "./regresseurs/regs_mens_rjd.csv",
+    x = regs_mens_rjd,
+    sep = ";", file = "./output/regs_mens_rjd.csv",
     row.names = FALSE
 )
-openxlsx::write.xlsx(reg_mens, file = "./regresseurs/regs_mens_rjd.xlsx")
+
+## Regressor quaterly ----------------------------------------------------------
+
+regs_trim_rjd <- lapply(
+    X = list(c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
+             c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
+             c(1L, 2L, 2L, 2L, 2L, 3L, 0L),
+             c(1L, 2L, 3L, 4L, 5L, 0L, 0L),
+             c(1L, 2L, 3L, 4L, 5L, 6L, 0L)),
+    FUN = \(group) {
+        calendar_td(
+            calendar = french_calendar,
+            frequency = 4L,
+            start = c(1990L, 1L),
+            length = 164,
+            groups = group
+        )
+    }
+) |>
+    do.call(what = cbind)
+
+colnames(regs_trim_rjd) <- sapply(c(1, 2, 3, 5, 6), \(k) paste0("REG", k, "_AC", 1:k)) |> do.call(what = c)
+
+regs_trim_rjd <- data.frame(
+    date = regs_trim_rjd |> time() |> zoo::as.Date(),
+    regs_trim_rjd
+)
+
+write.table(
+    x = regs_trim_rjd,
+    sep = ";", file = "./output/regs_trim_rjd.csv",
+    row.names = FALSE
+)
