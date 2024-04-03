@@ -16,7 +16,9 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v2
 
       - name: Install libcurl4
-        run:  sudo apt install libcurl4-openssl-dev
+        run: |
+          sudo apt install libcurl4-openssl-dev
+          sudo apt install libharfbuzz-dev libfribidi-dev libtiff5-dev
 
       - name: Install dependencies
         run: Rscript -e 'install.packages(c("rmarkdown", "flextable"), repos = "http://cran.us.r-project.org")'
