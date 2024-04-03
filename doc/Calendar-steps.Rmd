@@ -17,12 +17,17 @@ knitr::opts_knit$set(root.dir = "..")
 ```
 
 ```{r import data, echo = FALSE}
-print(getwd())
 # load("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_régresseurs_CJO/data/data4rmd.RData")
 load("./data/data4rmd.RData")
 
 # reg_cjo <- read.csv("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_régresseurs_CJO/data/reg_groups.csv", sep = ";")
 reg_cjo <- read.csv("./data/reg_groups.csv", sep = ";")
+```
+
+```{r chargement packages, echo = FALSE}
+library("flextable")
+library("kableExtra")
+library("dplyr")
 ```
 
 ## Divergence entre régresseurs Insee (**SAS**) et **RJD**
