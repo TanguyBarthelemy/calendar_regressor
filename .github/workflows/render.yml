@@ -2,7 +2,7 @@ name: Render documents with rmarkdown-action
 on: [push]
 jobs:
   render:
-    name: Render my tutorials
+    name: Render my calendar regressors
     runs-on: ubuntu-latest
     env:
       GH_PAT : ${{ secrets.GITHUB_TOKEN }}
