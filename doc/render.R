@@ -5,8 +5,7 @@
 rmarkdown::render(
     input = "./doc/Calendar-steps.Rmd",
     output_format = "all",
-    output_dir = "./doc",
-    knit_root_dir = ".."
+    output_dir = "./doc"
 )
 
 source("./doc/modify_gh_doc.R", encoding = "UTF-8")
