@@ -13,6 +13,7 @@ always_allow_html: true
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.path = "./figures/")
+knitr::opts_knit$set(root.dir = "..")
 ```
 
 ```{r import data, echo = FALSE}
