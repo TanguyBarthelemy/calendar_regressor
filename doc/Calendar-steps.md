@@ -4,6 +4,28 @@ Tanguy
 
 
 
+    ## 
+    ## Attaching package: 'kableExtra'
+
+    ## The following objects are masked from 'package:flextable':
+    ## 
+    ##     as_image, footnote
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following object is masked from 'package:kableExtra':
+    ## 
+    ##     group_rows
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
 ## Divergence entre régresseurs Insee (**SAS**) et **RJD**
 
 ### Couleur des paragraphes
@@ -186,7 +208,7 @@ des types de jours :
   - $`G_6`$ = samedi ouvrables
   - $`G_0`$ = les autres)
 
-<img src="./figures/cjo_sets_table-1.png" width="1301" />
+![](./figures/cjo_sets_table-1.png)<!-- -->
 
 #### Calculs des jeux de régresseurs
 
@@ -722,6 +744,28 @@ Tanguy
 
 
 
+    ## 
+    ## Attaching package: 'kableExtra'
+
+    ## The following objects are masked from 'package:flextable':
+    ## 
+    ##     as_image, footnote
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following object is masked from 'package:kableExtra':
+    ## 
+    ##     group_rows
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
 ## Divergence entre régresseurs Insee (**SAS**) et **RJD**
 
 ### Couleur des paragraphes
@@ -904,7 +948,7 @@ des types de jours :
   - $`G_6`$ = samedi ouvrables
   - $`G_0`$ = les autres)
 
-<img src="./figures/cjo_sets_table-1.png" width="1301" />
+![](./figures/cjo_sets_table-1.png)<!-- -->
 
 #### Calculs des jeux de régresseurs
 
