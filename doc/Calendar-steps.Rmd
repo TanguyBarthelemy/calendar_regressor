@@ -12,15 +12,15 @@ always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.path = "figures/")
+knitr::opts_chunk$set(echo = TRUE, fig.path = "./figures/")
 ```
 
 ```{r import data, echo = FALSE}
 # load("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_régresseurs_CJO/data/data4rmd.RData")
-load("./../data/data4rmd.RData")
+load("./data/data4rmd.RData")
 
 # reg_cjo <- read.csv("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_régresseurs_CJO/data/reg_groups.csv", sep = ";")
-reg_cjo <- read.csv("./../data/reg_groups.csv", sep = ";")
+reg_cjo <- read.csv("./data/reg_groups.csv", sep = ";")
 ```
 
 ## Divergence entre régresseurs Insee (**SAS**) et **RJD**
