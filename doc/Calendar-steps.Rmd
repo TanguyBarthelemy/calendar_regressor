@@ -384,13 +384,23 @@ On peut classer en 2 catégories les jours fériés français :
 
 Il existe 3 jours fériés de la seconde catégories et ils dépendent tous les 3 de la date de Pâques : lundi de Pâques, jeudi de l'ascension et lundi de pentecôte.
 
-Seulement la date de Pâques suit le calendrier lunaire. Et la fréquence de Pâques (combinant calendrier grégorien et calendrier lunaire) est de 5700000 ans.
+Seulement la date de Pâques suit le calendrier lunaire. Et la fréquence de Pâques (combinant calendrier grégorien et calendrier lunaire) est de 5700000 ans (ref. [Wikipedia](https://en.wikipedia.org/wiki/Date_of_Easter), [Denis Roegel](https://inria.hal.science/hal-01009457/PDF/roegel2014easter-bracelets.pdf), [Histoire des jours fériés](https://lagrandehistoireducalendrier.wordpress.com/tag/paques/) et [OEIS](https://oeis.org/A348924/internal)).
 
-La répartition des occurences de la date de Paques sur 57000000 ans est la suivante :
+La répartition des occurences de la date de Paques sur 5700000 ans est la suivante :
+
+```{r plot_easter, echo = FALSE}
+plot_easter <- function(x) {
+    dates <- as.Date(names(x))
+    labels <- format(dates, "%d-%b")
+
+    plot(x, ylab = "Occurence de Pâques", xaxt = "n")
+    axis(1, at = seq_along(labels), labels = labels)
+    return(invisible(NULL))
+}
+```
 
 ```{r easter_occurence, echo = FALSE}
-easter_occurence <- calendar_easter$date_easter_meeus |> table()
-plot(easter_occurence, ylab = "Occurence de Pâques")
+plot_easter(calendar_easter$date_easter_meeus |> table())
 ```
 
 Mais cette répartition des jours de Pâques est différente selon la période que l'on considère.
@@ -398,13 +408,13 @@ Mais cette répartition des jours de Pâques est différente selon la période q
 Sur la période 2000-2399 (cycle du calendrier) :
 
 ```{r easter_occurence_400, echo = FALSE}
-plot(reduce_calendar(2000, 2399)$date_easter_meeus |> table(), ylab = "Occurence de Pâques")
+plot_easter(reduce_calendar(2000, 2399)$date_easter_meeus |> table())
 ```
 
 Sur la période 1970-2050 (cycle du calendrier) :
 
 ```{r easter_occurence_1970_2050, echo = FALSE}
-plot(reduce_calendar(1970, 2050)$date_easter_meeus |> table(), ylab = "Occurence de Pâques")
+plot_easter(reduce_calendar(1970, 2050)$date_easter_meeus |> table())
 ```
 
 En comparant le nombre de jour fériés par mois :
@@ -418,11 +428,11 @@ cal_1970_2050 <- reduce_calendar(1970, 2050) |>
     add_easter_holidays() |>
     summarise_by_easter(name = "1970-2050", freq = 12)
 
-cal_0_57000000 <- calendar_easter |>
+cal_0_5700000 <- calendar_easter |>
     add_easter_holidays() |>
     summarise_by_easter(name = "1-5700000", freq = 12)
 
-cal_0_57000000 |>
+cal_0_5700000 |>
     merge(y = cal_2000_2399, all = TRUE) |>
     merge(y = cal_1970_2050, all = TRUE) |>
     kableExtra::kable()
@@ -439,11 +449,11 @@ cal_1970_2050 <- reduce_calendar(1970, 2050) |>
     add_easter_holidays() |>
     summarise_by_easter(name = "1970-2050", freq = 4)
 
-cal_0_57000000 <- calendar_easter |>
+cal_0_5700000 <- calendar_easter |>
     add_easter_holidays() |>
     summarise_by_easter(name = "1-5700000", freq = 4)
 
-cal_0_57000000 |>
+cal_0_5700000 |>
     merge(y = cal_2000_2399, all = TRUE) |>
     merge(y = cal_1970_2050, all = TRUE) |>
     kableExtra::kable()
