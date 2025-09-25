@@ -545,9 +545,14 @@ lundi de pentecôte.
 
 Seulement la date de Pâques suit le calendrier lunaire. Et la fréquence
 de Pâques (combinant calendrier grégorien et calendrier lunaire) est de
-5700000 ans.
+5700000 ans (ref.
+[Wikipedia](https://en.wikipedia.org/wiki/Date_of_Easter), [Denis
+Roegel](https://inria.hal.science/hal-01009457/PDF/roegel2014easter-bracelets.pdf),
+[Histoire des jours
+fériés](https://lagrandehistoireducalendrier.wordpress.com/tag/paques/)
+et [OEIS](https://oeis.org/A348924/internal)).
 
-La répartition des occurences de la date de Paques sur 57000000 ans est
+La répartition des occurences de la date de Paques sur 5700000 ans est
 la suivante :
 
 ![](./figures/easter_occurence-1.png)<!-- -->
@@ -1243,9 +1248,14 @@ lundi de pentecôte.
 
 Seulement la date de Pâques suit le calendrier lunaire. Et la fréquence
 de Pâques (combinant calendrier grégorien et calendrier lunaire) est de
-5700000 ans.
+5700000 ans (ref.
+[Wikipedia](https://en.wikipedia.org/wiki/Date_of_Easter), [Denis
+Roegel](https://inria.hal.science/hal-01009457/PDF/roegel2014easter-bracelets.pdf),
+[Histoire des jours
+fériés](https://lagrandehistoireducalendrier.wordpress.com/tag/paques/)
+et [OEIS](https://oeis.org/A348924/internal)).
 
-La répartition des occurences de la date de Paques sur 57000000 ans est
+La répartition des occurences de la date de Paques sur 5700000 ans est
 la suivante :
 
 ![](./figures/easter_occurence-1.png)<!-- -->
