@@ -5,7 +5,8 @@ jobs:
     name: Render my calendar regressors
     runs-on: ubuntu-latest
     env:
-      GH_PAT : ${{ secrets.GITHUB_TOKEN }}
+      GH_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
