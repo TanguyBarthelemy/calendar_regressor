@@ -21,8 +21,16 @@ jobs:
       - name: Install libfribidi
         run: sudo apt install libharfbuzz-dev libfribidi-dev libtiff5-dev
 
-      - name: Install dependencies
-        run: Rscript -e 'install.packages(c("rmarkdown", "flextable", "kableExtra", "dplyr"), repos = "http://cran.us.r-project.org")'
+      - name: Install display dependencies
+        run: Rscript -e 'install.packages(c("rmarkdown", "flextable", "kableExtra"), repos = "http://cran.us.r-project.org")'
+
+      - name: Install tidyverse dependencies
+        run: Rscript -e 'install.packages(c("magrittr", "purrr", "haven", "lubridate", "dplyr", "tidyr", "stringr"), repos = "http://cran.us.r-project.org")'
+
+      - name: Install ts dependencies
+        run: |
+          Rscript -e 'install.packages(c("zoo", "remotes"), repos = "http://cran.us.r-project.org")'
+          Rscript -e 'remotes::install_github("rjdverse/rjd3toolkit")'
 
       - name: Render document
         run: Rscript ./doc/render.R
