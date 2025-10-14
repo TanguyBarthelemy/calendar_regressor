@@ -19,33 +19,34 @@ create_annual_calendar <- function(leap_year = FALSE) {
     return(annual_cal)
 }
 
-create_empty_calendar <- function(start = 1950L, end = 2022L, starting_day = "dimanche") {
-    starting_day <- tolower(starting_day)
-    weekday_en <- c("sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday")
-    weekday_fr <- c("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi")
+# La convention est que le dimanche c'est le 1. Voilà.
+create_empty_calendar <- function(start = 1950L, end = 2022L) {
 
-    if (starting_day %in% 1L:7L) {
-        message("Tu as choisi le ", weekday_fr[starting_day], " comme jour de début.")
-        index_day <- starting_day
-        starting_day <- weekday_fr[starting_day]
-    } else if (starting_day %in% weekday_fr) {
-        index_day <- (1L:7L)[weekday_fr == starting_day]
-    } else if (starting_day %in% weekday_en) {
-        index_day <- (1L:7L)[weekday_en == starting_day]
-        starting_day <- weekday_fr[index_day]
-    } else {
-        stop("L'argument starting_day doit être dans la liste suivante :", paste0(c(weekday_fr, weekday_en, 1L:7L), collapse = ", "))
+    if (length(start) == 1L) {
+        start <- c(start, 1L)
+    }
+    if (length(end) == 1L) {
+        end <- c(end, 1L)
     }
 
-    weekday_name_vect <- weekday_fr
+    weekday_list <- weekdays(as.Date(3:9), abbreviate = FALSE)
+    starting_day <- ts(start = start, frequency = 12L) |>
+        zoo::as.Date() |>
+        weekdays(abbreviate = FALSE) |>
+        tolower()
+    index_day <- which(tolower(weekday_list) == starting_day)
 
-    year <- start:end
-    bissextile <- (year %% 400L == 0L) | (year %% 4L == 0L & year %% 100L != 0L)
+    years <- start[1L]:end[1L]
+    bissextile <- (years %% 400L == 0L) | (years %% 4L == 0L & years %% 100L != 0L)
 
     empty_cal <- do.call(rbind, purrr::map2(
-        .x = year, .y = bissextile,
+        .x = years, .y = bissextile,
         .f = \(x, y) cbind(year = x, create_annual_calendar(leap_year = y))
     )) |>
+        dplyr::filter(
+            year > start[1L] | month_number >= start[2L],
+            year < end[1L] | month_number <= end[2L]
+        ) |>
         dplyr::mutate(
             week_number = as.integer(c(
                 rep(seq_len(dplyr::n() %/% 7L), each = 7L),
@@ -60,7 +61,7 @@ create_empty_calendar <- function(start = 1950L, end = 2022L, starting_day = "di
         dplyr::mutate(
             temp_nb_day_tot = seq_len(dplyr::n()) - 1L + index_day,
             weekday_number = (temp_nb_day_tot - 1L) %% 7L + 1L,
-            weekday_name = weekday_name_vect[weekday_number]
+            weekday_name = weekday_list[weekday_number]
         )
 
     return(empty_cal)
@@ -252,13 +253,13 @@ add_bridges <- function(calendar) {
     full_calendar <- calendar |>
         dplyr::group_by(week_number) |>
         dplyr::mutate(
-            v1 = max(weekday_name == "jeudi" & Off != 0L) & max(weekday_name == "vendredi" & In != 0L),
-            v2 = max(weekday_name == "mardi" & Off != 0L) & max(weekday_name == "lundi" & In != 0L)
+            v1 = max(weekday_number == 5L & Off != 0L) & max(weekday_number == 6L & In != 0L),
+            v2 = max(weekday_number == 3L & Off != 0L) & max(weekday_number == 2L & In != 0L)
         ) |>
         dplyr::ungroup() |>
         dplyr::mutate(
-            friday_bridge = v1 & weekday_name == "vendredi",
-            monday_bridge = v2 & weekday_name == "lundi"
+            friday_bridge = v1 & weekday_number == 6L,
+            monday_bridge = v2 & weekday_number == 2L
         ) |>
         dplyr::select(-v1, -v2)
     return(full_calendar)
@@ -355,13 +356,13 @@ summarise_by_period <- function(calendar,
     return(full_calendar)
 }
 
-create_french_calendar <- function(start = 1950L, end = 2022L, starting_day = "dimanche",
+create_french_calendar <- function(start = 1950L, end = 2022L,
                                    summary = TRUE, by = "month") {
     if (end < start) {
         stop("L'argument end doit se trouver après start.")
     }
 
-    calendar <- create_empty_calendar(start = start, end = end, starting_day = starting_day) |>
+    calendar <- create_empty_calendar(start = start, end = end) |>
         add_french_publics_holidays()
 
     if (summary) {
@@ -417,9 +418,9 @@ format_to_sas <- function(summarised_calendar, frequency = "mensuelle") {
     return(full_calendar)
 }
 
-replicate_sas_calendar <- function(start = 1950L, end = 2022L, starting_day = "dimanche",
+replicate_sas_calendar <- function(start = 1950L, end = 2022L,
                                    summary = TRUE, by = "month") {
-    calendar <- create_french_calendar(start = start, end = end, starting_day = starting_day, summary = TRUE, by = "month") |>
+    calendar <- create_french_calendar(start = start, end = end, summary = TRUE, by = "month") |>
         format_to_sas()
 
     return(calendar)

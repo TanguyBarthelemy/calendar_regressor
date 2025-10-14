@@ -1,5 +1,6 @@
-linters: linters_with_defaults(
-        line_length_linter = NULL,
+linters: lintr::all_linters(
+        # line_length_linter = lintr::line_length_linter(80L),
+        line_length_linter = lintr::line_length_linter(200L),
         indentation_linter(indent = 4L),
         object_usage_linter = NULL,
         commented_code_linter = NULL,

@@ -9,6 +9,8 @@
 ## Chargement des packages -----------------------------------------------------
 
 library("rjd3toolkit")
+library("dplyr")
+library("openxlsx")
 
 
 ## Chargement des fonctions principales ----------------------------------------
@@ -26,8 +28,7 @@ load(file = "./data/mean-sas.RData")
 
 cal1 <- create_french_calendar(
     summary = FALSE,
-    start = 1990L, end = 2030L,
-    starting_day = "lundi"
+    start = 1990L, end = 2030L
 )
 
 # Actual SAS regressors --------------------------------------------------------
@@ -92,8 +93,8 @@ repr_regs_mens_sas <- cal_sas |>
     dplyr::select(date, dplyr::starts_with("REG"))
 
 write.table(repr_regs_mens_sas,
-    sep = ";", file = "./output/repr_regs_mens_sas.csv",
-    row.names = FALSE
+            sep = ";", file = "./output/repr_regs_mens_sas.csv",
+            row.names = FALSE
 )
 
 
@@ -155,8 +156,8 @@ regs_mens_sas_corrected <- cal_sas_corrected |>
     dplyr::select(date, dplyr::starts_with("REG"))
 
 write.table(regs_mens_sas_corrected,
-    sep = ";", file = "./output/regs_mens_sas_corrected.csv",
-    row.names = FALSE
+            sep = ";", file = "./output/regs_mens_sas_corrected.csv",
+            row.names = FALSE
 )
 
 
@@ -165,19 +166,21 @@ write.table(regs_mens_sas_corrected,
 
 ## Calendar creation -----------------------------------------------------------
 
-french_calendar <- national_calendar(days = list(
-    fixed_day(7, 14), # Fete nationale
-    fixed_day(5, 8, validity = list(start = "1982-05-08")), # Victoire 2nd guerre mondiale
-    special_day("NEWYEAR"), # Nouvelle année
-    special_day("CHRISTMAS"), # Noël
-    special_day("MAYDAY"), # 1er mai
-    special_day("EASTERMONDAY"), # Lundi de Pâques
-    special_day("ASCENSION"), # attention +39 et pas 40 jeudi ascension
-    special_day("WHITMONDAY"), # Lundi de Pentecôte (1/2 en 2005 a verif)
-    special_day("ASSUMPTION"), # Assomption
-    special_day("ALLSAINTSDAY"), # Toussaint
-    special_day("ARMISTICE")
-))
+french_calendar <- national_calendar(
+    days = list(
+        Bastille_day = fixed_day(7, 14), # Bastille Day
+        Victory_day = fixed_day(5, 8, validity = list(start = "1982-05-08")), # Victoire 2nd guerre mondiale
+        NEWYEAR = special_day("NEWYEAR"), # Nouvelle année
+        CHRISTMAS = special_day("CHRISTMAS"), # Noël
+        MAYDAY = special_day("MAYDAY"), # 1er mai
+        EASTERMONDAY = special_day("EASTERMONDAY"), # Lundi de Pâques
+        ASCENSION = special_day("ASCENSION"), # attention +39 et pas 40 jeudi ascension
+        WHITMONDAY = special_day("WHITMONDAY"), # Lundi de Pentecôte (1/2 en 2005 a verif)
+        ASSUMPTION = special_day("ASSUMPTION"), # Assomption
+        ALLSAINTSDAY = special_day("ALLSAINTSDAY"), # Toussaint
+        ARMISTICE = special_day("ARMISTICE")
+    )
+)
 
 
 ## Regressor set creation ------------------------------------------------------
@@ -206,8 +209,20 @@ colnames(regs_mens_rjd) <- sapply(c(1, 2, 3, 5, 6), \(k) paste0("REG", k, "_AC",
 
 regs_mens_rjd <- data.frame(
     date = regs_mens_rjd |> time() |> zoo::as.Date(),
+    LY = lp_variable(
+        frequency = 12L,
+        start = c(1990L, 1L),
+        length = 492L,
+        type = "LeapYear"
+    ),
     regs_mens_rjd
 )
+
+
+openxlsx::write.xlsx(x = regs_mens_rjd, file = "./output/regs_mens_rjd.xlsx")
+
+regs_mens_rjd <- regs_mens_rjd |>
+    mutate(date = as.character(date))
 
 write.table(
     x = regs_mens_rjd,
@@ -228,7 +243,7 @@ regs_trim_rjd <- lapply(
             calendar = french_calendar,
             frequency = 4L,
             start = c(1990L, 1L),
-            length = 164,
+            length = 164L,
             groups = group
         )
     }
@@ -239,15 +254,25 @@ colnames(regs_trim_rjd) <- sapply(c(1, 2, 3, 5, 6), \(k) paste0("REG", k, "_AC",
 
 regs_trim_rjd <- data.frame(
     date = regs_trim_rjd |> time() |> zoo::as.Date(),
+    LY = lp_variable(
+        frequency = 4L,
+        start = c(1990L, 1L),
+        length = 164,
+        type = "LeapYear"
+    ),
     regs_trim_rjd
 )
+
+write.xlsx(x = regs_trim_rjd, file = "./output/regs_trim_rjd.xlsx")
+
+regs_trim_rjd <- regs_trim_rjd |>
+    mutate(date = as.character(date))
 
 write.table(
     x = regs_trim_rjd,
     sep = ";", file = "./output/regs_trim_rjd.csv",
     row.names = FALSE
 )
-
 
 # Replicate rjd3 package method ------------------------------------------------
 
@@ -307,6 +332,6 @@ repr_regs_mens_rjd <- repr_cal_rjd |>
     dplyr::select(date, dplyr::starts_with("REG"))
 
 write.table(repr_regs_mens_rjd,
-    sep = ";", file = "./output/repr_regs_mens_rjd.csv",
-    row.names = FALSE
+            sep = ";", file = "./output/repr_regs_mens_rjd.csv",
+            row.names = FALSE
 )
