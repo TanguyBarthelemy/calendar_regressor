@@ -92,9 +92,10 @@ repr_regs_mens_sas <- cal_sas |>
     ) |>
     dplyr::select(date, dplyr::starts_with("REG"))
 
-write.table(repr_regs_mens_sas,
-            sep = ";", file = "./output/repr_regs_mens_sas.csv",
-            row.names = FALSE
+write.table(
+    x = repr_regs_mens_sas,
+    sep = ";", file = "./output/repr_regs_mens_sas.csv",
+    row.names = FALSE
 )
 
 
@@ -155,9 +156,10 @@ regs_mens_sas_corrected <- cal_sas_corrected |>
     ) |>
     dplyr::select(date, dplyr::starts_with("REG"))
 
-write.table(regs_mens_sas_corrected,
-            sep = ";", file = "./output/regs_mens_sas_corrected.csv",
-            row.names = FALSE
+write.table(
+    x = regs_mens_sas_corrected,
+    sep = ";", file = "./output/regs_mens_sas_corrected.csv",
+    row.names = FALSE
 )
 
 
@@ -331,7 +333,8 @@ repr_regs_mens_rjd <- repr_cal_rjd |>
     ) |>
     dplyr::select(date, dplyr::starts_with("REG"))
 
-write.table(repr_regs_mens_rjd,
-            sep = ";", file = "./output/repr_regs_mens_rjd.csv",
-            row.names = FALSE
+write.table(
+    x = repr_regs_mens_rjd,
+    sep = ";", file = "./output/repr_regs_mens_rjd.csv",
+    row.names = FALSE
 )

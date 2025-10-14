@@ -4,6 +4,28 @@ Tanguy
 
 
 
+    ## 
+    ## Attaching package: 'kableExtra'
+
+    ## The following objects are masked from 'package:flextable':
+    ## 
+    ##     as_image, footnote
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following object is masked from 'package:kableExtra':
+    ## 
+    ##     group_rows
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
 ## Divergence entre régresseurs Insee (**SAS**) et **RJD**
 
 ### Couleur des paragraphes
@@ -186,7 +208,7 @@ des types de jours :
   - $`G_6`$ = samedi ouvrables
   - $`G_0`$ = les autres)
 
-<img src="./figures/cjo_sets_table-1.png" width="1301" />
+![](./figures/cjo_sets_table-1.png)<!-- -->
 
 #### Calculs des jeux de régresseurs
 
@@ -523,9 +545,14 @@ lundi de pentecôte.
 
 Seulement la date de Pâques suit le calendrier lunaire. Et la fréquence
 de Pâques (combinant calendrier grégorien et calendrier lunaire) est de
-5700000 ans.
+5700000 ans (ref.
+[Wikipedia](https://en.wikipedia.org/wiki/Date_of_Easter), [Denis
+Roegel](https://inria.hal.science/hal-01009457/PDF/roegel2014easter-bracelets.pdf),
+[Histoire des jours
+fériés](https://lagrandehistoireducalendrier.wordpress.com/tag/paques/)
+et [OEIS](https://oeis.org/A348924/internal)).
 
-La répartition des occurences de la date de Paques sur 57000000 ans est
+La répartition des occurences de la date de Paques sur 5700000 ans est
 la suivante :
 
 ![](./figures/easter_occurence-1.png)<!-- -->
@@ -722,6 +749,28 @@ Tanguy
 
 
 
+    ## 
+    ## Attaching package: 'kableExtra'
+
+    ## The following objects are masked from 'package:flextable':
+    ## 
+    ##     as_image, footnote
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following object is masked from 'package:kableExtra':
+    ## 
+    ##     group_rows
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
+
 ## Divergence entre régresseurs Insee (**SAS**) et **RJD**
 
 ### Couleur des paragraphes
@@ -904,7 +953,7 @@ des types de jours :
   - $`G_6`$ = samedi ouvrables
   - $`G_0`$ = les autres)
 
-<img src="./figures/cjo_sets_table-1.png" width="1301" />
+![](./figures/cjo_sets_table-1.png)<!-- -->
 
 #### Calculs des jeux de régresseurs
 
@@ -1199,9 +1248,14 @@ lundi de pentecôte.
 
 Seulement la date de Pâques suit le calendrier lunaire. Et la fréquence
 de Pâques (combinant calendrier grégorien et calendrier lunaire) est de
-5700000 ans.
+5700000 ans (ref.
+[Wikipedia](https://en.wikipedia.org/wiki/Date_of_Easter), [Denis
+Roegel](https://inria.hal.science/hal-01009457/PDF/roegel2014easter-bracelets.pdf),
+[Histoire des jours
+fériés](https://lagrandehistoireducalendrier.wordpress.com/tag/paques/)
+et [OEIS](https://oeis.org/A348924/internal)).
 
-La répartition des occurences de la date de Paques sur 57000000 ans est
+La répartition des occurences de la date de Paques sur 5700000 ans est
 la suivante :
 
 ![](./figures/easter_occurence-1.png)<!-- -->
