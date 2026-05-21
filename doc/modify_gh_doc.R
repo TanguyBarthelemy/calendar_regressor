@@ -7,12 +7,17 @@ remove_double_dollar <- function(file) {
     # Parcourir les lignes
     for (line in input) {
         if (grepl("^\\$\\$", line)) {
+            new_line <- gsub(
+                pattern = "^\\$\\$|\\$\\$$",
+                replacement = "",
+                x = line
+            )
 
-            new_line <- gsub(pattern = "^\\$\\$|\\$\\$$",
-                             replacement = "", x = line)
-
-            output <- paste0(output, paste("```math", new_line, "```", sep = "\n"), "\n")
-
+            output <- paste0(
+                output,
+                paste("```math", new_line, "```", sep = "\n"),
+                "\n"
+            )
         } else {
             output <- paste0(output, line, "\n")
         }
@@ -58,15 +63,13 @@ modify_sum <- function(file) {
     pattern <- "\\$`[^$]*\\\\sum[^$]*`\\$"
 
     for (k in seq_along(input)) {
+        the_line <- input[k]
+        new_lines <- the_line
 
-        line <- input[k]
-        new_lines <- line
-
-        if (grepl(pattern, line)) {
-
-            matches <- gregexpr(pattern, line)
-            texts <- stringr::str_split(line, pattern) |> unlist()
-            math <- regmatches(line, matches) |> unlist()
+        if (grepl(pattern, the_line)) {
+            matches <- gregexpr(pattern, the_line)
+            texts <- stringr::str_split(the_line, pattern) |> unlist()
+            math <- regmatches(the_line, matches) |> unlist()
             math <- math |> substr(3, nchar(math))
             math <- math |> substr(1, nchar(math) - 2)
 

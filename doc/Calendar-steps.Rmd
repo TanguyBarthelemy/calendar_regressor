@@ -17,16 +17,14 @@ knitr::opts_knit$set(root.dir = "..")
 ```
 
 ```{r import data, echo = FALSE}
-# load("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_régresseurs_CJO/data/data4rmd.RData")
 load("./data/data4rmd.RData")
 
-# reg_cjo <- read.csv("C:/Users/UTZK0M/Documents/Projets R/Projets MTS/Recherche/0_Div_régresseurs_CJO/data/reg_groups.csv", sep = ";")
 reg_cjo <- read.csv("./data/reg_groups.csv", sep = ";")
 ```
 
 ```{r chargement packages, echo = FALSE}
 library("flextable")
-library("kableExtra")
+loadNamespace("kableExtra")
 library("dplyr")
 ```
 
@@ -188,7 +186,7 @@ tbl <- reg_cjo |>
     bg(i = 2, j = 9:15, bg = "#fffdd7", part = "header") |>
     bg(j = -1, bg = choose_color, part = "body") |>
     color(j = -1, color = choose_color, part = "body") |>
-    flextable::width(j = 2:15, .4)
+    flextable::width(j = 2:15, 0.4)
 
 tbl
 ```
@@ -356,7 +354,7 @@ jours <- data.frame(first_1 = c(6, rep(0, 399)), annee = 0:399) |>
         first_2 = (cumsum(first_1 + 365 + bisextile) - 1) %% 7 + 1
     )
 
-premier_de_l_an <- jours$first_2 |> table()
+premier_de_l_an <- table(jours$first_2)
 names(premier_de_l_an) <- c("Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche")
 ```
 
@@ -391,16 +389,16 @@ La répartition des occurences de la date de Paques sur 5700000 ans est la suiva
 ```{r plot_easter, echo = FALSE}
 plot_easter <- function(x) {
     dates <- as.Date(names(x))
-    labels <- format(dates, "%d-%b")
+    the_labels <- format(dates, "%d-%b")
 
     plot(x, ylab = "Occurence de Pâques", xaxt = "n")
-    axis(1, at = seq_along(labels), labels = labels)
+    axis(1, at = seq_along(the_labels), labels = the_labels)
     return(invisible(NULL))
 }
 ```
 
 ```{r easter_occurence, echo = FALSE}
-plot_easter(calendar_easter$date_easter_meeus |> table())
+plot_easter(table(calendar_easter$date_easter_meeus))
 ```
 
 Mais cette répartition des jours de Pâques est différente selon la période que l'on considère.
@@ -469,7 +467,7 @@ Mais est ce une raison pour prendre en compte la totalité de la série ou peut-
 
 ```{r long-term-mean, echo = FALSE}
 cal1 <- calendar_other_holidays |>
-    dplyr::filter(year >= 2000 & year <= 2399) |>
+    dplyr::filter(year >= 2000, year <= 2399) |>
     dplyr::summarise(
         Day = dplyr::n(),
         Off = sum(
@@ -485,7 +483,7 @@ cal1 <- calendar_other_holidays |>
     )
 
 cal2 <- calendar_other_holidays |>
-    dplyr::filter(year >= 1970 & year <= 2050) |>
+    dplyr::filter(year >= 1970, year <= 2050) |>
     dplyr::summarise(
         Day = dplyr::n(),
         Off = sum(

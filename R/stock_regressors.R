@@ -1,4 +1,3 @@
-
 # Try to replicate stock td
 
 library("rjd3toolkit")
@@ -35,12 +34,12 @@ compute_stock <- function(frequency = 12L, start = 2000, end = 2020, w = 15L) {
             ) |>
             dplyr::filter(last_month)
     } else {
-        stop("wrong frequency")
+        stop("wrong frequency", call. = FALSE)
     }
     regs <- regs |>
         dplyr::filter(
-            ((w <= NbDays) & (month_day_number == w))
-            | ((w > NbDays) & (month_day_number == NbDays))
+            ((w <= NbDays) & (month_day_number == w)) |
+                ((w > NbDays) & (month_day_number == NbDays))
         ) |>
         dplyr::select(year, period_number, weekday_number) |>
         dplyr::mutate(
@@ -71,14 +70,31 @@ compute_stock <- function(frequency = 12L, start = 2000, end = 2020, w = 15L) {
 for (k in 1:100) {
     w <- sample(-100:100, size = 1)
     frequency <- sample(c(4, 12), size = 1)
-    start <- c(sample(1950:2020, size = 1), sample(1:frequency, size = 1))
-    end <- c(sample((start[1]+1):2025, size = 1), sample(1:frequency, size = 1))
+    start <- c(sample(1950:2020, size = 1), sample.int(frequency, size = 1))
+    end <- c(
+        sample((start[1] + 1):2025, size = 1),
+        sample.int(frequency, size = 1)
+    )
     print(start)
     print(end)
-    length <- (end[1L] - start[1] + 1) * frequency - start[2L] + 1L - (frequency - end[2L])
+    length <- (end[1L] - start[1] + 1) *
+        frequency -
+        start[2L] +
+        1L -
+        (frequency - end[2L])
 
-    stock_tb <- compute_stock(frequency = frequency, w = w, start = start, end = end)
-    stock_rjd <- stock_td(frequency = frequency, start = start, length = length, w = w)
+    stock_tb <- compute_stock(
+        frequency = frequency,
+        w = w,
+        start = start,
+        end = end
+    )
+    stock_rjd <- stock_td(
+        frequency = frequency,
+        start = start,
+        length = length,
+        w = w
+    )
 
     print(waldo::compare(stock_rjd, stock_tb))
 }

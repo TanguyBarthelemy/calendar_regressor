@@ -2,9 +2,7 @@
 #####                    Calcul des jeux de régresseurs                    #####
 ################################################################################
 
-
 # Introduction -----------------------------------------------------------------
-
 
 ## Chargement des packages -----------------------------------------------------
 
@@ -28,7 +26,8 @@ load(file = "./data/mean-sas.RData")
 
 cal1 <- create_french_calendar(
     summary = FALSE,
-    start = 1990L, end = 2030L
+    start = 1990L,
+    end = 2030L
 )
 
 # Actual SAS regressors --------------------------------------------------------
@@ -37,7 +36,7 @@ regs_mens_sas <- read.csv("./regresseurs/reg_cjo_m.csv", sep = ";")
 
 # Replicate Dominique method ---------------------------------------------------
 
-cal_sas <- cal1 |> summarise_by_period(frequency = 12L, mean_table = mean_sas)
+cal_sas <- summarise_by_period(calendar = cal1, frequency = 12L, mean_table = mean_sas)
 
 repr_regs_mens_sas <- cal_sas |>
     dplyr::mutate(
@@ -86,7 +85,9 @@ repr_regs_mens_sas <- cal_sas |>
         REG6_AC6 = G6 - G0 * 1 / 8,
 
         date = as.Date(paste(
-            year, sprintf("%02.f", month_number), "01",
+            year,
+            sprintf("%02.f", month_number),
+            "01",
             sep = "-"
         ))
     ) |>
@@ -94,14 +95,15 @@ repr_regs_mens_sas <- cal_sas |>
 
 write.table(
     x = repr_regs_mens_sas,
-    sep = ";", file = "./output/repr_regs_mens_sas.csv",
+    sep = ";",
+    file = "./output/repr_regs_mens_sas.csv",
     row.names = FALSE
 )
 
 
 # Correct Dominique method -----------------------------------------------------
 
-cal_sas_corrected <- cal1 |> summarise_by_period(frequency = 12L, mean_table = mean_monthly)
+cal_sas_corrected <- summarise_by_period(calendar = cal1, frequency = 12L, mean_table = mean_monthly)
 
 regs_mens_sas_corrected <- cal_sas_corrected |>
     dplyr::mutate(
@@ -150,7 +152,9 @@ regs_mens_sas_corrected <- cal_sas_corrected |>
         REG6_AC6 = G6 - G0 * 1 / 8,
 
         date = as.Date(paste(
-            year, sprintf("%02.f", month_number), "01",
+            year,
+            sprintf("%02.f", month_number),
+            "01",
             sep = "-"
         ))
     ) |>
@@ -158,13 +162,13 @@ regs_mens_sas_corrected <- cal_sas_corrected |>
 
 write.table(
     x = regs_mens_sas_corrected,
-    sep = ";", file = "./output/regs_mens_sas_corrected.csv",
+    sep = ";",
+    file = "./output/regs_mens_sas_corrected.csv",
     row.names = FALSE
 )
 
 
 # With rjd3 packages -----------------------------------------------------------
-
 
 ## Calendar creation -----------------------------------------------------------
 
@@ -190,11 +194,13 @@ french_calendar <- national_calendar(
 ### Regressor monthly ----------------------------------------------------------
 
 regs_mens_rjd <- lapply(
-    X = list(c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
-             c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
-             c(1L, 2L, 2L, 2L, 2L, 3L, 0L),
-             c(1L, 2L, 3L, 4L, 5L, 0L, 0L),
-             c(1L, 2L, 3L, 4L, 5L, 6L, 0L)),
+    X = list(
+        c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
+        c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
+        c(1L, 2L, 2L, 2L, 2L, 3L, 0L),
+        c(1L, 2L, 3L, 4L, 5L, 0L, 0L),
+        c(1L, 2L, 3L, 4L, 5L, 6L, 0L)
+    ),
     FUN = \(group) {
         calendar_td(
             calendar = french_calendar,
@@ -207,7 +213,11 @@ regs_mens_rjd <- lapply(
 ) |>
     do.call(what = cbind)
 
-colnames(regs_mens_rjd) <- sapply(c(1, 2, 3, 5, 6), \(k) paste0("REG", k, "_AC", 1:k)) |> do.call(what = c)
+colnames(regs_mens_rjd) <- sapply(
+    c(1, 2, 3, 5, 6),
+    \(k) paste0("REG", k, "_AC", 1:k)
+) |>
+    do.call(what = c)
 
 regs_mens_rjd <- data.frame(
     date = regs_mens_rjd |> time() |> zoo::as.Date(),
@@ -228,18 +238,21 @@ regs_mens_rjd <- regs_mens_rjd |>
 
 write.table(
     x = regs_mens_rjd,
-    sep = ";", file = "./output/regs_mens_rjd.csv",
+    sep = ";",
+    file = "./output/regs_mens_rjd.csv",
     row.names = FALSE
 )
 
 ### Regressor quaterly ---------------------------------------------------------
 
 regs_trim_rjd <- lapply(
-    X = list(c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
-             c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
-             c(1L, 2L, 2L, 2L, 2L, 3L, 0L),
-             c(1L, 2L, 3L, 4L, 5L, 0L, 0L),
-             c(1L, 2L, 3L, 4L, 5L, 6L, 0L)),
+    X = list(
+        c(1L, 1L, 1L, 1L, 1L, 0L, 0L),
+        c(1L, 1L, 1L, 1L, 1L, 2L, 0L),
+        c(1L, 2L, 2L, 2L, 2L, 3L, 0L),
+        c(1L, 2L, 3L, 4L, 5L, 0L, 0L),
+        c(1L, 2L, 3L, 4L, 5L, 6L, 0L)
+    ),
     FUN = \(group) {
         calendar_td(
             calendar = french_calendar,
@@ -252,7 +265,11 @@ regs_trim_rjd <- lapply(
 ) |>
     do.call(what = cbind)
 
-colnames(regs_trim_rjd) <- sapply(c(1, 2, 3, 5, 6), \(k) paste0("REG", k, "_AC", 1:k)) |> do.call(what = c)
+colnames(regs_trim_rjd) <- sapply(
+    c(1, 2, 3, 5, 6),
+    \(k) paste0("REG", k, "_AC", 1:k)
+) |>
+    do.call(what = c)
 
 regs_trim_rjd <- data.frame(
     date = regs_trim_rjd |> time() |> zoo::as.Date(),
@@ -272,13 +289,14 @@ regs_trim_rjd <- regs_trim_rjd |>
 
 write.table(
     x = regs_trim_rjd,
-    sep = ";", file = "./output/regs_trim_rjd.csv",
+    sep = ";",
+    file = "./output/regs_trim_rjd.csv",
     row.names = FALSE
 )
 
 # Replicate rjd3 package method ------------------------------------------------
 
-repr_cal_rjd <- cal1 |> summarise_by_period(frequency = 12L, mean_table = mean_rjd)
+repr_cal_rjd <- summarise_by_period(calendar = cal1, frequency = 12L, mean_table = mean_rjd)
 
 repr_regs_mens_rjd <- repr_cal_rjd |>
     dplyr::mutate(
@@ -327,7 +345,9 @@ repr_regs_mens_rjd <- repr_cal_rjd |>
         REG6_AC6 = G6 - G0 * 1 / 1,
 
         date = as.Date(paste(
-            year, sprintf("%02.f", month_number), "01",
+            year,
+            sprintf("%02.f", month_number),
+            "01",
             sep = "-"
         ))
     ) |>
@@ -335,6 +355,7 @@ repr_regs_mens_rjd <- repr_cal_rjd |>
 
 write.table(
     x = repr_regs_mens_rjd,
-    sep = ";", file = "./output/repr_regs_mens_rjd.csv",
+    sep = ";",
+    file = "./output/repr_regs_mens_rjd.csv",
     row.names = FALSE
 )
