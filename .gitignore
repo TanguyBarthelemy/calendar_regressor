@@ -47,3 +47,7 @@ vignettes/*.pdf
 *.html
 
 TO_DO
+.positai
+
+archive/
+sas/
