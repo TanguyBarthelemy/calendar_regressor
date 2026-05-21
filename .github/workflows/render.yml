@@ -39,6 +39,13 @@ jobs:
 
       - uses: r-lib/actions/setup-tinytex@v2
 
+      - name: Install ubuntu deps
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install libcurl4-openssl-dev
+          sudo apt-get install -y libuv1-dev
+
       - name: Install display dependencies
         run: Rscript -e 'install.packages(c("rmarkdown", "flextable", "kableExtra"), repos = "http://cran.us.r-project.org")'
 
@@ -46,9 +53,7 @@ jobs:
         run: Rscript -e 'install.packages(c("magrittr", "purrr", "haven", "lubridate", "dplyr", "tidyr", "stringr"), repos = "http://cran.us.r-project.org")'
 
       - name: Install ts dependencies
-        run: |
-          Rscript -e 'install.packages(c("zoo", "remotes"), repos = "http://cran.us.r-project.org")'
-          Rscript -e 'remotes::install_github("rjdverse/rjd3toolkit")'
+        run: Rscript -e 'install.packages(c("zoo", "remotes", "rjd3toolkit"), repos = "http://cran.us.r-project.org")'
 
       - name: Render document
         run: Rscript ./doc/render.R
