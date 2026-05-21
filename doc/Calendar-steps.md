@@ -4,19 +4,10 @@ Tanguy
 
 
 
-    ## 
-    ## Attaching package: 'kableExtra'
-
-    ## The following objects are masked from 'package:flextable':
-    ## 
-    ##     as_image, footnote
+    ## <environment: namespace:kableExtra>
 
     ## 
     ## Attaching package: 'dplyr'
-
-    ## The following object is masked from 'package:kableExtra':
-    ## 
-    ##     group_rows
 
     ## The following objects are masked from 'package:stats':
     ## 
@@ -749,19 +740,10 @@ Tanguy
 
 
 
-    ## 
-    ## Attaching package: 'kableExtra'
-
-    ## The following objects are masked from 'package:flextable':
-    ## 
-    ##     as_image, footnote
+    ## <environment: namespace:kableExtra>
 
     ## 
     ## Attaching package: 'dplyr'
-
-    ## The following object is masked from 'package:kableExtra':
-    ## 
-    ##     group_rows
 
     ## The following objects are masked from 'package:stats':
     ## 
