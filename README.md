@@ -23,7 +23,10 @@ comprendre comment sont créés les régresseurs de calendriers.
 
 ## Résultat et production
 
-Après l’étude nous avons rédigé différents documents : - des programmes
-R qui reproduisent la méthode de création des régresseurs SAS et par
-RJD - une petite documentation des programmes et de la théorie des
-régresseurs de calendrier - des jeux de régresseurs mis à jour
+Après l’étude nous avons rédigé différents documents :
+
+- des programmes R qui reproduisent la méthode de création des
+  régresseurs SAS et par RJD
+- une petite documentation des programmes et de la théorie des
+  régresseurs de calendrier
+- des jeux de régresseurs mis à jour
