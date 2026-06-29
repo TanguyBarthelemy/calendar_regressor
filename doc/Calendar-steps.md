@@ -4,19 +4,6 @@ Tanguy
 
 
 
-    ## <environment: namespace:kableExtra>
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
 ## Divergence entre régresseurs Insee (**SAS**) et **RJD**
 
 ### Couleur des paragraphes
@@ -231,8 +218,8 @@ des groupes :
 <div class="blue">
 
 - Pour les jeux de régresseurs issus de JD+ (*package*
-  ***rjd3toolkit***), les $`\omega_k`$ sont calculés entre les jours
-  d’une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au
+  ***rjd3toolkit***), les $`\omega_k`$ sont calculés entre les jours d’une
+  semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au
   vendredi) et 2 jours de week-end (samedi et dimanche).
   - pour REG6, $`\omega_k = 1`$ car chaque groupe $`G_{i}`$ ne contient
     qu’un jour (du lundi au dimanche)
@@ -740,19 +727,6 @@ Tanguy
 
 
 
-    ## <environment: namespace:kableExtra>
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
 ## Divergence entre régresseurs Insee (**SAS**) et **RJD**
 
 ### Couleur des paragraphes
@@ -967,8 +941,8 @@ des groupes :
 <div class="blue">
 
 - Pour les jeux de régresseurs issus de JD+ (*package*
-  ***rjd3toolkit***), les $`\omega_k`$ sont calculés entre les jours
-  d’une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au
+  ***rjd3toolkit***), les $`\omega_k`$ sont calculés entre les jours d’une
+  semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au
   vendredi) et 2 jours de week-end (samedi et dimanche).
   - pour REG6, $`\omega_k = 1`$ car chaque groupe $`G_{i}`$ ne contient
     qu’un jour (du lundi au dimanche)
