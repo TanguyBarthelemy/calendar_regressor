@@ -22,9 +22,9 @@ load("./data/data4rmd.RData")
 reg_cjo <- read.csv("./data/reg_groups.csv", sep = ";")
 ```
 
-```{r chargement packages, echo = FALSE}
+```{r chargement packages, echo = FALSE, include = FALSE}
 library("flextable")
-loadNamespace("kableExtra")
+requireNamespace("kableExtra")
 library("dplyr")
 ```
 
