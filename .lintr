@@ -1,5 +1,6 @@
 linters: lintr::all_linters(
         lintr::line_length_linter(110L),
+        #line_length_linter(length = 80L),
         indentation_linter(indent = 4L),
         library_call_linter = NULL,
         return_linter = NULL,
@@ -8,9 +9,8 @@ linters: lintr::all_linters(
         commented_code_linter = NULL,
         nested_pipe_linter = NULL,
         consecutive_mutate_linter = NULL,
-        nonportable_path_linter = NULL,
-        #line_length_linter(length = 80L),
-        implicit_integer_linter = NULL
+        nonportable_path_linter = NULL
+        #implicit_integer_linter = NULL
     )
 encoding: "UTF-8"
 exclusions: list(

@@ -348,7 +348,7 @@ add_french_publics_holidays <- function(calendar, bridges = FALSE) {
     return(full_calendar)
 }
 
-c <- function(
+summarise_by_period <- function(
     calendar,
     frequency = "mensuelle",
     mean_table = mean_monthly

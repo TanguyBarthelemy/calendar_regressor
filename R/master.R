@@ -32,7 +32,7 @@ cal1 <- create_french_calendar(
 
 # Actual SAS regressors --------------------------------------------------------
 
-regs_mens_sas <- read.csv("./regresseurs/reg_cjo_m.csv", sep = ";")
+# regs_mens_sas <- read.csv("./regresseurs/reg_cjo_m.csv", sep = ";")
 
 # Replicate Dominique method ---------------------------------------------------
 
@@ -230,7 +230,7 @@ regs_mens_rjd <- data.frame(
     regs_mens_rjd
 )
 
-
+dir.create("output")
 openxlsx::write.xlsx(x = regs_mens_rjd, file = "./output/regs_mens_rjd.xlsx")
 
 regs_mens_rjd <- regs_mens_rjd |>

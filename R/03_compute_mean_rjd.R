@@ -14,7 +14,7 @@ load("./data/easter_mean_rjd.RData")
 
 length_mois <- c(31L, 28L, 31L, 30L, 31L, 30L, 31L, 31L, 30L, 31L, 30L, 31L)
 
-mean_rjd <- crossing(month_number = 1:12, weekday_number = 1:7) |>
+mean_rjd <- crossing(month_number = 1L:12L, weekday_number = 1L:7L) |>
     dplyr::mutate(
         Day_mean = rep(length_mois / 7, each = 7),
         Off_mean = 0,

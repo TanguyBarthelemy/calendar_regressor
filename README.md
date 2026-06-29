@@ -10,7 +10,7 @@
 [![Doc in
 PDF](https://img.shields.io/badge/Doc-PDF-blue)](https://github.com/TanguyBarthelemy/calendar_regressor/blob/main/doc/Calendar-steps.pdf)
 [![Doc in
-HTML](https://img.shields.io/badge/Doc-HTML-blue)](https://github.com/TanguyBarthelemy/calendar_regressor/blob/main/doc/Calendar-steps.html)
+HTML](https://img.shields.io/badge/Doc-HTML-blue)](https://htmlpreview.github.io/?https://github.com/TanguyBarthelemy/calendar_regressor/blob/main/doc/Calendar-steps.html)
 <!-- badges: end -->
 
 Le but de ce projet est d’étudier les possibles divergences entre les

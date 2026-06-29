@@ -209,7 +209,7 @@ $$ \omega_k = \frac{\# group_k}{\# group_0} $$
 
 <div class = "blue">
 
-- Pour les jeux de régresseurs issus de JD+ (*package* ***rjd3modelling***), les $\omega_k$ sont calculés entre les jours d'une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
+- Pour les jeux de régresseurs issus de JD+ (*package* ***rjd3toolkit***), les $\omega_k$ sont calculés entre les jours d'une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au vendredi) et 2 jours de week-end (samedi et dimanche).
     * pour REG6, $\omega_k = 1$ car chaque groupe $G_{i}$ ne contient qu'un jour (du lundi au dimanche)
     * pour REG1, $\omega_k = \frac{5}{2}$ car le groupe 1 $G_1$ (jours ouvrables) contient les jours du lundi au vendredi et le groupe 0 $G_0$ contient le samedi et le dimanche.
     * ... selon les configurations des groupes

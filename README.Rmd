@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 [![lint](https://github.com/TanguyBarthelemy/calendar_regressor/actions/workflows/lint-project.yml/badge.svg)](https://github.com/TanguyBarthelemy/calendar_regressor/actions/workflows/lint-project.yml)
 
 [![Doc in PDF](https://img.shields.io/badge/Doc-PDF-blue)](https://github.com/TanguyBarthelemy/calendar_regressor/blob/main/doc/Calendar-steps.pdf)
-[![Doc in HTML](https://img.shields.io/badge/Doc-HTML-blue)](https://github.com/TanguyBarthelemy/calendar_regressor/blob/main/doc/Calendar-steps.html)
+[![Doc in HTML](https://img.shields.io/badge/Doc-HTML-blue)](https://htmlpreview.github.io/?https://github.com/TanguyBarthelemy/calendar_regressor/blob/main/doc/Calendar-steps.html)
 <!-- badges: end -->
 
 Le but de ce projet est d'étudier les possibles divergences entre les régresseurs de calendriers générés par les programmes SAS (écrit par Dominique LADIRAY) et par les nouveaux packages du rjduniverse (*rjd3toolkit*).

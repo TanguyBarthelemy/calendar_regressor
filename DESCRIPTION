@@ -1,0 +1,27 @@
+Type: Project
+Package: calendar_regressor
+Title: Calcul des régresseurs de calendrier
+Version: 0.0.1
+Authors@R: 
+    person("Tanguy", "Barthelemy", , "tanguy.barthelemy@insee.fr", role = c("aut", "cre"))
+Description: Ce projet explique le calcul des régresseurs de calendrier 
+  utilisés dans un modèle REG-ARIMA de désaisonnalisation. Il présente la 
+  méthodologie utilisée dans les anciens programmes SAS et les nouveaux 
+  programmes Java de JDemetra+.
+Imports:
+    dplyr,
+	flextable,
+	kableExtra,
+	knitr,
+	openxlsx,
+	purrr,
+	rjd3toolkit,
+	rmarkdown,
+	stringr,
+	tidyr,
+	waldo,
+	zoo
+License: EUPL
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0

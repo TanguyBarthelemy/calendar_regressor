@@ -231,7 +231,7 @@ des groupes :
 <div class="blue">
 
 - Pour les jeux de régresseurs issus de JD+ (*package*
-  ***rjd3modelling***), les $`\omega_k`$ sont calculés entre les jours
+  ***rjd3toolkit***), les $`\omega_k`$ sont calculés entre les jours
   d’une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au
   vendredi) et 2 jours de week-end (samedi et dimanche).
   - pour REG6, $`\omega_k = 1`$ car chaque groupe $`G_{i}`$ ne contient
@@ -967,7 +967,7 @@ des groupes :
 <div class="blue">
 
 - Pour les jeux de régresseurs issus de JD+ (*package*
-  ***rjd3modelling***), les $`\omega_k`$ sont calculés entre les jours
+  ***rjd3toolkit***), les $`\omega_k`$ sont calculés entre les jours
   d’une semaine classique. Ainsi, il y a 5 jours ouvrables (du lundi au
   vendredi) et 2 jours de week-end (samedi et dimanche).
   - pour REG6, $`\omega_k = 1`$ car chaque groupe $`G_{i}`$ ne contient

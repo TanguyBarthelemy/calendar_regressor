@@ -34,7 +34,6 @@ calendar_easter <- data.frame(year = 0:(5700000 - 1)) |>
             "-",
             sprintf("%02.f", day_easter_meeus)
         )
-        # date_easter_meeus = as.Date(paste0("2000-", sprintf("%02.f", month_easter_meeus), "-", day_easter_meeus))
     ) |>
     dplyr::select(year, month_easter_meeus, day_easter_meeus, date_easter_meeus)
 
