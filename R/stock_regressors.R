@@ -8,14 +8,14 @@ source("./R/01_create_french_calendar.R")
 
 # Stock 12 ----------------------------------------------------------------
 
-compute_stock <- function(frequency = 12L, start = 2000, end = 2020, w = 15L) {
+compute_stock <- function(frequency = 12L, start = 2000L, end = 2020L, w = 15L) {
     if (length(end) == 1L) end <- c(end, 1L)
     weekday_df <- data.frame(
-        name = weekdays(as.Date(3:9), abbreviate = FALSE),
-        number = 1:7
+        name = weekdays(as.Date(3L:9L), abbreviate = FALSE),
+        number = 1L:7L
     )
     shift <- 0L
-    if (w <= 0) {
+    if (w <= 0L) {
         shift <- w
         w <- 31L
     }
@@ -24,9 +24,9 @@ compute_stock <- function(frequency = 12L, start = 2000, end = 2020, w = 15L) {
         regs <- create_empty_calendar(start = start, end = end) |>
             dplyr::mutate(period_number = month_number)
     } else if (frequency == 4L) {
-        end[2] <- end[2] * 3L
+        end[2L] <- end[2L] * 3L
         start2 <- start
-        start2[2] <- start2[2] * 3L
+        start2[2L] <- start2[2L] * 3L
         regs <- create_empty_calendar(start = start2, end = end) |>
             dplyr::mutate(
                 last_month = month_number %% 3L == 0L,
@@ -61,23 +61,23 @@ compute_stock <- function(frequency = 12L, start = 2000, end = 2020, w = 15L) {
             )
         )) |>
         dplyr::arrange(year, period_number) |>
-        dplyr::select(any_of(weekdays(as.Date(4:9), abbreviate = FALSE))) |>
+        dplyr::select(any_of(weekdays(as.Date(4L:9L), abbreviate = FALSE))) |>
         ts(start = start, frequency = frequency)
 
     return(regs)
 }
 
-for (k in 1:100) {
-    w <- sample(-100:100, size = 1)
-    frequency <- sample(c(4, 12), size = 1)
-    start <- c(sample(1950:2020, size = 1), sample.int(frequency, size = 1))
+for (k in 1L:100L) {
+    w <- sample(-100L:100L, size = 1L)
+    frequency <- sample(c(4L, 12L), size = 1L)
+    start <- c(sample(1950L:2020L, size = 1L), sample.int(frequency, size = 1L))
     end <- c(
-        sample((start[1] + 1):2025, size = 1),
-        sample.int(frequency, size = 1)
+        sample((start[1L] + 1L):2025L, size = 1L),
+        sample.int(frequency, size = 1L)
     )
     print(start)
     print(end)
-    length <- (end[1L] - start[1] + 1) *
+    length <- (end[1L] - start[1L] + 1L) *
         frequency -
         start[2L] +
         1L -

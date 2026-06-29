@@ -70,8 +70,8 @@ modify_sum <- function(file) {
             matches <- gregexpr(pattern, the_line)
             texts <- stringr::str_split(the_line, pattern) |> unlist()
             math <- regmatches(the_line, matches) |> unlist()
-            math <- math |> substr(3, nchar(math))
-            math <- math |> substr(1, nchar(math) - 2)
+            math <- math |> substr(3L, nchar(math))
+            math <- math |> substr(1L, nchar(math) - 2L)
 
             math <- paste0("\n\n```math\n", math, "\n```\n\n")
 

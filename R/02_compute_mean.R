@@ -8,26 +8,26 @@ source("./R/01_create_french_calendar.R")
 
 ## Create easter calendar ------------------------------------------------------
 
-calendar_easter <- data.frame(year = 0:(5700000 - 1)) |>
+calendar_easter <- data.frame(year = 0L:(5700000L - 1L)) |>
     # calendar_easter <- data.frame(year = 1990:4789) |>
     dplyr::mutate(
-        n_cycle_meton = year %% 19,
-        c = year %/% 100,
-        u = year %% 100,
-        s_bissextile = c %/% 4,
-        t_bissextile = c %% 4,
-        p_cycle_proemptose = (c + 8) %/% 25,
-        q_proemptose = (c - p_cycle_proemptose + 1) %/% 3,
-        e_epacte = (19 * n_cycle_meton + c - s_bissextile - q_proemptose + 15) %% 30,
-        b_bissextile = u %/% 4,
-        d_bissextile = u %% 4,
-        L_dominicale = (2 * t_bissextile + 2 * b_bissextile - e_epacte - d_bissextile + 32) %% 7,
-        h_correction = (n_cycle_meton + 11 * e_epacte + 22 * L_dominicale) %/%
-            451,
-        month_easter_meeus = (e_epacte + L_dominicale - 7 * h_correction + 114) %/% 31,
-        day_easter_meeus = (e_epacte + L_dominicale - 7 * h_correction + 114) %%
-            31 +
-            1,
+        n_cycle_meton = year %% 19L,
+        c = year %/% 100L,
+        u = year %% 100L,
+        s_bissextile = c %/% 4L,
+        t_bissextile = c %% 4L,
+        p_cycle_proemptose = (c + 8L) %/% 25L,
+        q_proemptose = (c - p_cycle_proemptose + 1L) %/% 3L,
+        e_epacte = (19L * n_cycle_meton + c - s_bissextile - q_proemptose + 15L) %% 30L,
+        b_bissextile = u %/% 4L,
+        d_bissextile = u %% 4L,
+        L_dominicale = (2L * t_bissextile + 2L * b_bissextile - e_epacte - d_bissextile + 32L) %% 7L,
+        h_correction = (n_cycle_meton + 11L * e_epacte + 22L * L_dominicale) %/%
+            451L,
+        month_easter_meeus = (e_epacte + L_dominicale - 7L * h_correction + 114L) %/% 31L,
+        day_easter_meeus = (e_epacte + L_dominicale - 7L * h_correction + 114L) %%
+            31L +
+            1L,
         date_easter_meeus = paste0(
             "2000-",
             sprintf("%02.f", month_easter_meeus),
@@ -60,18 +60,18 @@ summary_table <- rbind(
     #     weekday_number = 1),
     dplyr::mutate(
         .data = summary_table,
-        date = date + 1,
-        weekday_number = 2
+        date = date + 1L,
+        weekday_number = 2L
     ),
     dplyr::mutate(
         .data = summary_table,
-        date = date + 39,
-        weekday_number = 5
+        date = date + 39L,
+        weekday_number = 5L
     ),
     dplyr::mutate(
         .data = summary_table,
-        date = date + 50,
-        weekday_number = 2
+        date = date + 50L,
+        weekday_number = 2L
     )
 ) |>
     dplyr::mutate(
@@ -82,8 +82,8 @@ summary_table <- rbind(
 ### Calcul des moyennes autres jours fériés ------------------------------------
 
 calendar_other_holidays <- create_empty_calendar(
-    start = 2000,
-    end = 2399,
+    start = 2000L,
+    end = 2399L,
     starting_day = "samedi"
 ) |>
     add_new_year() |>
@@ -116,7 +116,7 @@ calendar_other_holidays <- create_empty_calendar(
 
 all_easter_holidays_monthly <- summary_table |>
     dplyr::summarise(
-        Off_easter = sum(Freq) / 5700000, # (4789 - 1989),
+        Off_easter = sum(Freq) / 5700000.0, # (4789 - 1989),
         .by = c(month_number, weekday_number)
     )
 
@@ -127,7 +127,7 @@ all_easter_holidays_monthly <- summary_table |>
 pure_easter_holidays_monthly <- summary_table |>
     dplyr::filter(!date %in% as.Date(c("2000-05-01", "2000-05-08"))) |>
     dplyr::summarise(
-        Off_easter = sum(Freq) / 5700000, # (4789 - 1989),
+        Off_easter = sum(Freq) / 5700000.0, # (4789 - 1989),
         .by = c(month_number, weekday_number)
     )
 
@@ -194,7 +194,7 @@ all_holidays_monthly <- rbind(
 
 all_easter_holidays_quarterly <- summary_table |>
     dplyr::summarise(
-        Off_easter = sum(Freq) / 5700000, # (4789 - 1989),
+        Off_easter = sum(Freq) / 5700000.0, # (4789 - 1989),
         .by = c(quarter_number, weekday_number)
     )
 
@@ -205,7 +205,7 @@ all_easter_holidays_quarterly <- summary_table |>
 pure_easter_holidays_quarterly <- summary_table |>
     dplyr::filter(!date %in% as.Date(c("2000-05-01", "2000-05-08"))) |>
     dplyr::summarise(
-        Off_easter = sum(Freq) / 5700000, # (4789 - 1989),
+        Off_easter = sum(Freq) / 5700000.0, # (4789 - 1989),
         .by = c(quarter_number, weekday_number)
     )
 

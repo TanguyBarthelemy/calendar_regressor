@@ -42,21 +42,21 @@ repr_regs_mens_sas <- cal_sas |>
     dplyr::mutate(
         G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
         G0 = Off_corr + In1_corr + In7_corr,
-        REG1_AC1 = G1 - G0 * 5 / 9,
+        REG1_AC1 = G1 - G0 * 5.0 / 9.0,
 
         G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
         G2 = In7_corr,
         G0 = Off_corr + In1_corr,
-        REG2_AC1 = G1 - G0 * 5 / 8,
-        REG2_AC2 = G2 - G0 * 1 / 8,
+        REG2_AC1 = G1 - G0 * 5.0 / 8.0,
+        REG2_AC2 = G2 - G0 * 1.0 / 8.0,
 
         G1 = In2_corr,
         G2 = In3_corr + In4_corr + In5_corr + In6_corr,
         G3 = In7_corr,
         G0 = Off_corr + In1_corr,
-        REG3_AC1 = G1 - G0 * 1 / 8,
-        REG3_AC2 = G2 - G0 * 4 / 8,
-        REG3_AC3 = G3 - G0 * 1 / 8,
+        REG3_AC1 = G1 - G0 * 1.0 / 8.0,
+        REG3_AC2 = G2 - G0 * 4.0 / 8.0,
+        REG3_AC3 = G3 - G0 * 1.0 / 8.0,
 
         G1 = In2_corr,
         G2 = In3_corr,
@@ -64,11 +64,11 @@ repr_regs_mens_sas <- cal_sas |>
         G4 = In5_corr,
         G5 = In6_corr,
         G0 = Off_corr + In1_corr + In7_corr,
-        REG5_AC1 = G1 - G0 * 1 / 9,
-        REG5_AC2 = G2 - G0 * 1 / 9,
-        REG5_AC3 = G3 - G0 * 1 / 9,
-        REG5_AC4 = G4 - G0 * 1 / 9,
-        REG5_AC5 = G5 - G0 * 1 / 9,
+        REG5_AC1 = G1 - G0 * 1.0 / 9.0,
+        REG5_AC2 = G2 - G0 * 1.0 / 9.0,
+        REG5_AC3 = G3 - G0 * 1.0 / 9.0,
+        REG5_AC4 = G4 - G0 * 1.0 / 9.0,
+        REG5_AC5 = G5 - G0 * 1.0 / 9.0,
 
         G1 = In2_corr,
         G2 = In3_corr,
@@ -77,12 +77,12 @@ repr_regs_mens_sas <- cal_sas |>
         G5 = In6_corr,
         G6 = In7_corr,
         G0 = Off_corr + In1_corr,
-        REG6_AC1 = G1 - G0 * 1 / 8,
-        REG6_AC2 = G2 - G0 * 1 / 8,
-        REG6_AC3 = G3 - G0 * 1 / 8,
-        REG6_AC4 = G4 - G0 * 1 / 8,
-        REG6_AC5 = G5 - G0 * 1 / 8,
-        REG6_AC6 = G6 - G0 * 1 / 8,
+        REG6_AC1 = G1 - G0 * 1.0 / 8.0,
+        REG6_AC2 = G2 - G0 * 1.0 / 8.0,
+        REG6_AC3 = G3 - G0 * 1.0 / 8.0,
+        REG6_AC4 = G4 - G0 * 1.0 / 8.0,
+        REG6_AC5 = G5 - G0 * 1.0 / 8.0,
+        REG6_AC6 = G6 - G0 * 1.0 / 8.0,
 
         date = as.Date(paste(
             year,
@@ -109,21 +109,21 @@ regs_mens_sas_corrected <- cal_sas_corrected |>
     dplyr::mutate(
         G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
         G0 = Off_corr + In1_corr + In7_corr,
-        REG1_AC1 = G1 - G0 * 5 / 9,
+        REG1_AC1 = G1 - G0 * 5.0 / 9.0,
 
         G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
         G2 = In7_corr,
         G0 = Off_corr + In1_corr,
-        REG2_AC1 = G1 - G0 * 5 / 8,
-        REG2_AC2 = G2 - G0 * 1 / 8,
+        REG2_AC1 = G1 - G0 * 5.0 / 8.0,
+        REG2_AC2 = G2 - G0 * 1.0 / 8.0,
 
         G1 = In2_corr,
         G2 = In3_corr + In4_corr + In5_corr + In6_corr,
         G3 = In7_corr,
         G0 = Off_corr + In1_corr,
-        REG3_AC1 = G1 - G0 * 1 / 8,
-        REG3_AC2 = G2 - G0 * 4 / 8,
-        REG3_AC3 = G3 - G0 * 1 / 8,
+        REG3_AC1 = G1 - G0 * 1.0 / 8.0,
+        REG3_AC2 = G2 - G0 * 4.0 / 8.0,
+        REG3_AC3 = G3 - G0 * 1.0 / 8.0,
 
         G1 = In2_corr,
         G2 = In3_corr,
@@ -131,11 +131,11 @@ regs_mens_sas_corrected <- cal_sas_corrected |>
         G4 = In5_corr,
         G5 = In6_corr,
         G0 = Off_corr + In1_corr + In7_corr,
-        REG5_AC1 = G1 - G0 * 1 / 9,
-        REG5_AC2 = G2 - G0 * 1 / 9,
-        REG5_AC3 = G3 - G0 * 1 / 9,
-        REG5_AC4 = G4 - G0 * 1 / 9,
-        REG5_AC5 = G5 - G0 * 1 / 9,
+        REG5_AC1 = G1 - G0 * 1.0 / 9.0,
+        REG5_AC2 = G2 - G0 * 1.0 / 9.0,
+        REG5_AC3 = G3 - G0 * 1.0 / 9.0,
+        REG5_AC4 = G4 - G0 * 1.0 / 9.0,
+        REG5_AC5 = G5 - G0 * 1.0 / 9.0,
 
         G1 = In2_corr,
         G2 = In3_corr,
@@ -144,12 +144,12 @@ regs_mens_sas_corrected <- cal_sas_corrected |>
         G5 = In6_corr,
         G6 = In7_corr,
         G0 = Off_corr + In1_corr,
-        REG6_AC1 = G1 - G0 * 1 / 8,
-        REG6_AC2 = G2 - G0 * 1 / 8,
-        REG6_AC3 = G3 - G0 * 1 / 8,
-        REG6_AC4 = G4 - G0 * 1 / 8,
-        REG6_AC5 = G5 - G0 * 1 / 8,
-        REG6_AC6 = G6 - G0 * 1 / 8,
+        REG6_AC1 = G1 - G0 * 1.0 / 8.0,
+        REG6_AC2 = G2 - G0 * 1.0 / 8.0,
+        REG6_AC3 = G3 - G0 * 1.0 / 8.0,
+        REG6_AC4 = G4 - G0 * 1.0 / 8.0,
+        REG6_AC5 = G5 - G0 * 1.0 / 8.0,
+        REG6_AC6 = G6 - G0 * 1.0 / 8.0,
 
         date = as.Date(paste(
             year,
@@ -174,8 +174,8 @@ write.table(
 
 french_calendar <- national_calendar(
     days = list(
-        Bastille_day = fixed_day(7, 14), # Bastille Day
-        Victory_day = fixed_day(5, 8, validity = list(start = "1982-05-08")), # Victoire 2nd guerre mondiale
+        Bastille_day = fixed_day(7L, 14L), # Bastille Day
+        Victory_day = fixed_day(5L, 8L, validity = list(start = "1982-05-08")), # Victoire 2nd guerre mondiale
         NEWYEAR = special_day("NEWYEAR"), # Nouvelle année
         CHRISTMAS = special_day("CHRISTMAS"), # Noël
         MAYDAY = special_day("MAYDAY"), # 1er mai
@@ -214,8 +214,8 @@ regs_mens_rjd <- lapply(
     do.call(what = cbind)
 
 colnames(regs_mens_rjd) <- sapply(
-    c(1, 2, 3, 5, 6),
-    \(k) paste0("REG", k, "_AC", 1:k)
+    c(1L, 2L, 3L, 5L, 6L),
+    \(k) paste0("REG", k, "_AC", seq_len(k))
 ) |>
     do.call(what = c)
 
@@ -266,8 +266,8 @@ regs_trim_rjd <- lapply(
     do.call(what = cbind)
 
 colnames(regs_trim_rjd) <- sapply(
-    c(1, 2, 3, 5, 6),
-    \(k) paste0("REG", k, "_AC", 1:k)
+    c(1L, 2L, 3L, 5L, 6L),
+    \(k) paste0("REG", k, "_AC", seq_len(k))
 ) |>
     do.call(what = c)
 
@@ -276,7 +276,7 @@ regs_trim_rjd <- data.frame(
     LY = lp_variable(
         frequency = 4L,
         start = c(1990L, 1L),
-        length = 164,
+        length = 164L,
         type = "LeapYear"
     ),
     regs_trim_rjd
@@ -302,21 +302,21 @@ repr_regs_mens_rjd <- repr_cal_rjd |>
     dplyr::mutate(
         G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
         G0 = Off_corr + In1_corr + In7_corr,
-        REG1_AC1 = G1 - G0 * 5 / 2,
+        REG1_AC1 = G1 - G0 * 5.0 / 2.0,
 
         G1 = In2_corr + In3_corr + In4_corr + In5_corr + In6_corr,
         G2 = In7_corr,
         G0 = Off_corr + In1_corr,
-        REG2_AC1 = G1 - G0 * 5 / 1,
-        REG2_AC2 = G2 - G0 * 1 / 1,
+        REG2_AC1 = G1 - G0 * 5.0 / 1.0,
+        REG2_AC2 = G2 - G0 * 1.0 / 1.0,
 
         G1 = In2_corr,
         G2 = In3_corr + In4_corr + In5_corr + In6_corr,
         G3 = In7_corr,
         G0 = Off_corr + In1_corr,
-        REG3_AC1 = G1 - G0 * 1 / 1,
-        REG3_AC2 = G2 - G0 * 4 / 1,
-        REG3_AC3 = G3 - G0 * 1 / 1,
+        REG3_AC1 = G1 - G0 * 1.0 / 1.0,
+        REG3_AC2 = G2 - G0 * 4.0 / 1.0,
+        REG3_AC3 = G3 - G0 * 1.0 / 1.0,
 
         G1 = In2_corr,
         G2 = In3_corr,
@@ -324,11 +324,11 @@ repr_regs_mens_rjd <- repr_cal_rjd |>
         G4 = In5_corr,
         G5 = In6_corr,
         G0 = Off_corr + In1_corr + In7_corr,
-        REG5_AC1 = G1 - G0 * 1 / 2,
-        REG5_AC2 = G2 - G0 * 1 / 2,
-        REG5_AC3 = G3 - G0 * 1 / 2,
-        REG5_AC4 = G4 - G0 * 1 / 2,
-        REG5_AC5 = G5 - G0 * 1 / 2,
+        REG5_AC1 = G1 - G0 * 1.0 / 2.0,
+        REG5_AC2 = G2 - G0 * 1.0 / 2.0,
+        REG5_AC3 = G3 - G0 * 1.0 / 2.0,
+        REG5_AC4 = G4 - G0 * 1.0 / 2.0,
+        REG5_AC5 = G5 - G0 * 1.0 / 2.0,
 
         G1 = In2_corr,
         G2 = In3_corr,
@@ -337,12 +337,12 @@ repr_regs_mens_rjd <- repr_cal_rjd |>
         G5 = In6_corr,
         G6 = In7_corr,
         G0 = Off_corr + In1_corr,
-        REG6_AC1 = G1 - G0 * 1 / 1,
-        REG6_AC2 = G2 - G0 * 1 / 1,
-        REG6_AC3 = G3 - G0 * 1 / 1,
-        REG6_AC4 = G4 - G0 * 1 / 1,
-        REG6_AC5 = G5 - G0 * 1 / 1,
-        REG6_AC6 = G6 - G0 * 1 / 1,
+        REG6_AC1 = G1 - G0 * 1.0 / 1.0,
+        REG6_AC2 = G2 - G0 * 1.0 / 1.0,
+        REG6_AC3 = G3 - G0 * 1.0 / 1.0,
+        REG6_AC4 = G4 - G0 * 1.0 / 1.0,
+        REG6_AC5 = G5 - G0 * 1.0 / 1.0,
+        REG6_AC6 = G6 - G0 * 1.0 / 1.0,
 
         date = as.Date(paste(
             year,

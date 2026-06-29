@@ -4,7 +4,7 @@ source("./R/01_create_french_calendar.R")
 
 # Création fonction -------------------------------------------------------
 
-reduce_calendar <- function(start = 0, end = 399) {
+reduce_calendar <- function(start = 0L, end = 399L) {
     if (start > end) stop("Erreur de date", call. = FALSE)
     return(dplyr::filter(.data = calendar_easter, year >= start, year <= end))
 }
@@ -21,18 +21,18 @@ add_easter_holidays <- function(x) {
     output <- rbind(
         dplyr::mutate(
             .data = summary_table,
-            date = date + 1,
-            weekday_number = 2
+            date = date + 1L,
+            weekday_number = 2L
         ),
         dplyr::mutate(
             .data = summary_table,
-            date = date + 39,
-            weekday_number = 5
+            date = date + 39L,
+            weekday_number = 5L
         ),
         dplyr::mutate(
             .data = summary_table,
-            date = date + 50,
-            weekday_number = 2
+            date = date + 50L,
+            weekday_number = 2L
         )
     ) |>
         dplyr::mutate(
@@ -43,47 +43,47 @@ add_easter_holidays <- function(x) {
     return(output)
 }
 
-summarise_by_easter <- function(x, freq = 12, name = "aha") {
-    if (freq == 12) {
+summarise_by_easter <- function(x, freq = 12L, name = "aha") {
+    if (freq == 12L) {
         x <- x |>
             dplyr::summarise(
                 e = sum(Freq),
                 .by = c(weekday_number, month_number)
             )
-    } else if (freq == 4) {
+    } else if (freq == 4L) {
         x <- x |>
             dplyr::summarise(
                 e = sum(Freq),
                 .by = c(weekday_number, quarter_number)
             )
     }
-    x$e <- x$e * 3 / sum(x$e)
+    x$e <- x$e * 3L / sum(x$e)
     colnames(x) <- c("periode", "type", name)
     return(x)
 }
 
 # Création calendar easter ------------------------------------------------
 
-calendar_easter <- data.frame(year = 0:(5700000 - 1)) |>
+calendar_easter <- data.frame(year = seq_len(5700000L) - 1L) |>
     # calendar_easter <- data.frame(year = 1990:4789) |>
     dplyr::mutate(
-        n_cycle_meton = year %% 19,
-        c = year %/% 100,
-        u = year %% 100,
-        s_bissextile = c %/% 4,
-        t_bissextile = c %% 4,
-        p_cycle_proemptose = (c + 8) %/% 25,
-        q_proemptose = (c - p_cycle_proemptose + 1) %/% 3,
-        e_epacte = (19 * n_cycle_meton + c - s_bissextile - q_proemptose + 15) %% 30,
-        b_bissextile = u %/% 4,
-        d_bissextile = u %% 4,
-        L_dominicale = (2 * t_bissextile + 2 * b_bissextile - e_epacte - d_bissextile + 32) %% 7,
-        h_correction = (n_cycle_meton + 11 * e_epacte + 22 * L_dominicale) %/%
-            451,
-        month_easter_meeus = (e_epacte + L_dominicale - 7 * h_correction + 114) %/% 31,
-        day_easter_meeus = (e_epacte + L_dominicale - 7 * h_correction + 114) %%
-            31 +
-            1,
+        n_cycle_meton = year %% 19L,
+        c = year %/% 100L,
+        u = year %% 100L,
+        s_bissextile = c %/% 4L,
+        t_bissextile = c %% 4L,
+        p_cycle_proemptose = (c + 8L) %/% 25L,
+        q_proemptose = (c - p_cycle_proemptose + 1L) %/% 3L,
+        e_epacte = (19L * n_cycle_meton + c - s_bissextile - q_proemptose + 15L) %% 30L,
+        b_bissextile = u %/% 4L,
+        d_bissextile = u %% 4L,
+        L_dominicale = (2L * t_bissextile + 2L * b_bissextile - e_epacte - d_bissextile + 32L) %% 7L,
+        h_correction = (n_cycle_meton + 11L * e_epacte + 22L * L_dominicale) %/%
+            451L,
+        month_easter_meeus = (e_epacte + L_dominicale - 7L * h_correction + 114L) %/% 31L,
+        day_easter_meeus = (e_epacte + L_dominicale - 7L * h_correction + 114L) %%
+            31L +
+            1L,
         date_easter_meeus = paste0(
             "2000-",
             sprintf("%02.f", month_easter_meeus),
@@ -96,8 +96,8 @@ calendar_easter <- data.frame(year = 0:(5700000 - 1)) |>
 # Création calendar other holidays ------------------------------------------------
 
 calendar_other_holidays <- create_empty_calendar(
-    start = 1970,
-    end = 2399,
+    start = 1970L,
+    end = 2399L,
     starting_day = "jeudi"
 ) |>
     add_new_year() |>

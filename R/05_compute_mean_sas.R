@@ -21,7 +21,7 @@ cal1 <- create_french_calendar(
 )
 
 mean_sas <- cal1 |>
-    dplyr::filter(year != 4000 | month_number != 2 | month_day_number != 29) |>
+    dplyr::filter(year != 4000L | month_number != 2L | month_day_number != 29L) |>
     dplyr::select(
         year,
         month_number,
@@ -30,8 +30,8 @@ mean_sas <- cal1 |>
     ) |>
     dplyr::mutate(
         weekday_number = dplyr::case_when(
-            year == 4000 & month_number < 3 ~ weekday_number,
-            year >= 4000 ~ (weekday_number - 2) %% 7 + 1,
+            year == 4000L & month_number < 3L ~ weekday_number,
+            year >= 4000L ~ (weekday_number - 2L) %% 7L + 1L,
             TRUE ~ weekday_number
         )
     ) |>
@@ -58,7 +58,7 @@ mean_sas <- rbind(
     mean_sas,
     dplyr::summarise(
         .data = mean_sas,
-        weekday_number = 0,
+        weekday_number = 0L,
         Off_mean = sum(Off_mean),
         Day_mean = sum(Day_mean),
         In_mean = sum(In_mean),

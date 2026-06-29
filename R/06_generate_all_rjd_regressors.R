@@ -11,8 +11,8 @@ library("rjd3toolkit")
 
 french_calendar <- national_calendar(
     days = list(
-        fixed_day(7, 14), # Fete nationale
-        fixed_day(5, 8, validity = list(start = "1982-05-08")), # Victoire 2nd guerre mondiale
+        fixed_day(7L, 14L), # Fete nationale
+        fixed_day(5L, 8L, validity = list(start = "1982-05-08")), # Victoire 2nd guerre mondiale
         special_day("NEWYEAR"), # Nouvelle année
         special_day("CHRISTMAS"), # Noël
         special_day("MAYDAY"), # 1er mai
@@ -51,8 +51,8 @@ regs_mens_rjd <- lapply(
     do.call(what = cbind)
 
 colnames(regs_mens_rjd) <- sapply(
-    c(1, 2, 3, 5, 6),
-    \(k) paste0("REG", k, "_AC", 1:k)
+    c(1L, 2L, 3L, 5L, 6L),
+    \(k) paste0("REG", k, "_AC", seq_len(k))
 ) |>
     do.call(what = c)
 
@@ -83,7 +83,7 @@ regs_trim_rjd <- lapply(
             calendar = french_calendar,
             frequency = 4L,
             start = c(1990L, 1L),
-            length = 164,
+            length = 164L,
             groups = group
         )
     }
@@ -91,8 +91,8 @@ regs_trim_rjd <- lapply(
     do.call(what = cbind)
 
 colnames(regs_trim_rjd) <- sapply(
-    c(1, 2, 3, 5, 6),
-    \(k) paste0("REG", k, "_AC", 1:k)
+    c(1L, 2L, 3L, 5L, 6L),
+    \(k) paste0("REG", k, "_AC", seq_len(k))
 ) |>
     do.call(what = c)
 

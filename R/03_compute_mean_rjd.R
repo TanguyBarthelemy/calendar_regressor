@@ -16,9 +16,9 @@ length_mois <- c(31L, 28L, 31L, 30L, 31L, 30L, 31L, 31L, 30L, 31L, 30L, 31L)
 
 mean_rjd <- crossing(month_number = 1L:12L, weekday_number = 1L:7L) |>
     dplyr::mutate(
-        Day_mean = rep(length_mois / 7, each = 7),
-        Off_mean = 0,
-        In_mean = 0,
+        Day_mean = rep(length_mois / 7.0, each = 7L),
+        Off_mean = 0L,
+        In_mean = 0L,
         periode = month_number
     )
 
@@ -26,35 +26,35 @@ mean_rjd <- crossing(month_number = 1L:12L, weekday_number = 1L:7L) |>
 mean_rjd <- mean_rjd |>
     dplyr::mutate(
         Off_mean = dplyr::case_when(
-            month_number %in% c(5L, 11L) ~ 2 / 7,
-            month_number %in% c(1L, 7L, 8L, 12L) ~ 1 / 7,
-            TRUE ~ 0
+            month_number %in% c(5L, 11L) ~ 2.0 / 7.0,
+            month_number %in% c(1L, 7L, 8L, 12L) ~ 1.0 / 7.0,
+            TRUE ~ 0.0
         )
     )
 
 # Moyennes liés aux jours fériés easter
 mean_rjd[
-    mean_rjd$month_number %in% 3:4 & mean_rjd$weekday_number == 2,
+    mean_rjd$month_number %in% 3L:4L & mean_rjd$weekday_number == 2L,
     "Off_mean"
 ] <- mean_easter_monday +
     mean_rjd[
-        mean_rjd$month_number %in% 3:4 & mean_rjd$weekday_number == 2,
+        mean_rjd$month_number %in% 3L:4L & mean_rjd$weekday_number == 2L,
         "Off_mean"
     ]
 mean_rjd[
-    mean_rjd$month_number %in% 5:6 & mean_rjd$weekday_number == 2,
+    mean_rjd$month_number %in% 5L:6L & mean_rjd$weekday_number == 2L,
     "Off_mean"
 ] <- mean_whit_monday +
     mean_rjd[
-        mean_rjd$month_number %in% 5:6 & mean_rjd$weekday_number == 2,
+        mean_rjd$month_number %in% 5L:6L & mean_rjd$weekday_number == 2L,
         "Off_mean"
     ]
 mean_rjd[
-    mean_rjd$month_number %in% 4:6 & mean_rjd$weekday_number == 5,
+    mean_rjd$month_number %in% 4L:6L & mean_rjd$weekday_number == 5L,
     "Off_mean"
 ] <- mean_ascension +
     mean_rjd[
-        mean_rjd$month_number %in% 4:6 & mean_rjd$weekday_number == 5,
+        mean_rjd$month_number %in% 4L:6L & mean_rjd$weekday_number == 5L,
         "Off_mean"
     ]
 
@@ -70,7 +70,7 @@ mean_rjd <- rbind(
     mean_rjd,
     dplyr::summarise(
         data = mean_rjd,
-        weekday_number = 0,
+        weekday_number = 0L,
         Day_mean = sum(Day_mean),
         Off_mean = sum(Off_mean),
         In_mean = sum(In_mean),

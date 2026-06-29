@@ -46,7 +46,7 @@ create_empty_calendar <- function(start = 1950L, end = 2022L) {
         end <- c(end, 1L)
     }
 
-    weekday_list <- weekdays(as.Date(3:9), abbreviate = FALSE)
+    weekday_list <- weekdays(as.Date(3L:9L), abbreviate = FALSE)
     starting_day <- ts(start = start, frequency = 12L) |>
         zoo::as.Date() |>
         weekdays(abbreviate = FALSE) |>
@@ -277,8 +277,8 @@ add_whit_monday <- function(calendar) {
             day_whit_monday = max(easter * temp_nb_day_tot + 50L),
             whit_monday = dplyr::case_when(
                 year == 2005L & temp_nb_day_tot == day_whit_monday ~ 0.5,
-                year >= 1886L & temp_nb_day_tot == day_whit_monday ~ 1,
-                TRUE ~ 0
+                year >= 1886L & temp_nb_day_tot == day_whit_monday ~ 1.0,
+                TRUE ~ 0.0
             )
         ) |>
         dplyr::ungroup() |>
@@ -422,7 +422,7 @@ summarise_by_period <- function(
         ) |>
         dplyr::arrange(year, periode) |>
         dplyr::rename_with(
-            ~ substr(x = .x, start = 1, stop = nchar(.x) - 2),
+            ~ substr(x = .x, start = 1L, stop = nchar(.x) - 2L),
             dplyr::ends_with("0")
         ) |>
         dplyr::rename_with(
@@ -471,7 +471,7 @@ format_to_sas <- function(summarised_calendar, frequency = "mensuelle") {
     full_calendar <- summarised_calendar |>
         dplyr::mutate(
             PH = Off2 + Off3 + Off4 + Off5 + Off6,
-            WD = Day2 + Day3 + Day4 + Day5 + Day6 - 5 / 2 * (Day1 + Day7),
+            WD = Day2 + Day3 + Day4 + Day5 + Day6 - 5L / 2L * (Day1 + Day7),
             TD1 = Day2 - Day1,
             TD2 = Day3 - Day1,
             TD3 = Day4 - Day1,
@@ -479,7 +479,7 @@ format_to_sas <- function(summarised_calendar, frequency = "mensuelle") {
             TD5 = Day6 - Day1,
             TD6 = Day7 - Day1,
             TD = In2 + In3 + In4 + In5 + In6,
-            WeekDays = TD - 5 / 2 * (PH + Day1 + Day7),
+            WeekDays = TD - 5L / 2L * (PH + Day1 + Day7),
             Bridges = monday_bridge + friday_bridge,
             LeapYear = (month_number == 2L) * (LeapYear - 0.25)
         ) |>

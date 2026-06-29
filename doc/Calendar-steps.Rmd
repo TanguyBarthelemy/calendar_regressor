@@ -171,22 +171,22 @@ Au total, on compte généralement 5 jeux de régresseurs. Un jeu de régresseur
 library("flextable")
 
 liste_names <- colnames(reg_cjo) |>
-    substr(1, 3) |>
+    substr(1L, 3L) |>
     as.list()
 names(liste_names) <- colnames(reg_cjo)
 
-choose_color <- \(x) c("#FFB6C1", "#87CEEB", "#98FB98", "#FFFF99", "#D8BFD8", "#FFDAB9", "#AFEEEE")[x + 1]
+choose_color <- \(x) c("#FFB6C1", "#87CEEB", "#98FB98", "#FFFF99", "#D8BFD8", "#FFDAB9", "#AFEEEE")[x + 1L]
 
 tbl <- reg_cjo |>
     flextable() |>
     set_header_labels(values = liste_names) |>
-    add_header_row(values = c("Ouvrable", "Férié"), colwidths = c(8, 7)) |>
+    add_header_row(values = c("Ouvrable", "Férié"), colwidths = c(8L, 7L)) |>
     align(align = "center", part = "header") |>
-    bg(i = 2, j = 2:8, bg = "#d7fff2", part = "header") |>
-    bg(i = 2, j = 9:15, bg = "#fffdd7", part = "header") |>
-    bg(j = -1, bg = choose_color, part = "body") |>
-    color(j = -1, color = choose_color, part = "body") |>
-    flextable::width(j = 2:15, 0.4)
+    bg(i = 2L, j = 2L:8L, bg = "#d7fff2", part = "header") |>
+    bg(i = 2L, j = 9L:15L, bg = "#fffdd7", part = "header") |>
+    bg(j = -1L, bg = choose_color, part = "body") |>
+    color(j = -1L, color = choose_color, part = "body") |>
+    flextable::width(j = 2L:15L, 0.4)
 
 tbl
 ```
@@ -348,10 +348,10 @@ $$ \overline{X + \omega Y} = \overline{X} + \omega \overline{Y} $$
 Les règles de création des calendriers sont stables dans le temps (on sait quel jour tombera le 26 mars dans 450 ans). Ainsi on peut calculer les fréquences des jours de la semaine.
 
 ```{r occurence_week_day, echo = FALSE}
-jours <- data.frame(first_1 = c(6, rep(0, 399)), annee = 0:399) |>
+jours <- data.frame(first_1 = c(6L, rep(0L, 399L)), annee = 0L:399L) |>
     dplyr::mutate(
-        bisextile = annee %% 400 == 0 | (annee %% 4 == 0 & annee %% 100 != 0),
-        first_2 = (cumsum(first_1 + 365 + bisextile) - 1) %% 7 + 1
+        bisextile = annee %% 400L == 0L | (annee %% 4L == 0L & annee %% 100L != 0L),
+        first_2 = (cumsum(first_1 + 365L + bisextile) - 1L) %% 7L + 1L
     )
 
 premier_de_l_an <- table(jours$first_2)
@@ -392,7 +392,7 @@ plot_easter <- function(x) {
     the_labels <- format(dates, "%d-%b")
 
     plot(x, ylab = "Occurence de Pâques", xaxt = "n")
-    axis(1, at = seq_along(the_labels), labels = the_labels)
+    axis(1L, at = seq_along(the_labels), labels = the_labels)
     return(invisible(NULL))
 }
 ```
@@ -406,29 +406,29 @@ Mais cette répartition des jours de Pâques est différente selon la période q
 Sur la période 2000-2399 (cycle du calendrier) :
 
 ```{r easter_occurence_400, echo = FALSE}
-plot_easter(reduce_calendar(2000, 2399)$date_easter_meeus |> table())
+plot_easter(reduce_calendar(2000L, 2399L)$date_easter_meeus |> table())
 ```
 
 Sur la période 1970-2050 (cycle du calendrier) :
 
 ```{r easter_occurence_1970_2050, echo = FALSE}
-plot_easter(reduce_calendar(1970, 2050)$date_easter_meeus |> table())
+plot_easter(reduce_calendar(1970L, 2050L)$date_easter_meeus |> table())
 ```
 
 En comparant le nombre de jour fériés par mois :
 
 ```{r comparing_trading_days, echo = FALSE}
-cal_2000_2399 <- reduce_calendar(2000, 2399) |>
+cal_2000_2399 <- reduce_calendar(2000L, 2399L) |>
     add_easter_holidays() |>
-    summarise_by_easter(name = "2000-2399", freq = 12)
+    summarise_by_easter(name = "2000-2399", freq = 12L)
 
-cal_1970_2050 <- reduce_calendar(1970, 2050) |>
+cal_1970_2050 <- reduce_calendar(1970L, 2050L) |>
     add_easter_holidays() |>
-    summarise_by_easter(name = "1970-2050", freq = 12)
+    summarise_by_easter(name = "1970-2050", freq = 12L)
 
 cal_0_5700000 <- calendar_easter |>
     add_easter_holidays() |>
-    summarise_by_easter(name = "1-5700000", freq = 12)
+    summarise_by_easter(name = "1-5700000", freq = 12L)
 
 cal_0_5700000 |>
     merge(y = cal_2000_2399, all = TRUE) |>
@@ -441,15 +441,15 @@ Et par trimestre :
 ```{r comparing_trading_days_quaterly, echo = FALSE}
 cal_2000_2399 <- reduce_calendar() |>
     add_easter_holidays() |>
-    summarise_by_easter(name = "2000-2399", freq = 4)
+    summarise_by_easter(name = "2000-2399", freq = 4L)
 
-cal_1970_2050 <- reduce_calendar(1970, 2050) |>
+cal_1970_2050 <- reduce_calendar(1970L, 2050L) |>
     add_easter_holidays() |>
-    summarise_by_easter(name = "1970-2050", freq = 4)
+    summarise_by_easter(name = "1970-2050", freq = 4L)
 
 cal_0_5700000 <- calendar_easter |>
     add_easter_holidays() |>
-    summarise_by_easter(name = "1-5700000", freq = 4)
+    summarise_by_easter(name = "1-5700000", freq = 4L)
 
 cal_0_5700000 |>
     merge(y = cal_2000_2399, all = TRUE) |>
@@ -467,7 +467,7 @@ Mais est ce une raison pour prendre en compte la totalité de la série ou peut-
 
 ```{r long-term-mean, echo = FALSE}
 cal1 <- calendar_other_holidays |>
-    dplyr::filter(year >= 2000, year <= 2399) |>
+    dplyr::filter(year >= 2000L, year <= 2399L) |>
     dplyr::summarise(
         Day = dplyr::n(),
         Off = sum(
@@ -483,7 +483,7 @@ cal1 <- calendar_other_holidays |>
     )
 
 cal2 <- calendar_other_holidays |>
-    dplyr::filter(year >= 1970, year <= 2050) |>
+    dplyr::filter(year >= 1970L, year <= 2050L) |>
     dplyr::summarise(
         Day = dplyr::n(),
         Off = sum(

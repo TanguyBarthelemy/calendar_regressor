@@ -13,7 +13,7 @@ cal1 <- create_french_calendar(
 
 # On ne garde que les jeudi
 cal1_bis <- cal1 |>
-    dplyr::filter(weekday_number == 5) |>
+    dplyr::filter(weekday_number == 5L) |>
     dplyr::summarise(
         # whit_monday = sum(whit_monday),
         # easter_monday = sum(easter_monday),
@@ -61,11 +61,11 @@ out <- cbind(
     merge(y = cal1_bis) |>
     # dplyr::filter(month_number > 2 & month_number < 7) |>
     dplyr::mutate(
-        reg_tuesday = -(NbDays / 6) + (Days - ascension) * (1 + 1 / 6),
-        mean_tuesday = (REG1_tuesday - reg_tuesday) / (1 + 1 / 6),
-        mean_round = round(mean_tuesday, 3)
+        reg_tuesday = -(NbDays / 6.0) + (Days - ascension) * (1.0 + 1.0 / 6.0),
+        mean_tuesday = (REG1_tuesday - reg_tuesday) / (1.0 + 1.0 / 6.0),
+        mean_round = round(mean_tuesday, 3.0)
     )
 
 mean_ascension_tuesday <- out |>
-    dplyr::filter(year == 1990, month_number %in% 4:6) |>
+    dplyr::filter(year == 1990L, month_number %in% 4L:6L) |>
     dplyr::pull(mean_tuesday)
