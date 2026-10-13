@@ -19,7 +19,7 @@ Dominique LADIRAY) et par les nouveaux packages du rjduniverse
 (*rjd3toolkit*).
 
 Cette étude cherche aussi dans une plus importante mesure à essayer de
-comprendre comment sont créés les régresseurs de calendriers.
+comprendre comment sont créés les régresseurs de calendrier.
 
 ## Résultat et production
 
